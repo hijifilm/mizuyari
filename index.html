@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>水やり日和</title>
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#2F6B4F">
+<meta name="description" content="スワイプするだけで水やりを簡単記録。乾いた株が一目でわかるシンプルデザインの観葉植物ケアアプリ。">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="水やり日和">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>try{var _t=JSON.parse(localStorage.getItem("settings-v1")||"{}").theme;if(_t==="light"||_t==="dark")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF3EE;--card:#FFFFFF;--ink:#1F2D26;--sub:#5E6E65;--line:#D5E0D7;--leaf:#2F6B4F;--water:#2F7DBF;--fert:#B87A12;--late:#C23B3B;--onleaf:#FFFFFF;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121A16;--card:#1B2620;--ink:#E8F0EA;--sub:#9DB0A3;--line:#2C3B32;--leaf:#6CC49A;--water:#6DB2EE;--fert:#E3B04F;--late:#F07B7B;--onleaf:#0F1A14}}
+:root[data-theme="dark"]{color-scheme:dark}
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="dark"]{--bg:#121A16;--card:#1B2620;--ink:#E8F0EA;--sub:#9DB0A3;--line:#2C3B32;--leaf:#6CC49A;--water:#6DB2EE;--fert:#E3B04F;--late:#F07B7B;--onleaf:#0F1A14}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.6}
+main{max-width:520px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:22px;margin:0 0 4px}
+.sum{margin:0 0 12px}
+.sum.ok,.sum.warn,.sum.late{border-radius:14px;padding:12px 14px;border:2px solid var(--leaf);background:var(--card)}
+.sum.warn{border-color:var(--warn);background:rgba(227,169,0,.14)}
+.sum.late{border-color:var(--late);background:rgba(194,59,59,.10)}
+.sm1{font-size:22px;font-weight:700;line-height:1.35;color:var(--leaf)}
+.sum.warn .sm1{color:var(--ink)}
+.sum.late .sm1{color:var(--late)}
+.sm1 b{font-size:26px}
+.sm2{font-size:15px;color:var(--ink);margin-top:2px}
+.sm3{font-size:12px;color:var(--sub);margin-top:6px}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+.hd h1{margin:0}
+.addb{flex:none;display:flex;align-items:center;gap:2px;height:44px;padding:0 14px;border-radius:22px;border:1.5px solid var(--leaf);background:var(--card);color:var(--leaf);font:inherit;font-size:22px;line-height:1;cursor:pointer}
+.addb .pls{font-size:24px;font-weight:700}
+.addb.on{background:var(--leaf);color:var(--onleaf)}
+.addb:focus-visible{outline:3px solid var(--leaf);outline-offset:3px}
+.add{margin-bottom:14px}
+.add input[type="date"]{display:block;width:100%;box-sizing:border-box;height:46px;min-height:46px;padding:0 12px;line-height:46px;text-align:left;margin-top:4px;-webkit-appearance:none;appearance:none}
+.add input[type="date"]::-webkit-date-and-time-value{text-align:left;min-height:1.2em}
+.sr{position:relative;margin-bottom:8px}
+.sr input{margin:0;padding-left:40px;border-radius:12px}
+.sri{position:absolute;left:12px;top:50%;width:20px;height:20px;transform:translateY(-50%);color:var(--sub);pointer-events:none}
+.qn{font-size:13px;color:var(--sub);margin:0 0 8px}
+.qn:empty{display:none}
+.card a,.card img{-webkit-user-drag:none;user-drag:none}
+.sn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.wg{font-size:13px;color:var(--sub);line-height:1.6;margin:0}
+.ih{font-size:16px;margin:0 0 6px}
+.ovt{font-size:14px;line-height:1.7;margin:0 0 14px}
+.tx{--c:var(--leaf);margin-bottom:12px}
+.tx.lv1{--c:var(--warn)}
+.tx.lv2{--c:var(--lv2)}
+.tx.lv3{--c:var(--late)}
+.txh{display:flex;align-items:center;gap:8px;font-size:14px}
+.txn{flex:1;font-weight:700}
+.txl{font-weight:700;font-size:13px;color:var(--ink);border:1.5px solid var(--c);border-radius:999px;padding:1px 10px;background:rgba(128,128,128,.12);background:color-mix(in srgb,var(--c) 22%,transparent)}
+.mt{display:flex;gap:4px;margin:6px 0 4px}
+.mt i{flex:1;height:10px;border-radius:5px;background:var(--line)}
+.mt i.on{background:var(--c)}
+.txt{font-size:13px;color:var(--sub);margin:0;line-height:1.6}
+.txt b{color:var(--ink)}
+.btn.idb{width:100%;background:none;color:var(--leaf);border:1.5px solid var(--leaf);margin-bottom:6px}
+#idmsg{margin:0 0 10px;min-height:1em}
+.card{position:relative;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;background:var(--card);background-image:linear-gradient(rgba(70,150,215,calc(var(--m,0)*.2)),rgba(70,150,215,calc(var(--m,0)*.2)));border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.card.late{border-color:var(--late)}
+.card.warn{border-color:var(--warn)}
+.card>*{position:relative;z-index:1}
+.card::before{content:"";position:absolute;left:0;right:0;bottom:0;height:calc(var(--wet,0)*100%);z-index:0;pointer-events:none;border-radius:60% 60% 0 0/14px 14px 0 0;background:rgba(47,125,191,.3);background:color-mix(in srgb,var(--water) 30%,transparent)}
+.card.anim{transition:transform .3s ease}
+.card.anim::before{transition:height .6s ease}
+.card.splash::before{border-radius:0}
+.card::after{content:"";position:absolute;left:50%;top:50%;width:160px;height:160px;margin:-80px 0 0 -80px;border-radius:50%;border:3px solid var(--water);opacity:0;pointer-events:none;z-index:2}
+.card.splash::after{animation:rip .9s ease-out}
+@keyframes rip{from{transform:scale(.1);opacity:.7}to{transform:scale(3);opacity:0}}
+.wr{cursor:grab;border-radius:10px}
+.wr:focus-visible{outline:3px solid var(--leaf);outline-offset:4px}
+.sw{display:flex;align-items:center;gap:6px;color:var(--sub);font-size:22px;line-height:1}
+.sw .ic{width:22px;height:22px}
+.gz.warn{--gc:var(--warn)}
+.gz .wl{fill:var(--aq)}
+:root{--aq:#56BDEE}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--aq:#6DC3F2}}
+:root[data-theme="dark"]{--aq:#6DC3F2}
+:root{--warn:#E3A900;--lv2:#D9772B}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--warn:#F2C94C;--lv2:#F0A15C}}
+:root[data-theme="dark"]{--warn:#F2C94C;--lv2:#F0A15C}
+@media (prefers-reduced-motion: reduce){.card.anim,.card.anim::before{transition:none!important}.card.splash::after{animation:none!important}}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.name{font-size:16px;font-weight:700;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.del{background:none;border:0;color:var(--sub);font-size:14px;padding:6px;cursor:pointer}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
+.lab{font-size:14px;display:flex;align-items:center;gap:8px}
+.ic{width:30px;height:30px;flex:none;display:block}
+.ic.w{color:var(--water)}
+.ic.f{color:var(--fert)}
+.ic .hl{stroke:var(--card)}
+.ic .lf{fill:var(--card)}
+.gz{--gc:var(--water);position:relative;display:block;width:44px;height:44px;flex:none;margin-right:6px;color:var(--gc)}
+.gz svg{width:100%;height:100%;display:block}
+.gz.late{--gc:var(--late)}
+.bd{position:absolute;right:-8px;bottom:-4px;min-width:22px;height:22px;padding:0 5px;border-radius:11px;background:var(--card);border:1.5px solid var(--gc);color:var(--ink);font-size:12px;font-weight:700;line-height:19px;text-align:center}
+.gz.late .bd{color:var(--late)}
+.lab span{display:block;font-size:13px;color:var(--sub)}
+.st{font-weight:700}
+.st.late{color:var(--late)}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;color:var(--onleaf);cursor:pointer;min-width:88px}
+.btn.w{background:var(--water);font-size:17px;padding:14px 20px;min-width:120px}
+.btn.f{background:none;color:var(--ink);border:1.5px solid var(--fert);font-size:13px;padding:6px 10px;min-width:64px;border-radius:9px}
+.fr{margin-top:8px}
+.fr .ic{width:22px;height:22px}
+.fr .st{font-size:14px}
+.fr .lab{font-size:13px}
+.fi{line-height:1.4}
+.fi b{font-size:15px}
+.fi span.late{color:var(--late);font-weight:700}
+.gs{display:flex;align-items:center;gap:20px;flex:none;padding-right:8px}
+.wk{border-radius:12px;cursor:grab}
+.wk:focus-visible{outline:3px solid var(--leaf);outline-offset:4px}
+.fib{--gc:var(--fert);position:relative;display:block;width:44px;height:44px;padding:0;border:0;border-radius:12px;background:none;cursor:pointer;color:var(--gc)}
+.fib .ic{width:44px;height:44px}
+.fib.warn{--gc:var(--warn)}
+.fib.late{--gc:var(--late)}
+.fib.late .bd{color:var(--late)}
+.ic .lf2{stroke:var(--card);fill:none}
+.fib:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.fp{display:none;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.fp .fi{font-size:13px}
+.fp .btn.f{font-size:14px;padding:8px 14px}
+.card.open .fp{display:flex}
+.card.open .fib{background:rgba(184,122,18,.18)}
+.btn:focus-visible,input:focus-visible,.del:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+form,.add{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:14px}
+.add h2{font-size:16px;margin:0 0 10px}
+label{display:block;font-size:14px;margin-bottom:10px}
+input{width:100%;font:inherit;font-size:16px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin-top:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.save{width:100%;background:var(--leaf)}
+.empty{color:var(--sub);text-align:center;padding:24px 0}
+.hint{font-size:13px;color:var(--sub);margin:4px 0 12px}
+.who{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.ph{width:48px;height:48px;border-radius:12px;object-fit:cover;flex:none;display:block}
+.phb{background:none;border:0;padding:0;cursor:pointer;flex:none;border-radius:12px}
+.phb:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.ph.none{display:flex;align-items:center;justify-content:center;background:var(--bg);font-size:24px}
+.nl{color:inherit;text-decoration:none}
+.nl:focus-visible,.back:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.back{display:inline-block;color:var(--leaf);font-weight:700;text-decoration:none;padding:6px 0;margin-bottom:8px}
+.dh{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.dh .ph{width:96px;height:96px}
+.dh .ph.none{font-size:44px}
+.dh input{font-size:20px;font-weight:700;margin:0}
+.dcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.day{color:var(--leaf);font-weight:700;margin:4px 0 0;font-size:14px}
+.intv{color:var(--sub);font-size:14px;margin:0;display:flex;flex-wrap:wrap;gap:6px 18px}
+.it{display:inline-flex;align-items:center;gap:6px}
+.intv .ic{width:22px;height:22px}
+.rm{display:block;width:100%;margin-top:28px;padding:12px;background:none;border:1px solid var(--late);color:var(--late);border-radius:10px;font:inherit;cursor:pointer}
+.rm:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+select{width:100%;font:inherit;font-size:16px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin-top:4px}
+select:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.nm{min-width:0;flex:1}
+.kn{font-size:.72em;font-weight:600;color:var(--sub);margin-left:3px}
+.loc{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--sub);margin-top:2px}
+.pin{width:14px;height:14px;flex:none}
+.pin circle{fill:var(--card)}
+textarea{width:100%;min-height:160px;font:inherit;font-size:16px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin-top:4px;resize:vertical}
+textarea:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+
+/* ---- 仕上げ(やわらかさはそのまま、輪郭と余白を整える) ---- */
+:root{--bg2:#F8FBF7;--sh:0 1px 1px rgba(31,45,38,.04),0 10px 24px -14px rgba(31,45,38,.28);--warnT:#8A6100}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg2:#16201B;--sh:0 12px 26px -16px rgba(0,0,0,.8);--warnT:#F2C94C}}
+:root[data-theme="dark"]{--bg2:#16201B;--sh:0 12px 26px -16px rgba(0,0,0,.8);--warnT:#F2C94C}
+body{background:var(--bg);background:linear-gradient(180deg,var(--bg2) 0,var(--bg) 360px) var(--bg) no-repeat}
+main{padding-top:26px}
+.dt{margin:0 0 2px;font-size:13px;color:var(--sub);letter-spacing:.08em}
+h1{font-size:28px;font-weight:500;letter-spacing:.12em;line-height:1.3}
+.hd{margin-bottom:16px;align-items:flex-end}
+.addb{border-width:1.5px;box-shadow:var(--sh)}
+.sum{margin-bottom:14px}
+.sum.ok,.sum.warn,.sum.late{display:flex;align-items:center;gap:14px;border:0;border-radius:20px;padding:16px 18px;box-shadow:var(--sh);background:var(--card)}
+.sum.ok{background:color-mix(in srgb,var(--leaf) 11%,var(--card))}
+.sum.warn{background:color-mix(in srgb,var(--warn) 20%,var(--card))}
+.sum.late{background:color-mix(in srgb,var(--late) 13%,var(--card))}
+.smi{--ic:var(--leaf);flex:none;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ic);background:var(--card)}
+.smi svg{width:24px;height:24px;display:block}
+.sum.warn .smi{--ic:var(--warnT)}
+.sum.late .smi{--ic:var(--late)}
+.smt{min-width:0}
+.sm1{font-size:20px;letter-spacing:.02em}
+.sm1 b{font-size:24px}
+.sm2{font-size:14px}
+.sm3{font-size:12px;margin-top:4px}
+.sr input{border-radius:999px;border-color:transparent;padding-left:44px;background:rgba(47,107,79,.07);background:color-mix(in srgb,var(--leaf) 8%,transparent)}
+.sri{left:16px}
+.card{border:1.5px solid transparent;border-radius:20px;box-shadow:var(--sh);padding:11px 14px;margin-bottom:10px}
+.card.late{border-color:var(--late)}
+.card.warn{border-color:var(--warn)}
+.card::before{border-radius:60% 60% 0 0/14px 14px 0 0}
+.name{letter-spacing:.03em}
+.ph{border-radius:15px}
+.ph.none{background:rgba(47,107,79,.10);background:color-mix(in srgb,var(--leaf) 11%,var(--card))}
+.pin{color:var(--leaf);opacity:.75}
+.loc{letter-spacing:.02em}
+.fp{border-top:1px solid var(--line)}
+.add,form{border:0;border-radius:20px;box-shadow:var(--sh);padding:18px}
+.dcard{border:0;border-radius:20px;box-shadow:var(--sh);padding:16px}
+.btn.save{border-radius:14px;padding:13px 14px;font-size:16px;letter-spacing:.04em}
+input,select,textarea{border-radius:12px}
+.back{letter-spacing:.03em}
+
+/* ---- バックアップ・確認ダイアログ ---- */
+.bk summary{cursor:pointer;font-weight:700;font-size:15px;letter-spacing:.03em;list-style:none;display:flex;align-items:center;justify-content:space-between}
+.bk summary::-webkit-details-marker{display:none}
+.bk summary::after{content:"＋";color:var(--leaf);font-size:18px}
+.bk[open] summary::after{content:"－"}
+.bk summary:focus-visible{outline:3px solid var(--leaf);outline-offset:4px;border-radius:8px}
+.bk{margin-top:18px}
+.bk[open] summary{margin-bottom:10px}
+.bkr{display:flex;gap:8px;margin:10px 0}
+.bkb{flex:1;background:var(--leaf);border-radius:12px;padding:12px 10px;min-width:0}
+.bkb[hidden]{display:none}
+#bkpbtn{width:100%;margin-top:8px}
+.bkb.s{background:none;color:var(--leaf);border:1.5px solid var(--leaf)}
+.bkt{min-height:96px;font-size:13px}
+.bkl{margin-top:12px}
+.mdl{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(20,30,25,.45)}
+.mdl[hidden]{display:none}
+.mdb{background:var(--card);border-radius:20px;padding:22px 20px 18px;max-width:340px;width:100%;box-shadow:var(--sh)}
+.mdb p{margin:0 0 18px;font-size:16px;line-height:1.7}
+.mda{display:flex;gap:10px}
+.mda .btn{flex:1;min-width:0;padding:12px;border-radius:12px}
+.btn.mc{background:none;color:var(--ink);border:1.5px solid var(--line)}
+.btn.mo{background:var(--leaf)}
+.btn.mo.dng{background:var(--late);color:var(--onleaf)}
+.btn.mo:focus-visible,.btn.mc:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+
+/* ---- 設定ボタン・設定画面 ---- */
+.hb{display:flex;align-items:center;gap:8px;flex:none}
+.setb{flex:none;width:44px;height:44px;padding:0;border-radius:50%;border:1.5px solid var(--leaf);background:var(--card);color:var(--leaf);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--sh)}
+.setb svg{width:22px;height:22px;display:block}
+.setb:focus-visible{outline:3px solid var(--leaf);outline-offset:3px}
+.sh{font-size:22px;font-weight:500;letter-spacing:.06em;margin:4px 0 16px}
+.swr{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.swl{min-width:0}
+.swt{font-weight:700;font-size:16px}
+.tgl{flex:none;position:relative;width:54px;height:32px;padding:0;border:0;border-radius:16px;background:#B9C7BD;cursor:pointer;transition:background .2s}
+.tgl span{position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.tgl[aria-checked="true"]{background:var(--leaf)}
+.tgl[aria-checked="true"] span{transform:translateX(22px)}
+.tgl:focus-visible{outline:3px solid var(--leaf);outline-offset:3px}
+.nt{margin-top:12px}
+#setv .bk{margin-top:0}
+@media (prefers-reduced-motion: reduce){.tgl,.tgl span{transition:none}}
+
+/* ---- 元に戻す ---- */
+.toast{position:fixed;left:0;right:0;margin:0 auto;width:max-content;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:12px;max-width:calc(100% - 32px);padding:10px 10px 10px 16px;border-radius:16px;background:var(--ink);color:var(--bg);box-shadow:0 10px 30px -10px rgba(0,0,0,.5);font-size:14px;animation:tin .25s ease}
+.toast[hidden]{display:none}
+.toast button{flex:none;border:0;border-radius:10px;padding:9px 13px;font:inherit;font-weight:700;color:inherit;cursor:pointer;background:rgba(128,128,128,.3);background:color-mix(in srgb,var(--bg) 22%,transparent)}
+.toast button:focus-visible{outline:3px solid var(--bg);outline-offset:2px}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion: reduce){.toast{animation:none}}
+
+/* ---- 様子の記録 ---- */
+.lgg{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;margin-top:10px}
+.lgt{position:relative;padding:0;border:0;border-radius:12px;overflow:hidden;aspect-ratio:1;background:var(--bg2);cursor:pointer}
+.lgt img{width:100%;height:100%;object-fit:cover;display:block}
+.lgt span{position:absolute;left:6px;bottom:6px;font-size:11px;font-weight:700;color:#fff;background:rgba(0,0,0,.5);border-radius:999px;padding:1px 8px}
+.lgt:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.lgv{position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto;-webkit-overflow-scrolling:touch}
+.lgv[hidden]{display:none}
+.lgin{max-width:560px;margin:0 auto;padding:16px 16px 48px}
+.lgx{background:none;border:0;color:var(--leaf);font-size:16px;font-weight:700;padding:8px 4px;cursor:pointer}
+.lgbig{width:100%;max-height:60vh;object-fit:contain;border-radius:16px;background:var(--bg2);display:block;margin:6px 0 12px}
+.lgprev{width:60%;max-width:260px;border-radius:12px;display:block;margin:6px 0 10px;background:var(--bg2);-webkit-touch-callout:default}
+.lgh{margin-top:20px}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px}
+.chk input{width:20px;height:20px;margin:0}
+a.lgxl{display:block;text-align:center;text-decoration:none;background:none;color:var(--leaf);border:1.5px solid var(--leaf);border-radius:12px;padding:12px;margin:8px 0}
+.lgx:focus-visible,a.lgxl:focus-visible{outline:3px solid var(--leaf);outline-offset:3px}
+
+.lgtt{font-weight:700;font-size:15px;margin:10px 0 6px}
+.lgprev{width:100%;max-width:340px;margin:0 auto 10px}
+.lgst{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.lgst li{display:flex;gap:12px;align-items:flex-start}
+.lgst li>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.lgst .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--leaf);color:var(--onleaf);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px}
+.btn.lgb{background:var(--leaf);border-radius:12px;padding:13px;text-align:center}
+.btn.lgb.s{background:none;color:var(--leaf);border:1.5px solid var(--leaf)}
+.lgst .bkt{min-height:84px}
+.lgtip{margin-top:8px}
+.dh .dnm{margin-top:6px;font-size:14px;font-weight:500}
+#dnn{font-weight:700}
+
+/* ---- カレンダー ---- */
+.sum.ok,.sum.warn,.sum.late{flex-wrap:wrap}
+.calw{flex:0 0 100%;min-width:0}
+.calb{background:var(--card);border-radius:16px;padding:10px 8px 12px;margin-top:2px}
+.calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.calt{font-weight:700;font-size:16px;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.calm{width:40px;height:40px;border:0;border-radius:50%;background:none;color:var(--leaf);font-size:24px;line-height:1;cursor:pointer}
+.calm:disabled{opacity:.3;cursor:default}
+.calto{border:1.5px solid var(--leaf);background:none;color:var(--leaf);border-radius:999px;font:inherit;font-size:12px;font-weight:700;padding:2px 10px;cursor:pointer}
+.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cwd{text-align:center;font-size:11px;color:var(--sub);padding:2px 0}
+.cwd.su{color:var(--late)}.cwd.sa{color:var(--water)}
+.cd{min-width:0;height:46px;padding:2px 0 0;border:1.5px solid transparent;border-radius:10px;background:none;color:var(--ink);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px}
+.cn{font-size:13px;line-height:18px}
+.cis{display:flex;gap:1px;height:14px}
+.cd.td{border-color:var(--leaf)}
+.cd.td .cn{font-weight:700;color:var(--leaf)}
+.cd.sl{background:color-mix(in srgb,var(--leaf) 16%,var(--card))}
+.cd:focus-visible,.calm:focus-visible,.calto:focus-visible{outline:3px solid var(--leaf);outline-offset:1px}
+.ci{display:inline-flex;width:13px;height:13px;vertical-align:-2px}
+.ci svg{width:13px;height:13px;display:block}
+.ci.cw{color:var(--water)}.ci.cf{color:var(--fert)}
+.ci svg path{fill:currentColor;stroke:currentColor;stroke-width:2}
+.ci.o svg path{fill:none;stroke-width:2.4}
+.cdt{margin-top:8px;padding:10px 12px;border-radius:12px;background:var(--bg2,var(--bg))}
+.cdh{font-weight:700;font-size:14px;margin-bottom:4px}
+.cr{font-size:14px;line-height:1.7;display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap}
+.cr .ci{margin-top:5px}
+.cr.sub{color:var(--sub)}
+.cleg{font-size:11px;color:var(--sub);margin:8px 0 0;line-height:1.9}
+
+/* ---- コンパクト表示(画面の上半分に収める) ---- */
+.sum.ok,.sum.warn,.sum.late{padding:8px 10px;gap:4px 10px;border-radius:18px;margin-bottom:10px}
+.sum.ok .smi,.sum.warn .smi,.sum.late .smi{width:34px;height:34px}
+.sum.ok .smi svg,.sum.warn .smi svg,.sum.late .smi svg{width:18px;height:18px}
+.sum.ok .smt,.sum.warn .smt,.sum.late .smt{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap}
+.sum.ok .sm1,.sum.warn .sm1,.sum.late .sm1{font-size:17px}
+.sum.ok .sm2,.sum.warn .sm2,.sum.late .sm2{font-size:13px;color:var(--sub)}
+.sm3{display:none}
+.calb{padding:4px 4px 8px;margin-top:0;border-radius:14px}
+.calh{margin-bottom:0}
+.calm{width:36px;height:32px;font-size:22px}
+.calt{font-size:15px}
+.cwd{font-size:10px;padding:0}
+.calg{gap:0}
+.cd{height:clamp(30px,4.2vh,38px);padding-top:1px;border-radius:8px;gap:0}
+.cn{font-size:12px;line-height:16px}
+.cis{height:11px}
+.ci{width:11px;height:11px}
+.ci svg{width:11px;height:11px}
+.cdt{margin-top:4px;padding:6px 10px;display:flex;flex-wrap:wrap;gap:2px 12px;align-items:center;border-radius:10px}
+.cdh{font-size:13px;margin:0}
+.cr{font-size:13px;line-height:1.5;display:inline-flex;gap:4px;align-items:center;flex-wrap:nowrap}
+.cr .ci{margin-top:0}
+.cleg{display:none}
+
+/* ---- 詳細ページ: 1画面に収める ---- */
+.back{margin-bottom:2px;padding:4px 0}
+.dh{gap:12px;margin-bottom:10px;align-items:center}
+.dh .ph{width:64px;height:64px;border-radius:16px}
+.dh .ph.none{font-size:32px}
+.dht{flex:1;min-width:0}
+.dh #dnn{font-size:19px;font-weight:700;padding:6px 10px;margin:0}
+.dsub{display:flex;align-items:center;gap:8px;margin-top:4px}
+.dh .dnm{flex:1;min-width:0;margin:0;font-size:13px;font-weight:500;padding:4px 10px}
+.dsub .day{margin:0;font-size:12px;white-space:nowrap}
+.tabs{display:flex;gap:2px;padding:3px;margin-bottom:10px;border-radius:14px;background:color-mix(in srgb,var(--leaf) 10%,var(--bg))}
+.tabs button{flex:1;border:0;border-radius:11px;padding:8px 0;background:none;color:var(--sub);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--card);color:var(--leaf);box-shadow:var(--sh)}
+.tabs button:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.dpan{margin-bottom:0;padding:14px}
+.dpan[hidden]{display:none}
+.dpan label{margin-bottom:8px;font-size:12px;color:var(--sub)}
+.dpan input,.dpan select{padding:8px 10px;font-size:15px;color:var(--ink)}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.dg>*{min-width:0}
+.dpan textarea{min-height:0;font-size:15px;padding:8px 10px}
+.dpan .intv{margin:2px 0 6px;font-size:13px}
+.dpan .wg{font-size:12px;margin:0 0 8px;line-height:1.5}
+.dpan .rm{margin-top:6px;padding:8px;font-size:13px;border-radius:10px}
+.dpan .ovt{font-size:14px;line-height:1.65;margin:0 0 12px}
+.dpan .tx{margin-bottom:10px}
+.dpan .txt{font-size:12px;line-height:1.5}
+.dpan .lgg{grid-template-columns:repeat(4,1fr)}
+
+/* ---- ホーム: カレンダーと検索は固定、植物リストだけスクロール ---- */
+#home{position:fixed;top:0;left:0;right:0;bottom:0;box-sizing:border-box;max-width:520px;margin:0 auto;padding:26px 16px 12px;display:flex;flex-direction:column;overflow:hidden}
+#home[hidden]{display:none}
+#home>*{flex:none}
+#home>.hd{margin-bottom:6px}
+#home>#list{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:2px 2px 20px;margin:0 -2px}
+#home:has(#addsec:not([hidden])){overflow-y:auto}
+#home:has(#addsec:not([hidden]))>#list{overflow:visible;flex:none}
+html:has(#home:not([hidden])),body:has(#home:not([hidden])){overflow:hidden;height:100%}
+
+/* ---- お世話タブの整え(iPhoneでも崩れないよう、入力欄の見た目をそろえる) ---- */
+.dpan input,.dpan select,.dpan textarea{box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:4px 0 0;-webkit-appearance:none;appearance:none;border-radius:12px;background-color:var(--bg);font-size:15px;color:var(--ink)}
+.dpan input[type="date"],.dpan select{display:block;height:42px;min-height:42px;padding:0 12px;line-height:42px;text-align:left}
+.dpan input[type="date"]::-webkit-date-and-time-value{text-align:left;min-height:1.2em}
+.dpan input[type="date"]::-webkit-calendar-picker-indicator{opacity:.55}
+.dpan select{padding-right:34px;line-height:normal;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%235E6E65' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:16px}
+.dpan label{margin:0 0 10px}
+.dg{gap:0 10px}
+.dpan .intv{gap:8px;margin:0 0 8px}
+.dpan .it{background:var(--bg);border-radius:999px;padding:4px 12px 4px 8px;font-size:13px;color:var(--ink)}
+.dpan .intv .ic{width:20px;height:20px}
+.dpan .wg{background:var(--bg);border-radius:12px;padding:8px 12px;margin:0 0 12px}
+.dpan textarea{padding:8px 12px;line-height:1.5;resize:none;height:64px}
+.dpan .rm{margin-top:4px}
+.dsub .day:empty{display:none}
+
+/* ---- 詳細ページ: 記録写真を3列で表示し、下のタブでお世話・概要に切り替える ---- */
+#detail{position:fixed;top:0;left:0;right:0;bottom:0;box-sizing:border-box;max-width:520px;margin:0 auto;padding:22px 16px 0;display:flex;flex-direction:column;overflow:hidden}
+#detail[hidden]{display:none}
+#detail>*{flex:none}
+html:has(#detail:not([hidden])),body:has(#detail:not([hidden])){overflow:hidden;height:100%}
+#detail>.dbody{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:2px 2px 12px;margin:0 -2px}
+.tabs{flex:none;display:flex;gap:0;padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));margin:0 -16px;background:var(--card);border-top:1px solid var(--line);border-radius:0;box-shadow:0 -4px 16px rgba(20,40,30,.06)}
+.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;border-radius:0;padding:4px 0;background:none;color:var(--sub);font:inherit;font-size:11px;font-weight:700;cursor:pointer;box-shadow:none}
+.tabs button svg{width:24px;height:24px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+.tabs button[aria-selected="true"]{background:none;color:var(--leaf);box-shadow:none}
+.tabs button[aria-selected="true"] svg{fill:currentColor;fill-opacity:.18}
+.lgp{background:none;border:0;box-shadow:none;padding:0}
+.lgbar{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.lgab{flex:none;border:1.5px solid var(--leaf);background:var(--card);color:var(--leaf);border-radius:999px;font:inherit;font-size:13px;font-weight:700;padding:6px 14px;cursor:pointer}
+.lgab:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.lgcnt{margin-left:auto;font-size:12px;color:var(--sub)}
+.dpan .lgg,.lgg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin:0}
+.lgt{border-radius:6px;aspect-ratio:1}
+.lgempty{text-align:center;color:var(--sub);font-size:13px;line-height:1.8;margin:48px 0}
+.lgp .hint{margin:0 0 6px;min-height:0}
+.lgp .hint:empty{display:none}
+
+.lgprev{width:auto;max-width:100%;max-height:34vh;margin:0 auto 8px}
+.lgdest{display:flex;gap:6px;padding:3px;border-radius:14px;background:color-mix(in srgb,var(--leaf) 10%,var(--bg));margin:4px 0 10px}
+.lgdest button{flex:1;border:0;border-radius:11px;padding:9px 0;background:none;color:var(--sub);font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.lgdest button[aria-selected="true"]{background:var(--card);color:var(--leaf);box-shadow:var(--sh)}
+.lgdest button:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.lgdp{display:flex;flex-direction:column;gap:8px}
+.lgdp[hidden]{display:none}
+a.lgxl,#lgigl{display:block;text-decoration:none;text-align:center;margin:0}
+a.lgxl{background:none;color:var(--leaf);border:1.5px solid var(--leaf)}
+#lgigl{background:none;color:var(--leaf);border:1.5px solid var(--leaf)}
+.btn.lgb[hidden]{display:none}
+.lged{margin-top:14px}
+.lged summary{cursor:pointer;font-size:14px;color:var(--leaf);font-weight:700;padding:6px 0}
+.lged .bkt{margin:6px 0 8px;min-height:90px}
+.sw2{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+
+.ivr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 2px}
+.iv{min-width:0}
+.ivl{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);margin-bottom:2px}
+.ivl .ic{width:18px;height:18px}
+.ivf{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink)}
+.dpan .ivf input{width:72px;height:42px;padding:0 6px;text-align:center;margin:0;-moz-appearance:textfield}
+.dpan .ivf input::-webkit-outer-spin-button,.dpan .ivf input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.wg2{font-size:11px;color:var(--sub);margin:2px 0 8px}
+
+/* ---- 横スクロールなし(縦のみ) ---- */
+html,body{overflow-x:hidden;max-width:100%}
+#detail,#home{overflow-x:hidden;touch-action:pan-y}
+#home,#detail{bottom:var(--vb,0px)}
+#visprobe{position:fixed;left:0;top:0;width:1px;height:100%;pointer-events:none;visibility:hidden}
+#detail>.dbody,#home>#list,.lgv{overflow-x:hidden;touch-action:pan-y}
+.dg,.ivr{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.lgg,.dpan .lgg{grid-template-columns:repeat(3,minmax(0,1fr))}
+.dpan,.dcard,.dg>*,.iv,.dht,.dsub{min-width:0;max-width:100%}
+.dpan input,.dpan select,.dpan textarea{max-width:100%}
+
+/* ---- 入力欄を押したときの自動ズーム防止(iPhoneは16px未満でズームする) ---- */
+input,select,textarea,.dpan input,.dpan select,.dpan textarea,.dh .dnm,.dh #dnn,.dpan .ivf input,.lgv input,.lgv textarea{font-size:16px}
+textarea.bkt,.bkt{font-size:16px}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulation}
+
+/* ---- 記録フォーム(状態・天気を選んで残す) ---- */
+.lgbig{max-height:30vh;width:auto;max-width:100%;margin:2px auto 12px}
+.lgf{background:var(--card);border-radius:20px;padding:14px;box-shadow:var(--sh)}
+.lgq{font-weight:700;font-size:14px;margin:0 0 6px}
+.lgq~.lgq,.chps+.lgq{margin-top:12px}
+.chps{display:flex;flex-wrap:wrap;gap:6px}
+.shx{display:block;box-sizing:border-box;text-align:center;text-decoration:none;margin:10px 0}
+#shtpl{min-height:96px;margin-top:4px}
+.chp{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.chp[aria-pressed="true"]{border-color:var(--leaf);background:color-mix(in srgb,var(--leaf) 16%,var(--card));color:var(--leaf);font-weight:700}
+.chp:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.lgrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px;margin-top:14px}
+.lgrow label{margin:0;font-size:12px;color:var(--sub)}
+.lgrow input{height:42px;padding:0 10px;margin-top:4px;box-sizing:border-box;-webkit-appearance:none;appearance:none}
+.lgacts{margin-top:14px}
+.lgacts .btn{width:100%;box-sizing:border-box}
+.lgbd{position:absolute;right:4px;top:4px;font-size:15px;line-height:1;background:rgba(255,255,255,.85);border-radius:999px;padding:2px 3px}
+.lgbd.w{top:28px}
+.lgt .lgbd.w{right:4px}
+.bk summary .sst{margin-left:auto;margin-right:10px;font-size:12px;font-weight:500;color:var(--sub);letter-spacing:0}
+#setv details.bk{margin-top:0;margin-bottom:12px}
+
+/* ---- ホームの下タブ(ホーム/検索) ---- */
+#home{padding-bottom:0}
+#home>.hometabs{position:sticky;bottom:0;z-index:5;margin-top:0}
+#home[data-t="search"] #sum{display:none}
+#home[data-t="search"]>.hd{margin-bottom:10px}
+
+/* ---- 削除ボタン(ゴミ箱アイコン) ---- */
+.dtop{display:flex;align-items:center;justify-content:space-between;height:44px;margin-bottom:6px}
+.dtop .back{margin:0;padding:6px 0}
+.trb{flex:none;width:38px;height:38px;padding:0;border:1.5px solid var(--late);border-radius:50%;background:var(--card);color:var(--late);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.trb svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.trb:focus-visible{outline:3px solid var(--late);outline-offset:2px}
+
+/* ---- お世話タブ: 水やり・肥料を「頻度」と「最後」で2段に整理 ---- */
+.cg{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:0 10px;margin:2px 0 4px;padding:8px 10px 0;border-radius:14px;background:var(--bg)}
+.cgh{grid-column:1/-1;display:flex;align-items:center;gap:6px;font-weight:700;font-size:13px;margin-bottom:4px}
+.cgh .ic{width:18px;height:18px}
+.cgh small{font-weight:500;font-size:11px;color:var(--sub)}
+.cg label{margin:0 0 8px}
+.cg input,.cg select{background-color:var(--card)}
+.dpan .wg:empty{display:none}
+.dpan .wg{padding:6px 12px;margin:0 0 8px}
+.cg input,.dpan .dg input,.dpan .dg select{height:40px;min-height:40px;line-height:40px}
+.cg input[type=number]{line-height:normal}
+
+/* ---- 履歴タブ ---- */
+.hsum{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.hs{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+.hs .ic{width:18px;height:18px}
+.hadd{display:flex;gap:6px;align-items:center}
+.hadd input{flex:1;min-width:0;height:40px;margin:0;padding:0 10px;box-sizing:border-box;-webkit-appearance:none;appearance:none;border-radius:12px}
+.hab{flex:none;height:40px;display:inline-flex;align-items:center;gap:4px;padding:0 12px;border:1.5px solid var(--leaf);border-radius:12px;background:var(--card);color:var(--leaf);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.hab .ic{width:16px;height:16px}
+.hab:focus-visible,.hx:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.hh{margin:4px 0 6px;min-height:0}
+.hh:empty{display:none}
+.hlist{margin-top:6px}
+.hmo{font-size:12px;color:var(--sub);font-weight:700;margin:10px 0 2px}
+.hrow{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.hrow .hdt{width:72px;flex:none}
+.hty{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
+.hty .ic{width:18px;height:18px}
+.hx{flex:none;width:32px;height:32px;border:0;border-radius:50%;background:none;color:var(--sub);font-size:20px;line-height:1;cursor:pointer}
+.dwrap{display:flex;flex-direction:column;gap:12px}
+.dwrap[hidden]{display:none}
+.dwrap .dpan{margin-bottom:0}
+.toast button.tx{padding:0;width:34px;height:34px;font-size:20px;line-height:1;background:none;border-radius:50%}
+body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+.shl{font-size:12px;color:var(--sub);margin:10px 0 0}
+#shurl{font-size:16px;height:42px;padding:0 10px;margin-top:4px;box-sizing:border-box}
+</style>
+<style>.dcard:has(#syncst){display:none}</style>
+</head>
+<body>
+<main>
+  <div id="detail" hidden></div>
+  <div id="setv" hidden>
+    <a class="back" href="#">‹ 一覧にもどる</a>
+    <h2 class="sh">設定</h2>
+    <details class="dcard bk">
+      <summary><span>画面の色</span><span class="sst" id="thst"></span></summary>
+      <p class="txt">明るい画面と暗い画面を切り替えられます。「自動」は、スマホの設定に合わせます。</p>
+      <div class="chps" role="group" aria-label="画面の色">
+        <button type="button" class="chp" data-theme-set="auto" aria-pressed="false">自動</button>
+        <button type="button" class="chp" data-theme-set="light" aria-pressed="false">☀️ ライト</button>
+        <button type="button" class="chp" data-theme-set="dark" aria-pressed="false">🌙 ダーク</button>
+      </div>
+    </details>
+    <details class="dcard bk">
+      <summary><span>通知</span><span class="sst" id="ntst"></span></summary>
+      <div class="swr">
+        <div class="swl">
+          <div class="swt" id="ntl">お世話の通知</div>
+          <p class="txt" id="ntsub"></p>
+        </div>
+        <button type="button" class="tgl" id="ntsw" role="switch" aria-checked="false" aria-labelledby="ntl"><span></span></button>
+      </div>
+      <p class="txt nt">いまは、通知はまだ届きません(準備中)。この設定は保存されていて、通知が使えるようになったときに使われます。</p>
+    </details>
+    <details class="dcard bk">
+      <summary><span>写真</span><span class="sst" id="phst"></span></summary>
+      <div class="swr">
+        <div class="swl">
+          <div class="swt" id="asl">撮ったら自動でスマホに保存</div>
+          <p class="txt" id="assub"></p>
+        </div>
+        <button type="button" class="tgl" id="assw" role="switch" aria-checked="false" aria-labelledby="asl"><span></span></button>
+      </div>
+      <div class="swr sw2">
+        <div class="swl">
+          <div class="swt" id="stl">写真に日付などをつける</div>
+          <p class="txt" id="stsub"></p>
+        </div>
+        <button type="button" class="tgl" id="stsw" role="switch" aria-checked="true" aria-labelledby="stl"><span></span></button>
+      </div>
+    </details>
+  <details class="dcard bk">
+    <summary>アプリをシェア</summary>
+    <p class="txt">このアプリのリンクを、家族や友だちに送れます。</p>
+    <label class="shl">送るリンク<input id="shurl" type="url" inputmode="url" autocomplete="off" aria-label="送るリンク"></label>
+    <div class="bkr">
+      <button type="button" class="btn bkb" id="shgo">シェアする</button>
+      <button type="button" class="btn bkb s" id="shcp">リンクをコピー</button>
+    </div>
+    <a class="btn bkb shx" id="shx" href="https://x.com/intent/post" target="_blank" rel="noopener noreferrer">Xでシェア</a>
+    <label class="shl">Xの紹介文(書き換えできます)<textarea id="shtpl" class="bkt" maxlength="200" aria-label="Xの紹介文"></textarea></label>
+    <button type="button" class="btn bkb s" id="shtrs">紹介文をもとにもどす</button>
+    <p class="txt">相手がリンクを開けるかどうかは、Claudeでの共有の設定によります。自分の置き場所に公開したときは、上のリンクを書き換えてください。</p>
+    <p class="hint" id="shmsg" role="status"></p>
+  </details>
+  <details class="dcard bk">
+    <summary>家族とデータを共有</summary>
+    <p class="txt">同じアプリを開いている家族と、植物・水やり記録・置き場所を自動でそろえます。植物の代表写真は小さくして共有されます。「様子の記録」の写真は共有されず、撮った端末にだけ残ります。</p>
+    <p class="hint" id="syncst" role="status">確認中…</p>
+  </details>
+  <details class="dcard bk">
+    <summary>このアプリについて</summary>
+    <p class="txt"><b>植物の情報について</b><br>犬・猫への毒性は、ASPCA(米国動物虐待防止協会)の公開情報を参考にした目安です。人への毒性や、植物の説明は、一般的な目安です。正確さは保証できません。</p>
+    <p class="txt">口にしたとき、体調が悪そうなときは、植物の名前を伝えて、動物病院や医療機関、中毒の相談窓口へご相談ください。このアプリは、医師や獣医師の判断の代わりにはなりません。</p>
+    <p class="txt"><b>データの扱い</b><br>植物の記録と写真は、お使いの端末の中に保存されます。バックアップをとらないまま、ブラウザのデータを消したり、アプリを削除したりすると、記録は戻せません。「バックアップと復元」を、ときどき使ってください。</p>
+    <p class="txt"><b>出典</b><br><a href="https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants" target="_blank" rel="noopener noreferrer">ASPCA Toxic and Non-toxic Plants</a></p>
+    <p class="txt"><a href="privacy.html" target="_blank" rel="noopener">プライバシーと利用上の注意</a></p>
+  </details>
+  <details class="dcard bk">
+    <summary>バックアップと復元</summary>
+    <p class="txt" id="bkinfo"></p>
+    <div class="bkr">
+      <button type="button" class="btn bkb" id="bkfile" hidden>ファイルに保存</button>
+      <button type="button" class="btn bkb s" id="bkcopy">コピーする</button>
+    </div>
+    <textarea id="bkta" class="bkt" readonly hidden aria-label="バックアップの文字"></textarea>
+    <p class="txt">コピーした文字は、メモアプリなどに貼り付けて保管できます。植物の写真も含まれます。「様子の記録」の写真は、「ファイルに保存」のときだけ含まれます。</p>
+    <label class="bkl">ファイルから復元
+      <input type="file" id="bkin" accept=".json,application/json,text/plain">
+    </label>
+    <label class="bkl">コピーした文字を貼り付けて復元
+      <textarea id="bkpaste" class="bkt" placeholder="ここに貼り付け"></textarea>
+    </label>
+    <button type="button" class="btn bkb" id="bkpbtn">貼り付けた内容で復元</button>
+    <p class="hint" id="bkmsg" role="status"></p>
+  </details>
+  </div>
+  <div id="visprobe" aria-hidden="true"></div>
+  <div id="home">
+  <div class="hd"><div><p class="dt" id="dt"></p><h1>水やり日和</h1></div><div class="hb"><button class="addb" id="addtoggle" aria-label="植物を追加" aria-expanded="false" aria-controls="addsec"><span class="pls">＋</span>🪴</button><button class="setb" id="settoggle" aria-label="設定"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6.5h8M16.5 6.5H20M4 12h3.5M11.5 12H20M4 17.5h10M18.5 17.5H20"/><circle cx="14.2" cy="6.5" r="2.2"/><circle cx="9.3" cy="12" r="2.2"/><circle cx="16.2" cy="17.5" r="2.2"/></svg></button></div></div>
+  <section class="add" id="addsec" hidden>
+    <h2>植物を追加</h2>
+    <label>写真(任意)
+      <input id="ph" type="file" accept="image/*">
+    </label>
+    <div id="idrow" hidden>
+      <button type="button" class="btn idb" id="idbtn">✨ 写真から品種を調べ直す</button>
+      <p class="hint" id="idmsg" role="status"></p>
+    </div>
+    <label>品種
+      <input id="n" placeholder="例: モンステラ" maxlength="30">
+    </label>
+    <label>ニックネーム(任意)
+      <input id="nn" placeholder="例: モンちゃん" maxlength="20">
+    </label>
+    <p class="hint">置き場所・お迎え日・鉢のサイズ・水やりの間隔などは、次の画面で入力します。</p>
+    <button class="btn save" id="add">次へ(詳細を入力)</button>
+  </section>
+  <div class="sum" id="sum"></div>
+  <div class="sr" id="sr" hidden>
+    <svg class="sri" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <input id="q" type="search" placeholder="名前・場所・鉢のサイズ・メモで検索" aria-label="植物を検索" autocomplete="off" enterkeyhint="search">
+  </div>
+  <p class="qn" id="qn" role="status"></p>
+  <div id="list"></div>
+  <div class="tabs hometabs" role="tablist" aria-label="ホームの切り替え">
+    <button type="button" role="tab" data-ht="home" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg><span>ホーム</span></button>
+    <button type="button" role="tab" data-ht="search" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg><span>検索</span></button>
+  </div>
+  </div>
+</main>
+<div class="lgv" id="lgv" hidden role="dialog" aria-modal="true" aria-label="様子の記録">
+  <div class="lgin">
+    <button type="button" class="lgx" id="lgclose">‹ もどる</button>
+    <img class="lgbig" id="lgimg" alt="記録した写真">
+    <div class="lgf">
+      <p class="lgq">状態</p>
+      <div class="chps" role="group" aria-label="状態"><button type="button" class="chp" data-c="ok" aria-pressed="false"><span aria-hidden="true">😊</span>元気</button><button type="button" class="chp" data-c="bud" aria-pressed="false"><span aria-hidden="true">🌱</span>新芽</button><button type="button" class="chp" data-c="bloom" aria-pressed="false"><span aria-hidden="true">🌸</span>開花</button><button type="button" class="chp" data-c="yel" aria-pressed="false"><span aria-hidden="true">🍂</span>葉が黄ばむ</button><button type="button" class="chp" data-c="wilt" aria-pressed="false"><span aria-hidden="true">😟</span>しおれ</button><button type="button" class="chp" data-c="bug" aria-pressed="false"><span aria-hidden="true">🐛</span>虫・病気</button></div>
+      <p class="lgq">天気</p>
+      <div class="chps" role="group" aria-label="天気"><button type="button" class="chp" data-w="sun" aria-pressed="false"><span aria-hidden="true">☀️</span>晴れ</button><button type="button" class="chp" data-w="cloud" aria-pressed="false"><span aria-hidden="true">☁️</span>くもり</button><button type="button" class="chp" data-w="rain" aria-pressed="false"><span aria-hidden="true">🌧️</span>雨</button><button type="button" class="chp" data-w="snow" aria-pressed="false"><span aria-hidden="true">❄️</span>雪</button></div>
+      <div class="lgrow"><label>日付<input type="date" id="lgd"></label>
+      <label>ひとこと<input type="text" id="lgn" maxlength="80" placeholder="例: 新しい葉が出てきた"></label></div>
+    </div>
+    <div class="lgacts"><button type="button" class="btn lgb s" id="lgshbtn" aria-expanded="false">SNSに投稿する</button></div>
+    <section id="lgshare" hidden>
+    <p class="lgtt">SNSに投稿する画像</p>
+    <img class="lgprev" id="lgprev" alt="投稿用の画像">
+    <label class="chk"><input type="checkbox" id="lgtxt" checked> 写真に名前と日付を入れる</label>
+    <p class="lgtt">どこに投稿しますか?</p>
+    <div class="lgdest" role="tablist" aria-label="投稿先"><button type="button" role="tab" data-dest="x" aria-selected="true">X</button><button type="button" role="tab" data-dest="ig" aria-selected="false">Instagram</button></div>
+    <div class="lgdp" data-dp="x">
+      <button type="button" class="btn lgb lgsv" id="lgsave" hidden>① 画像を保存・共有</button>
+      <a class="btn lgb s lgxl" id="lgxl" href="#" target="_blank" rel="noopener noreferrer">② Xの投稿画面を開く</a>
+      <p class="txt">文章とハッシュタグは入った状態で開きます。画像は、投稿画面の画像ボタンから、保存した写真を選んでください(Xの仕組みで、画像は自動では付けられません)。</p>
+    </div>
+    <div class="lgdp" data-dp="ig" hidden>
+      <button type="button" class="btn lgb lgsv" id="lgsave2" hidden>① 画像を保存・共有</button>
+      <a class="btn lgb s" id="lgigl" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">② Instagramを開く</a>
+      <p class="txt">文章とハッシュタグは自動でコピーされます。Instagramの「＋」から保存した画像を選び、キャプションに貼り付けてください(Instagramの仕組みで、自動投稿はできません)。</p>
+    </div>
+    <details class="lged"><summary>投稿の文章を編集</summary>
+      <textarea id="lgcap" class="bkt" aria-label="投稿の文章"></textarea>
+      <button type="button" class="btn lgb s" id="lgcopy">文章をコピー</button>
+    </details>
+    </section>
+    <p class="hint" id="lgsm" role="status"></p>
+    <button type="button" class="rm" id="lgdel">この記録を削除</button>
+  </div>
+</div>
+<div class="mdl" id="mdl" hidden role="dialog" aria-modal="true" aria-labelledby="mdt">
+  <div class="mdb">
+    <p id="mdt"></p>
+    <div class="mda"><button type="button" class="btn mc" id="mdc">やめる</button><button type="button" class="btn mo" id="mdo">OK</button></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden role="status" aria-live="polite"><span id="toastt"></span><button type="button" id="toastb">元に戻す</button><button type="button" id="toastx" class="tx" aria-label="閉じる">×</button></div>
+<script>
+(function(){
+  var KEY="plants-v1", plants=[];
+  var HRE=/^\d{4}-\d{2}-\d{2}$/;
+  function hAdd(p,t,d){
+    if(typeof d!=="string"||!HRE.test(d))return false;
+    var h=p.hist||(p.hist=[]);
+    for(var i=0;i<h.length;i++){if(h[i].t===t&&h[i].d===d)return false}
+    h.push({d:d,t:t});h.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0});
+    if(h.length>1000)h.length=1000;
+    return true;
+  }
+  function hDel(p,t,d){
+    var h=p.hist||[];
+    for(var i=0;i<h.length;i++){if(h[i].t===t&&h[i].d===d){h.splice(i,1);return true}}
+    return false;
+  }
+  function hLast(p,t){
+    var h=p.hist||[],m="";
+    for(var i=0;i<h.length;i++){if(h[i].t===t&&h[i].d>m)m=h[i].d}
+    return m;
+  }
+  function hSync(p){var w=hLast(p,"w"),f=hLast(p,"f");if(w)p.lw=w;if(f)p.lf=f}
+  function migrateHist(p){
+    if(Array.isArray(p.hist))return;
+    p.hist=[];
+    hAdd(p,"w",p.lw);
+    if(p.fi>0)hAdd(p,"f",p.lf);
+  }
+  function load(){try{var s=localStorage.getItem(KEY);plants=s?JSON.parse(s):[]}catch(e){plants=[]}
+    if(!Array.isArray(plants))plants=[];
+    plants.forEach(migrateHist)}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(plants));syncSoon();return true}catch(e){return false}}
+  function today(){var d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
+  function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+  function parse(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2])}
+  function left(last,every){return every-Math.round((today()-parse(last))/864e5)}
+  function label(n){return n<0?(-n)+"日 超過":n===0?"今日":"あと"+n+"日"}
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  var IW='<svg class="ic w" viewBox="0 0 24 24" role="img" aria-label="水やり"><path d="M12 3S5.5 10.2 5.5 14.6a6.5 6.5 0 0 0 13 0C18.5 10.2 12 3 12 3z" fill="currentColor"/><path class="hl" d="M9 15a3 3 0 0 0 3 3" fill="none" stroke-width="1.7" stroke-linecap="round"/></svg>';
+  var IF='<svg class="ic f" viewBox="0 0 24 24" role="img" aria-label="肥料"><path d="M6.8 8.6 5.4 19.6c-.1 1 .7 1.9 1.7 1.9h9.8c1 0 1.8-.9 1.7-1.9L17.2 8.6z" fill="currentColor"/><path d="M8.3 8.6 7.7 4.6c-.1-.6.4-1.1 1-1.1h6.6c.6 0 1.1.5 1 1.1l-.6 4z" fill="currentColor" fill-opacity=".55"/><path class="lf2" d="M12 19.2v-4.4" stroke-width="1.5" stroke-linecap="round"/><path class="lf" d="M12 15c-2.8 0-4-1.5-4-3.6 2.8 0 4 1.3 4 3.6zM12 15c0-2.2 1.2-3.6 4-3.6 0 2.1-1.2 3.6-4 3.6z"/></svg>';
+  function gauge(left,every,id){
+    var late=left<=0,r=late?0:Math.min(1,left/every),y=21.5-r*18.5,
+    d="M12 3L6.536 11.479A6.5 6.5 0 1 0 17.464 11.479z",
+    hw=y>=11.479?Math.sqrt(42.25-(y-15)*(y-15)):5.464*(y-3)/8.479,
+    wp=r<=0?"":y>=11.479?"M"+(12-hw).toFixed(2)+" "+y.toFixed(2)+"A6.5 6.5 0 "+(y<15?1:0)+" 0 "+(12+hw).toFixed(2)+" "+y.toFixed(2)+"z":"M"+(12-hw).toFixed(2)+" "+y.toFixed(2)+"L6.536 11.479A6.5 6.5 0 1 0 17.464 11.479L"+(12+hw).toFixed(2)+" "+y.toFixed(2)+"z",
+    t=left===0?"今":String(left),
+    al=left<0?(-left)+"日超過":left===0?"今日":"あと"+left+"日";
+    return '<span class="gz'+(left<0?' late':left===0?' warn':'')+'" role="img" aria-label="'+al+'"><svg viewBox="0 0 24 24"><path d="'+d+'" fill="currentColor" fill-opacity=".14"/>'+(wp?'<path class="wl" d="'+wp+'"/>':'')+'<path d="'+d+'" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><b class="bd">'+t+'</b></span>';
+  }
+  var PIN='<svg class="pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.5 6.5 0 0 0-6.5 6.5c0 4.7 6.5 12.5 6.5 12.5s6.5-7.8 6.5-12.5A6.5 6.5 0 0 0 12 2.5z" fill="currentColor"/><circle cx="12" cy="9" r="2.4"/></svg>';
+  var PK="places-v1",places=[];
+  function loadPlaces(){try{var s=localStorage.getItem(PK);places=s?JSON.parse(s):[]}catch(e){places=[]}}
+  function savePlaces(){try{localStorage.setItem(PK,JSON.stringify(places));syncSoon();return true}catch(e){return false}}
+  function addPlace(name){name=name.trim();if(!name)return "";if(places.indexOf(name)<0){places.push(name);savePlaces()}return name}
+  function placeOpts(sel){
+    var h='<option value="">未設定</option>';
+    places.forEach(function(x){h+='<option value="'+esc(x)+'"'+(x===sel?' selected':'')+'>'+esc(x)+'</option>'});
+    return h+'<option value="__new__">＋ 場所を追加…</option>';
+  }
+  function fillPlaceSelect(){}
+  function srcList(){var o=[];plants.forEach(function(p){if(p.src&&o.indexOf(p.src)<0)o.push(p.src)});return o}
+  function srcOpts(sel){
+    var h='<option value="">未設定</option>',l=srcList();
+    if(sel&&l.indexOf(sel)<0)l.push(sel);
+    l.forEach(function(x){h+='<option value="'+esc(x)+'"'+(x===sel?' selected':'')+'>'+esc(x)+'</option>'});
+    return h+'<option value="__new__">＋ お迎え元を追加…</option>';
+  }
+  function fertBtn(p,f){
+    var late=f<0,warn=f===0,t=warn?"今":String(f),
+    al="肥料 "+(late?(-f)+"日超過":warn?"今日が目安":"目安まであと"+f+"日");
+    return '<button class="fib'+(late?' late':warn?' warn':'')+'" data-ft="'+p.id+'" aria-label="'+al+'(タップで記録を開く)" aria-expanded="false">'+IF+'<b class="bd">'+t+'</b></button>';
+  }
+  function urgency(p){var a=left(p.lw,p.wi),b=p.fi>0?left(p.lf,p.fi):999;return Math.min(a,b)}
+  function shrink(file,cb){
+    var r=new FileReader();
+    r.onload=function(){var im=new Image();im.onload=function(){
+      var s=Math.min(1,360/Math.max(im.width,im.height)),c=document.createElement("canvas");
+      c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+      c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+      cb(c.toDataURL("image/jpeg",0.7))};im.onerror=function(){cb("")};im.src=r.result};
+    r.onerror=function(){cb("")};r.readAsDataURL(file);
+  }
+  var SMDROP='<svg viewBox="0 0 24 24"><path d="M12 3 6.5 11.4A6.5 6.5 0 1 0 17.5 11.4z" fill="currentColor"/></svg>';
+  var SMLEAF='<svg viewBox="0 0 24 24"><path d="M5 19C5 10.5 10 5 19.5 4.5 19.5 14 14.5 19 5 19z" fill="currentColor"/><path d="M5 19 13 11" stroke="var(--card)" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>';
+  /* ---- 1か月カレンダー(今日は水やりなしのとき表示) ---- */
+  var calOff=0,calSel=null;
+  var CDROP='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3S5.5 10.2 5.5 14.6a6.5 6.5 0 0 0 13 0C18.5 10.2 12 3 12 3z"/></svg>';
+  var CFERT='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 21 12 12 21 3 12z"/></svg>';
+  function calEvents(endD){
+    var ev={},t=today();
+    function add(key,type,done,p){
+      var o=ev[key]||(ev[key]={w:[],f:[],wd:[],fd:[]});
+      o[type+(done?"d":"")].push(dispName(p));
+    }
+    plants.forEach(function(p){
+      [["w",p.lw,p.wi],["f",p.lf,p.fi]].forEach(function(a){
+        if(!(a[2]>0))return;
+        var b=parse(a[1]),k;
+        (p.hist||[]).forEach(function(h){if(h.t===a[0]&&parse(h.d)<=endD)add(h.d,a[0],true,p)});
+        var nx=new Date(b.getFullYear(),b.getMonth(),b.getDate()+a[2]);
+        if(nx<=t)nx=new Date(t.getFullYear(),t.getMonth(),t.getDate());
+        for(k=0;k<800&&nx<=endD;k++){
+          add(iso(nx),a[0],false,p);
+          nx=new Date(nx.getFullYear(),nx.getMonth(),nx.getDate()+a[2]);
+        }
+      });
+    });
+    return ev;
+  }
+  function drawCal(){
+    var box=document.getElementById("calw");
+    if(!box)return;
+    var t=today(),m=new Date(t.getFullYear(),t.getMonth()+calOff,1),
+    y=m.getFullYear(),mo=m.getMonth(),last=new Date(y,mo+1,0),ev=calEvents(last),
+    sel=calSel||iso(t),
+    h='<div class="calb"><div class="calh"><button type="button" class="calm" data-cal="-1" aria-label="前の月"'+(calOff<=-6?' disabled':'')+'>‹</button>'
+      +'<div class="calt">'+y+'年'+(mo+1)+'月'+(calOff!==0?' <button type="button" class="calto" data-cal="0">今日</button>':'')+'</div>'
+      +'<button type="button" class="calm" data-cal="1" aria-label="次の月"'+(calOff>=12?' disabled':'')+'>›</button></div><div class="calg" role="grid">';
+    "日月火水木金土".split("").forEach(function(c,i){h+='<div class="cwd'+(i===0?' su':i===6?' sa':'')+'" role="columnheader">'+c+'</div>'});
+    for(var i=0;i<m.getDay();i++)h+='<div></div>';
+    for(var d=1;d<=last.getDate();d++){
+      var key=iso(new Date(y,mo,d)),e=ev[key],ic="",lab=(mo+1)+"月"+d+"日";
+      if(e){
+        if(e.w.length)ic+='<span class="ci cw">'+CDROP+'</span>';else if(e.wd.length)ic+='<span class="ci cw o">'+CDROP+'</span>';
+        if(e.f.length)ic+='<span class="ci cf">'+CFERT+'</span>';else if(e.fd.length)ic+='<span class="ci cf o">'+CFERT+'</span>';
+        var tx=[];
+        if(e.w.length)tx.push("水やり予定 "+e.w.join("、"));
+        if(e.wd.length)tx.push("水をあげた日 "+e.wd.join("、"));
+        if(e.f.length)tx.push("肥料の目安 "+e.f.join("、"));
+        if(e.fd.length)tx.push("肥料をあげた日 "+e.fd.join("、"));
+        lab+=" "+tx.join(" ");
+      }
+      h+='<button type="button" class="cd'+(key===iso(t)?' td':'')+(key===sel?' sl':'')+'" data-cd="'+key+'" aria-label="'+lab+'"'+(key===sel?' aria-pressed="true"':' aria-pressed="false"')+'><span class="cn">'+d+'</span><span class="cis">'+ic+'</span></button>';
+    }
+    h+='</div>';
+    var se=ev[sel],sd=parse(sel),rows="";
+    function row(cls,icon,label,names){return names&&names.length?'<span class="cr"><span class="ci '+cls+'">'+icon+'</span>'+label+' '+esc(names.join("、"))+'</span>':""}
+    if(se){
+      rows+=row("cw",CDROP,"水やり",se.w)+row("cw o",CDROP,"あげた",se.wd)+row("cf",CFERT,"肥料",se.f)+row("cf o",CFERT,"あげた",se.fd);
+    }
+    h+='<div class="cdt"><b class="cdh">'+(sd.getMonth()+1)+'/'+sd.getDate()+'('+"日月火水木金土".charAt(sd.getDay())+')</b>'+(rows||'<span class="cr sub">予定なし</span>')+'</div></div>';
+    box.innerHTML=h;
+  }
+  document.getElementById("sum").addEventListener("click",function(e){
+    var c=e.target.closest("[data-cal]"),d=e.target.closest("[data-cd]");
+    if(c){var v=+c.getAttribute("data-cal");calOff=v===0?0:Math.max(-6,Math.min(12,calOff+v));if(v===0)calSel=null;drawCal()}
+    else if(d){calSel=d.getAttribute("data-cd");drawCal()}
+  });
+  var htab="home";
+  function render(){
+    var nowD=new Date();
+    document.getElementById("dt").textContent=(nowD.getMonth()+1)+"月"+nowD.getDate()+"日 "+"日月火水木金土".charAt(nowD.getDay())+"曜日";
+    var list=document.getElementById("list");
+    var sorted=plants.slice().sort(function(a,b){return left(a.lw,a.wi)-left(b.lw,b.wi)||urgency(a)-urgency(b)});
+    var due=sorted.filter(function(p){return urgency(p)<=0}).length;
+    var wd=sorted.filter(function(p){return left(p.lw,p.wi)<=0}).length,wl=sorted.filter(function(p){return left(p.lw,p.wi)<0}).length,fd=sorted.filter(function(p){return p.fi>0&&left(p.lf,p.fi)<=0}).length,sm=document.getElementById("sum");
+    if(!plants.length){sm.className="sum";sm.innerHTML=""}
+    else{
+      var nx=Math.min.apply(null,plants.map(function(p){return left(p.lw,p.wi)}));
+      sm.className="sum "+(wl?"late":wd?"warn":"ok");
+      sm.innerHTML='<div class="smi" aria-hidden="true">'+(wd?SMDROP:SMLEAF)+'</div><div class="smt"><div class="sm1">'+(wd?'今日は水やり <b>'+wd+'株</b>'+(wl?'(遅れ '+wl+'株)':''):'今日は水やりなし')+'</div>'
+        +(wd?'':'<div class="sm2">次は '+nx+'日後</div>')
+        +(fd?'<div class="sm2">肥料 '+fd+'株</div>':'')
+        +'</div>'+'<div class="calw" id="calw"></div>';
+      drawCal();
+    }
+    document.getElementById("sr").hidden=!plants.length||htab!=="search";
+    document.getElementById("qn").hidden=htab!=="search";
+    if(!plants.length){list.innerHTML='<p class="empty">まだ植物がありません。右上の「＋🪴」から追加してください。バックアップがあるときは、右上の設定ボタンの中の「バックアップと復元」から戻せます。</p>';document.getElementById("qn").textContent="";return}
+    var qt=htab==="search"?query.trim():"",shown=qt?sorted.filter(function(p){return matches(p,query)}):sorted;
+    document.getElementById("qn").textContent=qt&&shown.length?shown.length+"件見つかりました":"";
+    if(!shown.length){list.innerHTML='<p class="empty">「'+esc(qt)+'」に合う植物が見つかりません。</p>';return}
+    var old={};
+    list.querySelectorAll(".card").forEach(function(c){old[c.dataset.id]=c.getBoundingClientRect().top});
+    list.innerHTML=shown.map(function(p){
+      var w=left(p.lw,p.wi),f=p.fi>0?left(p.lf,p.fi):null,el=p.fi>0?Math.round((today()-parse(p.lf))/864e5):0,fl=f===null?"":f>0?"目安まであと"+f+"日":f===0?"今日が目安":"目安を"+(-f)+"日超過";
+      var h='<div class="card'+(w<0?' late':w===0?' warn':'')+'" data-id="'+p.id+'" style="--m:'+(w<=0?0:Math.min(1,w/p.wi)).toFixed(2)+'"><div class="top"><div class="who">'+'<button class="phb" data-p="'+p.id+'" aria-label="写真を変える">'+(p.img?'<img class="ph" alt="" src="'+p.img+'">':'<div class="ph none">🪴</div>')+'</button>'+'<div class="nm"><h3 class="name"><a class="nl" href="#plant-'+p.id+'">'+esc(dispName(p))+(p.nn&&p.nn!==p.name?'<span class="kn">('+esc(p.name)+')</span>':'')+' ›</a></h3>'+(p.pl?'<div class="loc">'+PIN+esc(p.pl)+'</div>':'')+memoSnipHtml(p)+'</div></div><div class="gs"><div class="wk" tabindex="0" role="button" data-sw="'+p.id+'" aria-label="水やりをする(左右にスワイプ、またはEnterキー)">'+gauge(w,p.wi,p.id)+'</div>'+(f!==null?fertBtn(p,f):'<span class="fib" aria-hidden="true"></span>')+'</div></div>';
+      if(f!==null)h+='<div class="fp"><div class="fi"><div>最後から<b>'+el+'日</b>経過</div><span class="'+(f<0?'late':'')+'">'+fl+'</span></div><button class="btn f" data-f="'+p.id+'" aria-label="肥料をあげた">あげた</button></div>';
+      return h+'</div>';
+    }).join("");
+    if(skipFlip)skipFlip=false;else flip(old);
+  }
+  function flip(old){
+    if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+    document.getElementById("list").querySelectorAll(".card").forEach(function(c){
+      var o=old[c.dataset.id];
+      if(o===undefined)return;
+      var dy=o-c.getBoundingClientRect().top;
+      if(Math.abs(dy)<2)return;
+      c.style.transform="translateY("+dy+"px)";
+      void c.offsetHeight;
+      c.style.transition="transform .5s ease";
+      c.style.transform="";
+      setTimeout(function(){c.style.transition=""},550);
+    });
+  }
+  function dispName(p){return p.nn||p.name}
+  function find(id){return plants.filter(function(p){return p.id===id})[0]}
+  document.getElementById("list").addEventListener("click",function(e){
+    var t=e.target,p,pb=t.closest("[data-p]");
+    if(pb){pickId=pb.dataset.p;fileEl.value="";fileEl.click();return}
+    var fb=t.closest("[data-ft]");
+    if(fb){var o=fb.closest(".card").classList.toggle("open");fb.setAttribute("aria-expanded",o?"true":"false");return}
+    if(t.dataset.w&&(p=find(t.dataset.w)))p.lw=iso(today());
+    else if(t.dataset.f&&(p=find(t.dataset.f))){var prevLf=p.lf,fid=p.id,ftd=iso(today()),fadded=hAdd(p,"f",ftd);p.lf=ftd;showToast(dispName(p)+"に肥料をあげました",function(){var q=find(fid);if(q){if(fadded)hDel(q,"f",ftd);q.lf=prevLf;save();render()}})}
+    else if(t.dataset.d){p=find(t.dataset.d);if(p&&confirm(p.name+"を削除しますか?"))plants=plants.filter(function(x){return x!==p})}
+    else return;
+    save();render();
+  });
+  var idWi=7,idFi=30,pendingTab=null;
+  document.getElementById("add").addEventListener("click",function(){
+    var n=document.getElementById("n");
+    if(!n.value.trim()){n.focus();return}
+    var wi=idWi>=1?idWi:7,fi=idFi>=0?idFi:30;
+    var d=iso(today()),ph=document.getElementById("ph"),file=ph.files&&ph.files[0],nid=String(Date.now());
+    function done(img){
+      plants.push({id:nid,name:n.value.trim(),nn:document.getElementById("nn").value.trim().slice(0,20),wi:Math.round(wi),fi:Math.round(fi),lw:d,lf:d,img:img||"",pl:"",hist:(Math.round(fi)>0?[{d:d,t:"w"},{d:d,t:"f"}]:[{d:d,t:"w"}])});
+      n.value="";document.getElementById("nn").value="";ph.value="";idWi=7;idFi=30;document.getElementById("idmsg").textContent="";query="";document.getElementById("q").value="";save();render();setAdd(false);
+      pendingTab="info";location.hash="#plant-"+nid;
+    }
+    if(file)shrink(file,done);else done("");
+  });
+  var sampleFn=null;
+  try{
+    if(window.claude&&claude.use){
+      claude.use("sample").then(function(sm){
+        if(!sm)return;
+        return Promise.resolve(sm.limits?sm.limits():{}).then(function(l){
+          if(l&&l.images){sampleFn=sm;document.getElementById("idrow").hidden=false;if(curId)refreshInfo()}
+        });
+      }).catch(function(){});
+    }
+  }catch(e){}
+  function smallBlob(file,cb){
+    var r=new FileReader();
+    r.onload=function(){var im=new Image();im.onload=function(){
+      var s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement("canvas");
+      c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+      c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+      c.toBlob(function(b){cb(b)},"image/jpeg",0.8)};im.onerror=function(){cb(null)};im.src=r.result};
+    r.onerror=function(){cb(null)};r.readAsDataURL(file);
+  }
+  var ID_PROMPT=['この写真に写っている観葉植物の種類を推定してください。',
+    '日本の一般的な家庭で、室内で育てる前提で、水やりと肥料の一般的な間隔の目安も答えてください。',
+    '植物が写っていない、または判別できないときは name を空文字にしてください。',
+    '次のJSONだけを出力してください(前後に文章やコードブロックは不要):',
+    '{"name":"日本語の一般的な名前(例: モンステラ)","water":水やり間隔の日数(整数。春から秋の目安),"fert":肥料間隔の日数(整数。肥料が不要なら0),"confidence":"high か low","note":"20字以内の補足(なくてもよい)"}'].join('\n');
+  document.getElementById("idbtn").addEventListener("click",function(){
+    var bt=this,msg=document.getElementById("idmsg"),f=document.getElementById("ph").files[0];
+    if(!sampleFn)return;
+    if(!f){msg.textContent="先に写真を選んでください。";return}
+    bt.disabled=true;msg.textContent="調べています…(数秒かかります)";
+    smallBlob(f,function(blob){
+      if(!blob){bt.disabled=false;msg.textContent="写真を読み込めませんでした。品種は手入力できます。";return}
+      sampleFn(ID_PROMPT,{images:[blob]}).then(function(r){
+        var m=/\{[\s\S]*\}/.exec((r&&r.text)||""),d=null;
+        try{d=m&&JSON.parse(m[0])}catch(e){}
+        if(!d||!d.name){msg.textContent="植物を判別できませんでした。別の角度の写真か、手入力をお試しください。";return}
+        document.getElementById("n").value=String(d.name).slice(0,30);
+        var w=Math.round(+d.water),fe=Math.round(+d.fert);
+        if(w>=1&&w<=60)idWi=w;
+        if(fe>=0&&fe<=180)idFi=fe;
+        msg.textContent=(d.confidence==="low"?"自信がありません。":"候補です。")+"違っていたら直してから「次へ」を押してください。"+(d.note?"("+String(d.note).slice(0,30)+")":"");
+      }).catch(function(e){
+        msg.textContent=e&&e.code==="rate_limited"?"少し時間をおいて、もう一度お試しください。":e&&e.code==="not_granted"?"この機能は使えませんでした。品種は手入力できます。":"うまく調べられませんでした。品種は手入力できます。";
+      }).then(function(){bt.disabled=false});
+    });
+  });
+  document.getElementById("ph").addEventListener("change",function(){
+    if(sampleFn&&this.files&&this.files[0]&&!document.getElementById("n").value.trim())document.getElementById("idbtn").click();
+  });
+  var query="",skipFlip=false;
+  function setHomeTab(t){
+    if(t===htab)return;
+    htab=t;
+    if(t!=="search"){query="";document.getElementById("q").value=""}
+    document.getElementById("home").setAttribute("data-t",t);
+    Array.prototype.forEach.call(document.querySelectorAll("#home [data-ht]"),function(b){
+      var on=b.getAttribute("data-ht")===t;b.setAttribute("aria-selected",on?"true":"false");
+    });
+    skipFlip=true;render();
+    document.getElementById("list").scrollTop=0;
+    if(t==="search")document.getElementById("q").focus();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("#home [data-ht]"),function(b){
+    b.addEventListener("click",function(){setHomeTab(b.getAttribute("data-ht"))});
+  });
+  function half(x){return String(x||"").replace(/[０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-65248)})}
+  function matches(p,q){
+    var terms=half(q).trim().split(/[\s\u3000]+/).filter(Boolean);
+    if(!terms.length)return true;
+    var nm=norm(p.name+" "+(p.nn||"")),pl=norm(p.pl||""),mm=norm(p.memo||"");
+    return terms.every(function(t){
+      var m=/^(\d+)号?$/.exec(t);
+      if(m&&String(p.ps||"")===m[1])return true;
+      var k=norm(t);
+      return !!k&&(nm.indexOf(k)>=0||pl.indexOf(k)>=0||(!/^\d{1,2}$/.test(t)&&mm.indexOf(k)>=0));
+    });
+  }
+  function memoSnipHtml(p){
+    var q=query.trim(),memo=p.memo||"";
+    if(!q||!memo)return "";
+    var terms=half(q).trim().split(/[\s　]+/).filter(function(t){return t&&!/^\d{1,2}$/.test(t)});
+    var low=kana(memo).toLowerCase();
+    for(var i=0;i<terms.length;i++){
+      var t=kana(terms[i]).toLowerCase(),idx=low.indexOf(t);
+      if(idx>=0){
+        var st=Math.max(0,idx-3),en=Math.min(memo.length,idx+t.length+20);
+        var sn=(st>0?"…":"")+memo.slice(st,en).replace(/\s+/g," ")+(en<memo.length?"…":"");
+        return '<div class="loc"><span aria-hidden="true">📝</span><span class="sn">'+esc(sn)+'</span></div>';
+      }
+    }
+    return "";
+  }
+  document.getElementById("q").addEventListener("input",function(){query=this.value;skipFlip=true;render()});
+  /* ---- 設定(通知のオン/オフ) ---- */
+  var settings={notify:false,autosave:false,stamp:true,theme:"auto"};
+  try{var _s=JSON.parse(localStorage.getItem("settings-v1")||"{}");settings.notify=!!_s&&_s.notify===true;settings.autosave=!!_s&&_s.autosave===true;settings.stamp=!(_s&&_s.stamp===false);settings.theme=(_s&&(_s.theme==="light"||_s.theme==="dark"))?_s.theme:"auto"}catch(e){}
+  function saveSettings(){try{localStorage.setItem("settings-v1",JSON.stringify(settings));return true}catch(e){return false}}
+  var THN={auto:"自動",light:"ライト",dark:"ダーク"};
+  function syncTheme(){
+    var r=document.documentElement;
+    if(settings.theme==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",settings.theme);
+    document.getElementById("thst").textContent=THN[settings.theme];
+    Array.prototype.forEach.call(document.querySelectorAll("[data-theme-set]"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-theme-set")===settings.theme?"true":"false")});
+  }
+  document.addEventListener("click",function(e){
+    var b=e.target.closest&&e.target.closest("[data-theme-set]");
+    if(!b)return;
+    settings.theme=b.getAttribute("data-theme-set");saveSettings();syncTheme();
+  });
+  function syncNotify(){
+    syncTheme();
+    document.getElementById("ntsw").setAttribute("aria-checked",settings.notify?"true":"false");
+    document.getElementById("ntsub").textContent=settings.notify?"オン: 水やりの日などに知らせます。":"オフ: 通知しません。";
+    document.getElementById("ntst").textContent=settings.notify?"オン":"オフ";
+    document.getElementById("phst").textContent="自動保存 "+(settings.autosave?"オン":"オフ")+"・日付 "+(settings.stamp?"オン":"オフ");
+    var as=document.getElementById("assw"),st=document.getElementById("stsw");
+    as.setAttribute("aria-checked",settings.autosave?"true":"false");
+    st.setAttribute("aria-checked",settings.stamp?"true":"false");
+    document.getElementById("assub").textContent=(settings.autosave?"オン: ":"オフ: ")+"「📷 撮る」で撮った写真を、スマホにも保存します。保存のたびに、確認の画面が出ます。"+(dlFn?"":"(いまの画面では使えないようです)");
+    document.getElementById("stsub").textContent=settings.stamp?"オン: 保存・投稿する画像に、名前・日付・育てた日数を入れます。":"オフ: 写真だけを、そのまま保存・投稿します。";
+  }
+  document.getElementById("ntsw").addEventListener("click",function(){settings.notify=!settings.notify;saveSettings();syncNotify()});
+  document.getElementById("assw").addEventListener("click",function(){settings.autosave=!settings.autosave;saveSettings();syncNotify()});
+  document.getElementById("stsw").addEventListener("click",function(){settings.stamp=!settings.stamp;saveSettings();syncNotify()});
+  document.getElementById("settoggle").addEventListener("click",function(){location.hash="app-options"});
+  syncNotify();
+  /* ---- 押し間違いを取り消す(元に戻す) ---- */
+  var undoFn=null,toastTimer=null;
+  function showToast(msg,undo){
+    undoFn=undo;
+    document.getElementById("toastt").textContent=msg;
+    document.getElementById("toast").hidden=false;
+    clearTimeout(toastTimer);toastTimer=setTimeout(hideToast,8000);
+  }
+  function hideToast(){clearTimeout(toastTimer);document.getElementById("toast").hidden=true;undoFn=null}
+  document.getElementById("toastx").addEventListener("click",hideToast);
+  document.getElementById("toastb").addEventListener("click",function(){var f=undoFn;hideToast();if(f)f()});
+  /* ---- アプリをシェア ---- */
+  var APPURL=location.href.split("#")[0].split("?")[0];
+  try{var _u=JSON.parse(localStorage.getItem("settings-v1")||"{}").shareUrl;settings.shareUrl=(typeof _u==="string"&&/^https:\/\/\S{3,300}$/.test(_u))?_u:""}catch(e){settings.shareUrl=""}
+  function shUrl(){return settings.shareUrl||APPURL}
+  var TPL="スワイプするだけで水やりを簡単記録。乾いた株が一目でわかるシンプルデザインの観葉植物ケアアプリ「水やり日和」🪴\n#水やり日和 #観葉植物";
+  try{var _tp=JSON.parse(localStorage.getItem("settings-v1")||"{}").shareTpl;settings.shareTpl=(typeof _tp==="string"&&_tp.trim())?_tp.slice(0,200):""}catch(e){settings.shareTpl=""}
+  function syncX(){
+    document.getElementById("shx").href="https://x.com/intent/post?text="+encodeURIComponent(settings.shareTpl||TPL)+"&url="+encodeURIComponent(shUrl());
+  }
+  document.getElementById("shtpl").value=settings.shareTpl||TPL;
+  document.getElementById("shtpl").addEventListener("input",function(){
+    var v=this.value.slice(0,200);settings.shareTpl=(v.trim()&&v!==TPL)?v:"";saveSettings();syncX();
+  });
+  document.getElementById("shtrs").addEventListener("click",function(){
+    settings.shareTpl="";saveSettings();document.getElementById("shtpl").value=TPL;syncX();shMsg("紹介文をもとにもどしました。");
+  });
+  function shText(){return "水やり日和 - 観葉植物のお世話を記録できるアプリ\n"+shUrl()}
+  function shMsg(t){document.getElementById("shmsg").textContent=t}
+  document.getElementById("shurl").value=shUrl();
+  document.getElementById("shurl").addEventListener("change",function(){
+    var v=this.value.trim();
+    if(v===""||v===APPURL){settings.shareUrl="";saveSettings();syncX();this.value=APPURL;shMsg("");return}
+    if(!/^https:\/\/\S{3,300}$/.test(v)){this.value=shUrl();shMsg("https:// から始まるリンクを入れてください。");return}
+    settings.shareUrl=v;saveSettings();syncX();shMsg("リンクを変えました。");
+  });
+  function shCopy(){
+    var t=shText(),ta=document.getElementById("shurl");
+    function fb(){ta.focus();ta.select();shMsg("自動でコピーできませんでした。上のリンクを選んで、コピーしてください。")}
+    try{
+      if(!navigator.clipboard||!navigator.clipboard.writeText){fb();return}
+      navigator.clipboard.writeText(t).then(function(){shMsg("コピーしました。メッセージアプリなどに貼り付けて送ってください。")}).catch(fb);
+    }catch(e){fb()}
+  }
+  document.getElementById("shcp").addEventListener("click",shCopy);
+  syncX();
+  document.getElementById("shgo").addEventListener("click",function(){
+    shMsg("");
+    try{
+      if(navigator.share){
+        navigator.share({title:"水やり日和",text:"水やり日和 - 観葉植物のお世話を記録できるアプリ",url:shUrl()}).catch(function(e){if(!(e&&e.name==="AbortError"))shCopy()});
+        return;
+      }
+    }catch(e){}
+    shCopy();
+  });
+  /* ---- ページ内の確認ダイアログ(この枠では confirm が使えないため) ---- */
+  var askCb=null,askLast=null;
+  function ask(msg,okLabel,danger,cb){
+    askCb=cb;askLast=document.activeElement;
+    document.getElementById("mdt").textContent=msg;
+    var o=document.getElementById("mdo");
+    o.textContent=okLabel;o.className="btn mo"+(danger?" dng":"");
+    document.getElementById("mdl").hidden=false;
+    document.getElementById("mdc").focus();
+  }
+  function askClose(ok){
+    var cb=askCb;askCb=null;
+    document.getElementById("mdl").hidden=true;
+    if(askLast&&askLast.focus&&document.contains(askLast))askLast.focus();
+    if(ok&&cb)cb();
+  }
+  document.getElementById("mdo").addEventListener("click",function(){askClose(true)});
+  document.getElementById("mdc").addEventListener("click",function(){askClose(false)});
+  document.getElementById("mdl").addEventListener("click",function(e){if(e.target===this)askClose(false)});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!document.getElementById("mdl").hidden)askClose(false)});
+
+  /* ---- バックアップと復元 ---- */
+  var BK="backup-last-v1",dlFn=null;
+  function bkMsg(t){document.getElementById("bkmsg").textContent=t}
+  function bkInfo(){
+    var s=null,el=document.getElementById("bkinfo");
+    try{s=localStorage.getItem(BK)}catch(e){}
+    if(!s||!/^\d{4}-\d{2}-\d{2}$/.test(s)){el.textContent="まだバックアップしていません。データは、このブラウザの中にだけあります。";return}
+    var n=Math.round((today()-parse(s))/864e5);
+    el.textContent="最後のバックアップ: "+(+s.slice(5,7))+"月"+(+s.slice(8,10))+"日("+(n<=0?"今日":n+"日前")+")";
+  }
+  function markBk(){try{localStorage.setItem(BK,iso(today()))}catch(e){}bkInfo()}
+  function backupObj(){return {app:"plant-care",v:1,at:new Date().toISOString(),plants:plants,places:places,settings:settings}}
+  function backupText(){return JSON.stringify(backupObj())}
+  try{
+    if(window.claude&&claude.use){
+      claude.use("downloads").then(function(d){if(d){dlFn=d;document.getElementById("bkfile").hidden=false;syncNotify();Array.prototype.forEach.call(document.querySelectorAll(".lgsv"),function(x){x.hidden=false})}}).catch(function(){});
+    }
+  }catch(e){}
+  document.getElementById("bkfile").addEventListener("click",function(){
+    if(!dlFn)return;
+    bkMsg("");
+    backupFullText().then(function(txt){return dlFn.save({filename:"plant-care-backup-"+iso(today())+".json",data:txt})}).then(function(){
+      markBk();bkMsg("ファイルに保存しました。");
+    }).catch(function(e){
+      bkMsg(e&&e.code==="declined"?"保存をやめました。":"ファイルに保存できませんでした。「コピーする」をお試しください。");
+    });
+  });
+  document.getElementById("bkcopy").addEventListener("click",function(){
+    var t=backupText(),ta=document.getElementById("bkta");
+    function fallback(){
+      ta.hidden=false;ta.value=t;ta.focus();ta.select();
+      bkMsg("自動でコピーできませんでした。上の文字をすべて選んで、コピーしてください。");
+    }
+    try{
+      if(!navigator.clipboard||!navigator.clipboard.writeText){fallback();return}
+      navigator.clipboard.writeText(t).then(function(){
+        ta.hidden=true;markBk();bkMsg("コピーしました。メモアプリなどに貼り付けて、保管してください。");
+      }).catch(fallback);
+    }catch(e){fallback()}
+  });
+  var DRE=/^\d{4}-\d{2}-\d{2}$/;
+  function lv3(x){x=Math.round(+x);return x>=0&&x<=3?x:3}
+  function cleanPlant(p){
+    if(!p||typeof p!=="object")return null;
+    var id=String(p.id==null?"":p.id);
+    if(!/^\d{1,20}$/.test(id)||typeof p.name!=="string"||!p.name.trim())return null;
+    var wi=Math.round(+p.wi),fi=Math.round(+p.fi);
+    if(!(wi>=1&&wi<=365)||typeof p.lw!=="string"||!DRE.test(p.lw))return null;
+    if(!(fi>=0&&fi<=730))fi=0;
+    var o={id:id,name:p.name.trim().slice(0,30),nn:typeof p.nn==="string"?p.nn.trim().slice(0,20):"",wi:wi,fi:fi,lw:p.lw,lf:(typeof p.lf==="string"&&DRE.test(p.lf))?p.lf:p.lw,
+      pl:typeof p.pl==="string"?p.pl.trim().slice(0,20):"",img:"",ps:"",memo:typeof p.memo==="string"?p.memo.slice(0,5000):""};
+    if(typeof p.img==="string"&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(p.img))o.img=p.img;
+    if(/^(?:[2-9]|1[0-2])$/.test(String(p.ps==null?"":p.ps)))o.ps=String(p.ps);
+    if(typeof p.sd==="string"&&DRE.test(p.sd))o.sd=p.sd;
+    if(typeof p.src==="string"&&p.src.trim())o.src=p.src.trim().slice(0,30);
+    if(Array.isArray(p.hist)){
+      o.hist=[];
+      p.hist.slice(0,1000).forEach(function(h){if(h&&(h.t==="w"||h.t==="f")&&typeof h.d==="string"&&DRE.test(h.d))hAdd(o,h.t,h.d)});
+      if(!o.hist.length)delete o.hist;
+    }
+    migrateHist(o);
+    var i=p.info;
+    if(i&&typeof i==="object"&&typeof i.nm==="string"&&typeof i.ov==="string"){
+      o.info={nm:i.nm.slice(0,30),ov:i.ov.slice(0,200),pet:lv3(i.pet),petN:String(i.petN||"").slice(0,80),hum:lv3(i.hum),humN:String(i.humN||"").slice(0,80)};
+    }
+    return o;
+  }
+  function importText(t){
+    var d;
+    try{d=JSON.parse(t)}catch(e){bkMsg("読み込めませんでした。バックアップの文字が、途中で切れていないか確認してください。");return}
+    if(!d||d.app!=="plant-care"||!Array.isArray(d.plants)){bkMsg("このアプリのバックアップではないようです。");return}
+    var good=d.plants.map(cleanPlant).filter(function(x){return x});
+    if(!good.length){bkMsg("復元できる植物が見つかりませんでした。");return}
+    var skipped=d.plants.length-good.length;
+    ask(good.length+"株を復元します。同じ植物は、バックアップの内容で上書きされます。よろしいですか?","復元する",false,function(){
+      var before=JSON.stringify(plants),beforeP=JSON.stringify(places);
+      good.forEach(function(g){
+        var k=-1;
+        for(var j=0;j<plants.length;j++){if(plants[j].id===g.id){k=j;break}}
+        if(k>=0)plants[k]=g;else plants.push(g);
+        if(g.pl)addPlaceQuiet(g.pl);
+      });
+      if(Array.isArray(d.places))d.places.forEach(function(x){if(typeof x==="string")addPlaceQuiet(x)});
+      if(d.settings&&typeof d.settings==="object"&&typeof d.settings.notify==="boolean"){settings.notify=d.settings.notify;if(typeof d.settings.autosave==="boolean")settings.autosave=d.settings.autosave;if(typeof d.settings.stamp==="boolean")settings.stamp=d.settings.stamp;saveSettings();syncNotify()}
+      if(!save()||!savePlaces()){
+        plants=JSON.parse(before);places=JSON.parse(beforeP);
+        bkMsg("保存する容量が足りず、復元できませんでした。");
+        return;
+      }
+      query="";document.getElementById("q").value="";
+      fillPlaceSelect();render();
+      document.getElementById("bkpaste").value="";
+      var msg=good.length+"株を復元しました。"+(skipped>0?"(読み込めない "+skipped+"件は、飛ばしました)":"");
+      bkMsg(msg);
+      restoreLogs(d).then(function(n){if(n>0)bkMsg(msg+" 様子の記録の写真 "+n+"枚も復元しました。")}).catch(function(){});
+    });
+  }
+  function addPlaceQuiet(x){x=String(x).trim().slice(0,20);if(x&&places.indexOf(x)<0)places.push(x)}
+  document.getElementById("bkin").addEventListener("change",function(){
+    var f=this.files&&this.files[0],inp=this;
+    if(!f)return;
+    if(f.size>80*1024*1024){bkMsg("ファイルが大きすぎます。");inp.value="";return}
+    var r=new FileReader();
+    r.onload=function(){importText(String(r.result||""));inp.value=""};
+    r.onerror=function(){bkMsg("ファイルを読み込めませんでした。");inp.value=""};
+    r.readAsText(f);
+  });
+  document.getElementById("bkpbtn").addEventListener("click",function(){
+    var t=document.getElementById("bkpaste").value.trim();
+    if(!t){bkMsg("先に、バックアップの文字を貼り付けてください。");return}
+    importText(t);
+  });
+  bkInfo();
+  /* ---- 様子の記録(写真)とSNS投稿 ---- */
+  function byId(i){return document.getElementById(i)}
+  var LGK="logs-v1",logs={},lgCur=null,lgFull="",lgIm=null,shareBlob=null,shareUrl=null,shareTimer=null,noteTimer=null;
+  var COND=[["ok","😊","元気"],["bud","🌱","新芽"],["bloom","🌸","開花"],["yel","🍂","葉が黄ばむ"],["wilt","😟","しおれ"],["bug","🐛","虫・病気"]],
+  WX=[["sun","☀️","晴れ"],["cloud","☁️","くもり"],["rain","🌧️","雨"],["snow","❄️","雪"]];
+  function optOf(list,k){for(var i=0;i<list.length;i++){if(list[i][0]===k)return list[i]}return null}
+  function cleanLogs(o){
+    var r={};
+    if(!o||typeof o!=="object")return r;
+    Object.keys(o).forEach(function(pid){
+      if(!/^\d{1,20}$/.test(pid)||!Array.isArray(o[pid]))return;
+      var a=o[pid].filter(function(l){return l&&typeof l.id==="string"&&/^l[a-z0-9]{3,30}$/.test(l.id)&&typeof l.d==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(l.d)})
+        .map(function(l){return {id:l.id,d:l.d,note:typeof l.note==="string"?l.note.slice(0,80):"",c:optOf(COND,l.c)?l.c:"",w:optOf(WX,l.w)?l.w:""}});
+      if(a.length)r[pid]=a;
+    });
+    return r;
+  }
+  try{logs=cleanLogs(JSON.parse(localStorage.getItem(LGK)||"{}"))}catch(e){logs={}}
+  function saveLogs(){try{localStorage.setItem(LGK,JSON.stringify(logs));return true}catch(e){return false}}
+  function sortLogs(arr){arr.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:(a.id<b.id?1:-1)})}
+  function sortAllLogs(){Object.keys(logs).forEach(function(k){sortLogs(logs[k])})}
+  function findLog(pid,id){var a=logs[pid]||[];for(var i=0;i<a.length;i++){if(a[i].id===id)return a[i]}return null}
+  function dateJa(d){return (+d.slice(5,7))+"月"+(+d.slice(8,10))+"日"}
+  function dateShort(d){return (+d.slice(5,7))+"/"+(+d.slice(8,10))}
+  function growText(p,d){
+    if(!p.sd)return "";
+    var n=Math.round((parse(d)-parse(p.sd))/864e5)+1;
+    return n>=1?"育てて"+n+"日目":"";
+  }
+
+  /* 写真の保存先は IndexedDB(localStorage より大きく保存できます) */
+  var _db=null;
+  function idb(){
+    if(_db)return _db;
+    var pr=new Promise(function(res,rej){
+      try{
+        var r=indexedDB.open("suizuyari-photos",1);
+        r.onupgradeneeded=function(){r.result.createObjectStore("p")};
+        r.onsuccess=function(){res(r.result)};
+        r.onerror=function(){rej(r.error||new Error("idb"))};
+      }catch(e){rej(e)}
+    });
+    _db=pr;
+    pr.catch(function(){if(_db===pr)_db=null});
+    return pr;
+  }
+  function idbDo(mode,fn){
+    return idb().then(function(db){
+      return new Promise(function(res,rej){
+        var tx=db.transaction("p",mode),out=fn(tx.objectStore("p"));
+        tx.oncomplete=function(){res(out&&out.result)};
+        tx.onerror=function(){rej(tx.error)};
+        tx.onabort=function(){rej(tx.error||new Error("abort"))};
+      });
+    });
+  }
+  function idbPut(k,v){return idbDo("readwrite",function(st){return st.put(v,k)})}
+  function idbGet(k){return idbDo("readonly",function(st){return st.get(k)})}
+  function idbDel(k){return idbDo("readwrite",function(st){return st.delete(k)})}
+  function dropLogs(pid){
+    (logs[pid]||[]).forEach(function(l){idbDel("f:"+l.id).catch(function(){});idbDel("t:"+l.id).catch(function(){})});
+    delete logs[pid];saveLogs();
+  }
+
+  /* 画像の読み込み・縮小 */
+  function readFile(file,cb){var r=new FileReader();r.onload=function(){cb(String(r.result||""))};r.onerror=function(){cb("")};r.readAsDataURL(file)}
+  function loadImg(src,cb){var im=new Image();im.onload=function(){cb(im)};im.onerror=function(){cb(null)};im.src=src}
+  function toJpeg(im,max,q){
+    var s=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");
+    c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));
+    c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+    return c.toDataURL("image/jpeg",q);
+  }
+
+  /* 詳細ページの「様子の記録」 */
+  function logsHtml(p){
+    var arr=logs[p.id]||[],
+    h='<div class="lgbar"><button type="button" class="lgab" id="lgcamb">📷 撮る</button><button type="button" class="lgab" id="lgpickb">🖼 選ぶ</button><span class="lgcnt">'+(arr.length?arr.length+'枚':'')+'</span></div><p class="hint" id="lgmsg" role="status"></p>';
+    if(!arr.length)return h+'<p class="lgempty">まだ記録がありません。<br>毎日の様子を写真で残して、SNSにも投稿できます。</p>';
+    return h+'<div class="lgg">'+arr.map(function(l){
+      return '<button type="button" class="lgt" data-lg="'+l.id+'" aria-label="'+dateJa(l.d)+'の記録'+(l.c?"、"+optOf(COND,l.c)[2]:"")+(l.w?"、"+optOf(WX,l.w)[2]:"")+'"><img alt="" data-tid="'+l.id+'"><span>'+dateShort(l.d)+'</span>'+(l.c?'<b class="lgbd" aria-hidden="true">'+optOf(COND,l.c)[1]+'</b>':'')+(l.w?'<b class="lgbd w" aria-hidden="true">'+optOf(WX,l.w)[1]+'</b>':'')+'</button>';
+    }).join("")+'</div>';
+  }
+  function fillThumbs(){
+    Array.prototype.forEach.call(document.querySelectorAll("#dlogs img[data-tid]"),function(im){
+      idbGet("t:"+im.getAttribute("data-tid")).then(function(u){if(u)im.src=u}).catch(function(){});
+    });
+  }
+  function renderLogs(pid){
+    var p=find(pid),box=byId("dlogs");
+    if(!p||!box)return;
+    box.innerHTML=logsHtml(p);fillThumbs();
+  }
+  function lgMsg(t){var m=byId("lgmsg");if(m)m.textContent=t}
+  function dataBlob(u){var a=u.split(","),b=atob(a[1]),n=b.length,x=new Uint8Array(n);while(n--)x[n]=b.charCodeAt(n);return new Blob([x],{type:"image/jpeg"})}
+  function autoSaveShot(pid,id,im,full){
+    var p=find(pid),l=findLog(pid,id);
+    if(!p||!l)return;
+    function go(blob){
+      if(!blob){if(curId===pid)lgMsg("記録しました。スマホへの自動保存はできませんでした。");return}
+      dlFn.save({filename:"水やり日和_"+dispName(p)+"_"+l.d+".jpg",data:blob}).then(function(){
+        if(curId===pid)lgMsg("記録して、スマホにも保存しました。");
+      }).catch(function(e){
+        if(curId===pid)lgMsg(e&&e.code==="declined"?"記録しました。スマホへの保存は、やめました。":"記録しました。スマホへの自動保存はできませんでした。");
+      });
+    }
+    if(settings.stamp)drawShare(im,p,l,true,go);else go(dataBlob(full));
+  }
+  function addLog(pid,file,cam){
+    lgMsg("保存しています…");
+    readFile(file,function(url){
+      if(!url){lgMsg("写真を読み込めませんでした。");return}
+      loadImg(url,function(im){
+        if(!im){lgMsg("写真を読み込めませんでした。");return}
+        var full=toJpeg(im,1080,0.82),th=toJpeg(im,240,0.7),
+        id="l"+Date.now().toString(36)+Math.floor(Math.random()*1296).toString(36);
+        Promise.all([idbPut("f:"+id,full),idbPut("t:"+id,th)]).then(function(){
+          var arr=logs[pid]||(logs[pid]=[]);
+          arr.push({id:id,d:iso(today()),note:"",c:"",w:""});sortLogs(arr);
+          if(!saveLogs()){
+            logs[pid]=arr.filter(function(l){return l.id!==id});if(!logs[pid].length)delete logs[pid];
+            idbDel("f:"+id).catch(function(){});idbDel("t:"+id).catch(function(){});
+            if(curId===pid){renderLogs(pid);lgMsg("記録を保存できませんでした。")}
+            return;
+          }
+          if(curId===pid){renderLogs(pid);lgMsg("記録しました。")}
+          if(cam&&settings.autosave&&dlFn)autoSaveShot(pid,id,im,full);
+        }).catch(function(){
+          if(curId===pid)lgMsg("写真を保存できませんでした。保存容量がいっぱいか、このブラウザでは使えない可能性があります。");
+        });
+      });
+    });
+  }
+  var lgCamEl=document.createElement("input"),lgPickEl=document.createElement("input");
+  lgCamEl.type="file";lgCamEl.accept="image/*";lgCamEl.setAttribute("capture","environment");lgCamEl.style.display="none";
+  lgPickEl.type="file";lgPickEl.accept="image/*";lgPickEl.style.display="none";
+  document.body.appendChild(lgCamEl);document.body.appendChild(lgPickEl);
+  [lgCamEl,lgPickEl].forEach(function(inp){
+    inp.addEventListener("change",function(){
+      var f=inp.files&&inp.files[0];
+      if(f&&curId)addLog(curId,f,inp===lgCamEl);
+      inp.value="";
+    });
+  });
+
+  /* 記録を開く(大きな写真・ひとこと・SNS投稿) */
+  function lgCaption(){
+    var p=lgCur&&find(lgCur.pid),l=lgCur&&findLog(lgCur.pid,lgCur.id);
+    if(!p||!l)return "";
+    var g=growText(p,l.d),lines=[dispName(p)+(g?"("+g+")":"")];
+    var st=[];
+    if(l.w)st.push(optOf(WX,l.w)[1]+optOf(WX,l.w)[2]);
+    if(l.c)st.push(optOf(COND,l.c)[1]+optOf(COND,l.c)[2]);
+    if(st.length)lines.push(st.join(" "));
+    if(l.note)lines.push(l.note);
+    lines.push(dateJa(l.d));
+    lines.push("#観葉植物 #植物のある暮らし #水やり日和");
+    return lines.join("\n");
+  }
+  function updateCaption(){
+    var t=lgCaption();
+    byId("lgcap").value=t;syncXLink();
+  }
+  function syncXLink(){byId("lgxl").href="https://x.com/intent/post?text="+encodeURIComponent(byId("lgcap").value)}
+  function wrapLines(g,text,maxW,maxLines){
+    var lines=[],cur="",i=0;
+    for(;i<text.length;i++){
+      var t=cur+text.charAt(i);
+      if(cur&&g.measureText(t).width>maxW){
+        lines.push(cur);cur="";
+        if(lines.length===maxLines)break;
+        cur=text.charAt(i);
+      }else cur=t;
+    }
+    if(lines.length<maxLines&&cur)lines.push(cur);
+    if(i<text.length&&lines.length){var last=lines[lines.length-1];lines[lines.length-1]=last.slice(0,-1)+"…"}
+    return lines;
+  }
+  function drawShare(im,p,l,withText,cb){
+    var W=1080,H=1350,c=document.createElement("canvas");
+    c.width=W;c.height=H;
+    var g=c.getContext("2d");
+    g.fillStyle="#1F2D26";g.fillRect(0,0,W,H);
+    var s=Math.max(W/im.width,H/im.height),w=im.width*s,h=im.height*s;
+    g.drawImage(im,(W-w)/2,(H-h)/2,w,h);
+    if(withText){
+      var ff='"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif',
+      gr=g.createLinearGradient(0,H*0.6,0,H);
+      gr.addColorStop(0,"rgba(0,0,0,0)");gr.addColorStop(1,"rgba(0,0,0,.66)");
+      g.fillStyle=gr;g.fillRect(0,H*0.6,W,H*0.4);
+      g.fillStyle="#fff";g.textBaseline="alphabetic";
+      g.shadowColor="rgba(0,0,0,.4)";g.shadowBlur=14;
+      var y=H-64,gt=growText(p,l.d),sub=dateJa(l.d)+(gt?"・"+gt:"");
+      if(l.note){
+        g.font="500 34px "+ff;
+        var nl=wrapLines(g,l.note,W-128,2);
+        for(var i=nl.length-1;i>=0;i--){g.fillText(nl[i],64,y);y-=48}
+        y-=6;
+      }
+      g.font="500 38px "+ff;g.fillText(sub,64,y);y-=66;
+      var fs=76;g.font="700 "+fs+"px "+ff;
+      while(fs>36&&g.measureText(dispName(p)).width>W-128){fs-=4;g.font="700 "+fs+"px "+ff}
+      g.fillText(dispName(p),64,y);
+      g.font="500 30px "+ff;g.fillText("水やり日和",64,96);
+      g.shadowBlur=0;
+    }
+    c.toBlob(cb,"image/jpeg",0.9);
+  }
+  function buildShare(){
+    if(!lgCur||!lgIm)return;
+    var p=find(lgCur.pid),l=findLog(lgCur.pid,lgCur.id);
+    if(!p||!l)return;
+    drawShare(lgIm,p,l,byId("lgtxt").checked,function(blob){
+      if(!blob||!lgCur)return;
+      shareBlob=blob;
+      if(shareUrl)URL.revokeObjectURL(shareUrl);
+      shareUrl=URL.createObjectURL(blob);
+      byId("lgprev").src=shareUrl;
+    });
+  }
+  function scheduleShare(){clearTimeout(shareTimer);shareTimer=setTimeout(buildShare,250)}
+  function openLog(pid,id){
+    var l=findLog(pid,id);
+    if(!l)return;
+    lgCur={pid:pid,id:id};lgFull="";lgIm=null;shareBlob=null;
+    byId("lgtxt").checked=settings.stamp;byId("lgd").value=l.d;byId("lgd").max=iso(today());byId("lgn").value=l.note||"";
+    byId("lgimg").removeAttribute("src");byId("lgprev").removeAttribute("src");byId("lgsm").textContent="";syncChips();byId("lgshare").hidden=true;byId("lgshbtn").setAttribute("aria-expanded","false");byId("lgshbtn").textContent="SNSに投稿する";byId("lgv").scrollTop=0;
+    byId("lgv").hidden=false;byId("lgclose").focus();
+    updateCaption();
+    idbGet("f:"+id).then(function(u){
+      if(!lgCur||lgCur.id!==id)return;
+      if(!u){byId("lgsm").textContent="この写真が見つかりません。";return}
+      lgFull=u;byId("lgimg").src=u;
+      loadImg(u,function(im){if(im&&lgCur&&lgCur.id===id){lgIm=im;buildShare()}});
+    }).catch(function(){byId("lgsm").textContent="写真を読み込めませんでした。"});
+  }
+  function syncChips(){
+    var l=lgCur&&findLog(lgCur.pid,lgCur.id);
+    Array.prototype.forEach.call(document.querySelectorAll("#lgv [data-c]"),function(b){b.setAttribute("aria-pressed",l&&l.c===b.getAttribute("data-c")?"true":"false")});
+    Array.prototype.forEach.call(document.querySelectorAll("#lgv [data-w]"),function(b){b.setAttribute("aria-pressed",l&&l.w===b.getAttribute("data-w")?"true":"false")});
+  }
+  byId("lgv").addEventListener("click",function(e){
+    var b=e.target.closest(".chp"),l=lgCur&&findLog(lgCur.pid,lgCur.id);
+    if(!b||!l)return;
+    if(b.hasAttribute("data-c")){var c=b.getAttribute("data-c");l.c=l.c===c?"":c}
+    else{var w=b.getAttribute("data-w");l.w=l.w===w?"":w}
+    saveLogs();syncChips();updateCaption();scheduleShare();
+    if(curId===lgCur.pid)renderLogs(lgCur.pid);
+  });
+  byId("lgshbtn").addEventListener("click",function(){
+    var sh=byId("lgshare"),open=sh.hidden;
+    sh.hidden=!open;this.setAttribute("aria-expanded",open?"true":"false");this.textContent=open?"SNS投稿を閉じる":"SNSに投稿する";
+    if(open){buildShare();sh.scrollIntoView({block:"start"})}
+  });
+  function closeLog(){
+    if(byId("lgv").hidden)return;
+    byId("lgv").hidden=true;lgCur=null;lgFull="";lgIm=null;shareBlob=null;
+    if(shareUrl){URL.revokeObjectURL(shareUrl);shareUrl=null}
+  }
+  byId("lgclose").addEventListener("click",closeLog);
+  byId("lgv").addEventListener("click",function(e){if(e.target===this)closeLog()});
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&byId("mdl").hidden&&!byId("lgv").hidden)closeLog();
+  });
+  byId("lgd").addEventListener("change",function(){
+    var l=lgCur&&findLog(lgCur.pid,lgCur.id),v=this.value;
+    if(!l||!/^\d{4}-\d{2}-\d{2}$/.test(v))return;
+    if(v>iso(today())){v=iso(today());this.value=v}
+    l.d=v;sortLogs(logs[lgCur.pid]);saveLogs();
+    if(curId===lgCur.pid)renderLogs(lgCur.pid);
+    updateCaption();scheduleShare();
+  });
+  byId("lgn").addEventListener("input",function(){
+    var l=lgCur&&findLog(lgCur.pid,lgCur.id);
+    if(!l)return;
+    l.note=this.value.slice(0,80);
+    clearTimeout(noteTimer);noteTimer=setTimeout(saveLogs,300);
+    updateCaption();scheduleShare();
+  });
+  byId("lgtxt").addEventListener("change",buildShare);
+  byId("lgcap").addEventListener("input",syncXLink);
+  byId("lgcopy").addEventListener("click",function(){
+    var t=byId("lgcap").value,sm=byId("lgsm"),ta=byId("lgcap");
+    function fb(){ta.focus();ta.select();sm.textContent="自動でコピーできませんでした。選ばれた文章を、コピーしてください。"}
+    try{
+      if(!navigator.clipboard||!navigator.clipboard.writeText){fb();return}
+      navigator.clipboard.writeText(t).then(function(){sm.textContent="文章をコピーしました。"}).catch(fb);
+    }catch(e){fb()}
+  });
+  function copyCap(){try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(byId("lgcap").value).catch(function(){})}catch(e){}}
+  byId("lgxl").addEventListener("click",copyCap);
+  byId("lgigl").addEventListener("click",copyCap);
+  Array.prototype.forEach.call(document.querySelectorAll("[data-dest]"),function(b){
+    b.addEventListener("click",function(){
+      var d=b.getAttribute("data-dest");
+      Array.prototype.forEach.call(document.querySelectorAll("[data-dest]"),function(x){x.setAttribute("aria-selected",x===b?"true":"false")});
+      Array.prototype.forEach.call(document.querySelectorAll("[data-dp]"),function(x){x.hidden=x.getAttribute("data-dp")!==d});
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".lgsv"),function(b){b.addEventListener("click",function(){copyCap();doSave()})});
+  function doSave(){
+    var p=lgCur&&find(lgCur.pid),l=lgCur&&findLog(lgCur.pid,lgCur.id),sm=byId("lgsm");
+    if(!dlFn||!shareBlob||!p||!l){sm.textContent="画像を準備しています。少し待って、もう一度押してください。";return}
+    dlFn.save({filename:"水やり日和_"+dispName(p)+"_"+l.d+".jpg",data:shareBlob}).then(function(){
+      sm.textContent="画像を保存しました。文章もコピーしてあります。";
+    }).catch(function(e){
+      sm.textContent=e&&e.code==="declined"?"保存をやめました。":"画像を保存できませんでした。上の画像を長押しして保存してください。";
+    });
+  }
+  byId("lgdel").addEventListener("click",function(){
+    var cur=lgCur;
+    if(!cur)return;
+    ask("この記録を削除しますか?(元に戻せません)","削除する",true,function(){
+      var a=logs[cur.pid]||[];
+      logs[cur.pid]=a.filter(function(l){return l.id!==cur.id});
+      if(!logs[cur.pid].length)delete logs[cur.pid];
+      saveLogs();idbDel("f:"+cur.id).catch(function(){});idbDel("t:"+cur.id).catch(function(){});
+      closeLog();
+      if(curId===cur.pid)renderLogs(cur.pid);
+    });
+  });
+  /* 記録の写真を、バックアップ(ファイル)に含める/復元する */
+  function backupFullText(){
+    var o=backupObj(),ids=[];
+    o.logs=logs;o.photos={};
+    Object.keys(logs).forEach(function(pid){logs[pid].forEach(function(l){ids.push(l.id)})});
+    return Promise.all(ids.map(function(id){
+      return idbGet("f:"+id).then(function(u){if(u)o.photos[id]=u}).catch(function(){});
+    })).then(function(){return JSON.stringify(o)});
+  }
+  function restoreLogs(d){
+    if(!d.logs||typeof d.logs!=="object"||!d.photos||typeof d.photos!=="object")return Promise.resolve(0);
+    var jobs=[],n=0,chain=Promise.resolve(),src=cleanLogs(d.logs);
+    Object.keys(src).forEach(function(pid){
+      if(!find(pid))return;
+      src[pid].forEach(function(l){
+        var u=d.photos[l.id];
+        if(typeof u==="string"&&/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(u))jobs.push({pid:pid,l:l,u:u});
+      });
+    });
+    jobs.forEach(function(j){
+      chain=chain.then(function(){
+        return new Promise(function(res){
+          loadImg(j.u,function(im){
+            if(!im){res();return}
+            Promise.all([idbPut("f:"+j.l.id,j.u),idbPut("t:"+j.l.id,toJpeg(im,240,0.7))]).then(function(){
+              var arr=logs[j.pid]||(logs[j.pid]=[]),k=-1;
+              for(var i=0;i<arr.length;i++){if(arr[i].id===j.l.id){k=i;break}}
+              if(k>=0)arr[k]=j.l;else arr.push(j.l);
+              n++;res();
+            }).catch(function(){res()});
+          });
+        });
+      });
+    });
+    return chain.then(function(){sortAllLogs();saveLogs();return n});
+  }
+  function setAdd(o){
+    var sc=document.getElementById("addsec"),bt=document.getElementById("addtoggle");
+    sc.hidden=!o;bt.setAttribute("aria-expanded",o?"true":"false");bt.classList.toggle("on",o);
+    if(o)document.getElementById("n").focus()
+  }
+  document.getElementById("addtoggle").addEventListener("click",function(){setAdd(document.getElementById("addsec").hidden)});
+  var PLANTS=[
+    {k:["モンステラ","monstera"],ov:"熱帯アメリカ原産のサトイモ科。大きく切れ込んだ葉が特徴です。明るい日陰を好み、直射日光だと葉焼けします。寒さに弱く、冬は10℃以上で管理します。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {k:["ポトス","pothos","ゴールデンカズラ"],ov:"東南アジア原産のつる性の植物で、丈夫で初心者向きです。暗めの場所でも育ち、水栽培もできます。寒さに弱く、冬は10℃以上が目安です。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {k:["サンスベリア","サンセベリア","sansevieria","虎の尾"],ov:"アフリカ原産で、肉厚の剣のような葉が特徴です。乾燥にとても強く、暗い場所にも耐えます。水やりは控えめにして、冬はさらに減らします。",pet:1,petN:"サポニンを含み、食べると嘔吐や下痢をすることがあります。",hum:0,humN:"触れる分には問題ありませんが、食べないようにしましょう。"},
+    {k:["ゴムの木","ゴムノキ","フィカスエラスティカ","インドゴムノキ"],ov:"インド・東南アジア原産のクワ科。つやのある厚い葉が特徴で、明るい場所で元気に育ちます。寒さにやや弱く、冬は水を控えめにします。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・よだれ・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックス(天然ゴム)アレルギーの人は特に注意してください。"},
+    {k:["ベンジャミン","フィカスベンジャミナ"],ov:"東南アジア原産のクワ科。細かい葉が茂り、枝ぶりを楽しめます。置き場所を変えると葉を落としやすいので、あまり動かさないのがコツです。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"},
+    {k:["ガジュマル"],ov:"沖縄などに自生するクワ科。太い気根と丸い葉が特徴で、「幸せを呼ぶ木」とも呼ばれます。日当たりを好み、寒さに弱いです。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"},
+    {k:["ウンベラータ"],ov:"アフリカ原産のクワ科。大きなハート形の葉が特徴です。明るい場所を好み、寒さと乾燥に弱いです。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"},
+    {k:["パキラ","pachira","発財樹"],ov:"中南米原産。手のひら状の葉と太い幹が特徴で、丈夫で育てやすいです。日当たりのよい場所を好み、乾燥にも強いです。",pet:0,petN:"犬や猫への毒性はないとされています。ただし食べ過ぎるとおなかを壊すことがあります。",hum:0,humN:"特に問題ないとされています。"},
+    {k:["ドラセナ","幸福の木","コンシンネ","マッサンゲアナ"],ov:"熱帯アフリカ・アジア原産。すらりとした幹と細長い葉が特徴で、「幸福の木」の名で親しまれています。明るい日陰が向き、冬は10℃以上で管理します。",pet:1,petN:"サポニンを含み、食べると嘔吐・よだれ・食欲低下が出ることがあります(特に猫)。",hum:0,humN:"触れる分には問題ありません。食べないようにしましょう。"},
+    {k:["ユッカ","青年の木"],ov:"中米原産。太い幹の先に剣のような葉がつきます。日当たりと風通しを好み、乾燥に強いです。",pet:1,petN:"サポニンを含み、食べると嘔吐や下痢をすることがあります。",hum:0,humN:"葉先が鋭いので、けがに注意してください。"},
+    {k:["アロエ","aloe"],ov:"アフリカ原産の多肉植物。日当たりと風通しを好み、乾燥にとても強いです。冬は水を控えめにします。",pet:2,petN:"アロインなどを含み、食べると嘔吐・下痢・元気消失が出ることがあります。",hum:1,humN:"汁で肌がかぶれることがあります。観賞用のものを食べるのは避けましょう。"},
+    {k:["スパティフィラム","spathiphyllum"],ov:"熱帯アメリカ原産。白い苞(花のように見える部分)が特徴で、日陰でも育ちます。水切れに弱く、葉がぐったりしたら水やりのサインです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {k:["ディフェンバキア","ディフェンバッキア","ディーフェンバキア"],ov:"熱帯アメリカ原産。白や黄緑の斑入りの大きな葉が特徴です。明るい日陰を好み、寒さに弱いです。",pet:2,petN:"汁が口に入ると、口の痛み・腫れ・よだれ・嘔吐が出ます。ペットのいる場所には置かないでください。",hum:2,humN:"口に入ると強い痛みと腫れが出ます。汁で肌も荒れます。子どもの手が届く場所には置かないでください。"},
+    {k:["アイビー","ヘデラ","ivy"],ov:"ヨーロッパ・アジア原産のつる性植物。壁やハンギングで垂らして楽しめます。明るい場所を好み、夏の暑さと乾燥がやや苦手です。",pet:2,petN:"サポニンを含み、食べると嘔吐・よだれ・下痢が出ることがあります。",hum:2,humN:"樹液で皮膚炎(かぶれ)が出ることがあります。食べないようにしましょう。"},
+    {k:["シェフレラ","カポック","schefflera"],ov:"東南アジア・台湾原産。手のひら状の葉が特徴で、丈夫で育てやすいです。明るい場所を好み、日陰にも耐えます。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。"},
+    {k:["フィロデンドロン","philodendron"],ov:"熱帯アメリカ原産のサトイモ科。大きな葉やつる性など、種類が多いです。明るい日陰を好み、寒さに弱いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {k:["アンスリウム","anthurium"],ov:"熱帯アメリカ原産。つやのあるハート形の苞(花のように見える部分)が特徴です。明るい日陰と高い湿度を好み、寒さに弱いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {k:["シンゴニウム","syngonium"],ov:"熱帯アメリカ原産のつる性植物。矢じり形の葉が特徴で、日陰にも強いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {k:["ユーフォルビア","euphorbia"],ov:"種類が多く、多肉質のものから低木状のものまであります。日当たりと風通しを好み、乾燥に強いものが多いです。",pet:2,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれます。目に入ると危険なので、すぐに水で洗ってください。"},
+    {k:["ポインセチア","poinsettia"],ov:"メキシコ原産。冬に赤く色づく葉(苞)が特徴で、クリスマスの鉢植えとして人気です。寒さに弱く、10℃以上で管理します。",pet:1,petN:"樹液に刺激があり、食べると軽い嘔吐や口の炎症が出ることがあります。",hum:1,humN:"樹液で肌がかぶれることがあります。"},
+    {k:["ソテツ","蘇鉄","サゴパーム"],ov:"日本南部〜東アジア原産。太い幹と羽状の葉が特徴で、日当たりを好みます。",pet:3,petN:"種子や葉にサイカシンを含み、少量でも嘔吐や肝臓の障害など、重い症状が出ることがあります。",hum:2,humN:"種子を食べると中毒を起こすことがあります。子どもの誤食に注意してください。"},
+    {k:["アジアンタム","adiantum"],ov:"熱帯〜温帯に分布するシダ。繊細な葉が特徴で、乾燥が苦手です。明るい日陰で、土を乾かしすぎないようにします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {k:["ペペロミア","peperomia"],ov:"熱帯・亜熱帯原産。小ぶりで厚みのある葉の種類が多いです。明るい日陰を好み、水のやりすぎに注意します。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {k:["カラテア","calathea"],ov:"熱帯アメリカ原産。模様の美しい葉が特徴で、夜に葉を閉じます。直射日光、乾燥、寒さが苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {k:["アレカヤシ","テーブルヤシ","チャメドレア"],ov:"ヤシ科の観葉植物。羽状の葉が涼しげです。明るい日陰を好み、乾燥した風や寒さが苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {k:["エケベリア","echeveria"],ov:"メキシコ原産の多肉植物。バラの花のように葉が広がります。日当たりと風通しを好み、水やりは控えめにします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {k:["ハオルチア","ハオルシア","haworthia"],ov:"南アフリカ原産の多肉植物。透明感のある葉の「窓」が特徴です。強い直射日光を避け、明るい日陰で育てます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"}
+  ];
+  function kana(x){return String(x||"").replace(/[ぁ-ゖ]/g,function(c){return String.fromCharCode(c.charCodeAt(0)+96)})}
+  function norm(x){return kana(x).toLowerCase().replace(/[\s　・･\-ー_]/g,"")}
+  function lookupDb(name){
+    var n=norm(name);
+    if(!n)return null;
+    for(var i=0;i<PLANTS.length;i++){
+      for(var j=0;j<PLANTS[i].k.length;j++){
+        var k=norm(PLANTS[i].k[j]);
+        if(k.length>=2&&n.indexOf(k)>=0)return PLANTS[i];
+      }
+    }
+    return null;
+  }
+  var LVT=["ほぼ安全","軽い注意","注意","危険"];
+  function meter(icon,label,lv,note){
+    var seg="";
+    for(var i=0;i<3;i++)seg+='<i'+(i<lv?' class="on"':'')+'></i>';
+    return '<div class="tx lv'+lv+'"><div class="txh"><span aria-hidden="true">'+icon+'</span><span class="txn">'+label+'</span><span class="txl">'+(lv?'⚠ ':'✓ ')+LVT[lv]+'</span></div><div class="mt" role="img" aria-label="'+label+': '+LVT[lv]+'(3段階中'+lv+')">'+seg+'</div><p class="txt">'+esc(String(note||""))+'</p></div>';
+  }
+  function getInfo(p){
+    var d=lookupDb(p.name);
+    if(d)return {ov:d.ov,pet:d.pet,petN:d.petN,hum:d.hum,humN:d.humN,est:false};
+    if(p.info&&p.info.nm===p.name)return {ov:p.info.ov,pet:p.info.pet,petN:p.info.petN,hum:p.info.hum,humN:p.info.humN,est:true};
+    return null;
+  }
+  function infoHtml(p){
+    var d=getInfo(p),h='';
+    if(!d){
+      h+='<p class="txt">この植物のデータは、まだアプリに入っていません。「モンステラ」のように一般的な品種名にすると見つかることがあります。</p>';
+      if(sampleFn)h+='<button type="button" class="btn idb" id="dlook">✨ Claudeに調べてもらう(推定)</button><p class="hint" id="dlmsg" role="status"></p>';
+      return h;
+    }
+    return h+'<p class="ovt">'+esc(String(d.ov))+'</p>'
+      +meter('🐾','ペット(犬・猫)',d.pet,d.petN)
+      +meter('🧑','人',d.hum,d.humN)
+      +'<p class="txt">'+(d.est?'<b>AIによる推定です。</b>':'')+'犬猫はASPCA(米国動物虐待防止協会)の公開情報を参考にした目安です。人は一般的な目安です。口にしたときは、植物の名前を伝えて、動物病院や医療機関へ。</p>';
+  }
+  function refreshInfo(){
+    var el=document.getElementById("dinfo"),p=find(curId);
+    if(el&&p)el.innerHTML=infoHtml(p);
+  }
+  function infoPrompt(nm){
+    return ['次の観葉植物について、日本語で、概要と、ペット(犬・猫)および人への害の度合いを答えてください。',
+      '植物名: '+nm,
+      '害の度合いは次の数字で表します。0=ほぼ安全 / 1=軽い(胃腸の不調など) / 2=注意(口の炎症・嘔吐・皮膚炎など) / 3=危険(重い症状の可能性)。',
+      '確実でないときは、安全側(数字が大きいほう)で答えてください。',
+      '植物の種類を特定できないときは ov を空文字にしてください。',
+      '次のJSONだけを出力してください(前後に文章やコードブロックは不要):',
+      '{"ov":"2文以内の概要(原産地、特徴、置き場所の目安)","pet":0から3の整数,"petN":"40字以内の理由","hum":0から3の整数,"humN":"40字以内の理由"}'].join('\n');
+  }
+  function lookAi(p,bt){
+    if(!sampleFn||!p)return;
+    var msg=document.getElementById("dlmsg"),nm=p.name;
+    bt.disabled=true;msg.textContent="調べています…(数秒かかります)";
+    sampleFn(infoPrompt(nm)).then(function(r){
+      var m=/\{[\s\S]*\}/.exec((r&&r.text)||""),d=null;
+      try{d=m&&JSON.parse(m[0])}catch(e){}
+      if(!d||!d.ov){msg.textContent="うまく調べられませんでした。品種名を変えて、もう一度お試しください。";return}
+      function lv(x){x=Math.round(+x);return x>=0&&x<=3?x:3}
+      var cur=find(curId);
+      if(!cur||cur.name!==nm)return;
+      cur.info={nm:nm,ov:String(d.ov).slice(0,200),pet:lv(d.pet),petN:String(d.petN||"").slice(0,80),hum:lv(d.hum),humN:String(d.humN||"").slice(0,80)};
+      save();refreshInfo();
+    }).catch(function(e){
+      msg.textContent=e&&e.code==="rate_limited"?"少し時間をおいて、もう一度お試しください。":"うまく調べられませんでした。";
+    }).then(function(){bt.disabled=false});
+  }
+  function potOpts(sel){
+    var h='<option value="">未設定</option>';
+    for(var n=2;n<=12;n++)h+='<option value="'+n+'"'+(String(n)===String(sel)?' selected':'')+'>'+n+'号(約'+(n*3)+'cm)</option>';
+    return h;
+  }
+  function fmtMl(x){return x>=1000?(Math.round(x/100)/10)+'L':x+'ml'}
+  function waterGuide(ps){
+    var n=+ps;
+    if(!(n>0))return "";
+    var v=0.38*Math.pow(n*0.3,3)*1000,lo=Math.round(v*0.2/10)*10,hi=Math.round(v*0.3/10)*10;
+    return "水の量の目安: 約"+fmtMl(lo)+"〜"+fmtMl(hi)+"(鉢底から流れるまで)";
+  }
+  var curId=null;
+  function dayText(p){
+    if(!p.sd)return "";
+    var n=Math.round((today()-parse(p.sd))/864e5);
+    return n>=0?"育てて"+(n+1)+"日目":"";
+  }
+  function photoHtml(p){return p.img?'<img class="ph" alt="" src="'+p.img+'">':'<div class="ph none">🪴</div>'}
+  var WD="日月火水木金土";
+  function histHtml(p){
+    var h=p.hist||[],cnt={w:0,f:0},ds={w:[],f:[]};
+    h.forEach(function(x){cnt[x.t]++;ds[x.t].push(x.d)});
+    function avg(t){
+      var a=ds[t];
+      if(a.length<2)return "";
+      a.sort();
+      var v=(parse(a[a.length-1])-parse(a[0]))/864e5/(a.length-1);
+      return "・平均 "+(Math.round(v*10)/10)+"日おき";
+    }
+    var out='<div class="hsum"><span class="hs">'+IW+'水やり '+cnt.w+'回'+avg("w")+'</span><span class="hs">'+IF+'肥料 '+cnt.f+'回'+avg("f")+'</span></div>'
+      +'<div class="hadd"><input id="hd" type="date" value="'+iso(today())+'" max="'+iso(today())+'" aria-label="記録する日"><button type="button" class="hab" id="haw">'+IW+'水やり</button><button type="button" class="hab" id="haf">'+IF+'肥料</button></div>'
+      +'<p class="hint hh" id="hmsg" role="status"></p>';
+    if(!h.length)return out+'<p class="lgempty">まだ履歴がありません。</p>';
+    var mo="",list='';
+    h.forEach(function(x){
+      var m=x.d.slice(0,7),dt=parse(x.d);
+      if(m!==mo){mo=m;list+='<div class="hmo">'+dt.getFullYear()+'年'+(dt.getMonth()+1)+'月</div>'}
+      list+='<div class="hrow"><span class="hdt">'+(dt.getMonth()+1)+'/'+dt.getDate()+'('+WD.charAt(dt.getDay())+')</span><span class="hty">'+(x.t==="w"?IW+'水やり':IF+'肥料')+'</span><button type="button" class="hx" data-hdel="'+x.t+x.d+'" aria-label="'+(dt.getMonth()+1)+'月'+dt.getDate()+'日の'+(x.t==="w"?"水やり":"肥料")+'を削除">×</button></div>';
+    });
+    return out+'<div class="hlist">'+list+'</div>';
+  }
+  function renderHist(p){
+    var box=document.getElementById("dhis");
+    if(box)box.innerHTML=histHtml(p);
+    var a=document.getElementById("dlw"),b=document.getElementById("dlf");
+    if(a)a.value=p.lw;if(b)b.value=p.lf;
+  }
+  var dtab="his";
+  function setTab(t){
+    dtab=t;
+    Array.prototype.forEach.call(document.querySelectorAll("#detail [data-tab]"),function(b){
+      var on=b.getAttribute("data-tab")===t;
+      b.setAttribute("aria-selected",on?"true":"false");b.tabIndex=on?0:-1;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("#detail [data-pan]"),function(d){d.hidden=d.getAttribute("data-pan")!==t});
+  }
+  function showDetail(id){
+    var p=find(id),box=document.getElementById("detail"),dt=iso(today());
+    document.getElementById("home").hidden=true;box.hidden=false;
+    box.innerHTML='<div class="dtop"><a class="back" href="#">‹ 一覧にもどる</a><button type="button" class="trb" id="drm" aria-label="この植物を削除"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l.8 12a1 1 0 0 0 1 .9h7.4a1 1 0 0 0 1-.9l.8-12M10 11v5M14 11v5"/></svg></button></div>'
+      +'<div class="dh"><button class="phb" data-p="'+p.id+'" aria-label="写真を変える">'+photoHtml(p)+'</button>'
+      +'<div class="dht"><input id="dnn" value="'+esc(p.nn||"")+'" maxlength="20" placeholder="ニックネーム(任意)" aria-label="ニックネーム"><div class="dsub"><input id="dn" class="dnm" value="'+esc(p.name)+'" maxlength="30" aria-label="品種" placeholder="品種"><span class="day" id="dday">'+dayText(p)+'</span></div></div></div>'
+      +'<div class="dbody">'
+      +'<div class="dwrap" data-pan="info" role="tabpanel">'
+      +'<div class="dcard dpan" id="dinfo">'+infoHtml(p)+'</div>'
+      +'<div class="dcard dpan" id="dcare">'
+        +'<h2 class="ih">お世話の設定</h2>'
+        +'<div class="dg"><label>お迎え日<input id="dsd" type="date" value="'+(p.sd||"")+'"></label>'
+        +'<label>鉢のサイズ<select id="dps">'+potOpts(p.ps||"")+'</select></label></div>'
+        +'<label class="dsrcl">お迎え元<select id="dsrc">'+srcOpts(p.src||"")+'</select></label><div id="dsrcw" hidden><label>新しいお迎え元の名前<input id="dsrcn" maxlength="30" placeholder="例: ホームセンター、友人"></label></div>'
+        +'<div class="cg"><div class="cgh">'+IW+'水やり</div>'
+        +'<label>頻度<span class="ivf"><input id="dwi" type="number" inputmode="numeric" min="1" max="365" value="'+p.wi+'" aria-label="水やりの間隔(日)"><span>日おき</span></span></label>'
+        +'<label>最後の水やり<input id="dlw" type="date" value="'+p.lw+'" max="'+dt+'"></label>'
+        +'<div class="cgh">'+IF+'肥料<small>(0でなし)</small></div>'
+        +'<label>頻度<span class="ivf"><input id="dfi" type="number" inputmode="numeric" min="0" max="730" value="'+p.fi+'" aria-label="肥料の間隔(日)。0で肥料なし"><span>日おき</span></span></label>'
+        +'<label>最後の肥料<input id="dlf" type="date" value="'+p.lf+'" max="'+dt+'"></label></div>'
+        +'<label>置き場所<select id="dpl">'+placeOpts(p.pl||"")+'</select></label><div id="dplw" hidden><label>新しい場所の名前<input id="dpln" maxlength="20" placeholder="例: リビングの窓辺"></label></div>'
+
+        +'<p class="wg" id="dwg">'+waterGuide(p.ps)+'</p>'
+        +'<label>メモ<textarea id="dmemo" rows="2" placeholder="気づいたこと、元気がないときの様子など">'+esc(p.memo||"")+'</textarea></label>'
+        +'</div></div>'
+      +'<div class="dcard dpan" data-pan="his" role="tabpanel" id="dhis">'+histHtml(p)+'</div>'
+      +'<div class="dpan lgp" data-pan="log" role="tabpanel" id="dlogs">'+logsHtml(p)+'</div></div>'
+      +'<div class="tabs" role="tablist" aria-label="表示の切り替え">'
+      +'<button type="button" role="tab" data-tab="his"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg><span>ケア履歴</span></button><button type="button" role="tab" data-tab="log"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span>記録</span></button><button type="button" role="tab" data-tab="info"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/></svg><span>概要</span></button></div>';
+    setTab(dtab);
+    fillThumbs();
+  }
+  function route(){
+    var m=/^#plant-(\d+)$/.exec(location.hash),box=document.getElementById("detail"),sv=document.getElementById("setv");
+    if(location.hash==="#app-options"){
+      curId=null;box.hidden=true;box.innerHTML="";
+      document.getElementById("home").hidden=true;sv.hidden=false;
+      syncNotify();bkInfo();Array.prototype.forEach.call(document.querySelectorAll("#setv details"),function(d){d.open=false});window.scrollTo(0,0);return;
+    }
+    sv.hidden=true;closeLog();
+    if(m&&find(m[1])){if(curId!==m[1]){dtab=pendingTab||"his";if(pendingTab)setTimeout(function(){var c=document.getElementById("dcare");if(c)c.scrollIntoView({block:"start"})},80);pendingTab=null}curId=m[1];showDetail(m[1]);window.scrollTo(0,0)}
+    else{curId=null;box.hidden=true;box.innerHTML="";document.getElementById("home").hidden=false;render()}
+  }
+  var det=document.getElementById("detail");
+  det.addEventListener("input",function(e){
+    var p=find(curId),t=e.target;
+    if(!p)return;
+    if(t.id==="dn"){if(t.value.trim())p.name=t.value.trim()}
+    else if(t.id==="dnn")p.nn=t.value.trim().slice(0,20);
+    else if(t.id==="dmemo")p.memo=t.value;
+    else if(t.id==="dsd"){p.sd=t.value;document.getElementById("dday").textContent=dayText(p)}
+    else if(t.id==="dlw"||t.id==="dlf"){
+      var v=t.value;
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return;
+      if(v>iso(today())){v=iso(today());t.value=v}
+      var ty=t.id==="dlw"?"w":"f",old=ty==="w"?p.lw:p.lf;
+      hDel(p,ty,old);hAdd(p,ty,v);
+      if(ty==="w")p.lw=v;else p.lf=v;
+      if(document.getElementById("dhis"))renderHist(p);
+    }
+    else return;
+    save();
+  });
+  det.addEventListener("click",function(e){
+    var pb=e.target.closest("[data-p]");
+    if(pb){pickId=pb.dataset.p;fileEl.value="";fileEl.click()}
+    else if(e.target.closest("#haw,#haf")){
+      var hp=find(curId),ty=e.target.closest("#haw")?"w":"f",hd=document.getElementById("hd").value;
+      if(!hp||!HRE.test(hd))return;
+      if(hd>iso(today()))hd=iso(today());
+      var ok=hAdd(hp,ty,hd);
+      hSync(hp);save();renderHist(hp);
+      document.getElementById("hmsg").textContent=ok?"記録しました。":"その日はすでに記録されています。";
+    }
+    else if(e.target.closest("[data-hdel]")){
+      var hp2=find(curId),code=e.target.closest("[data-hdel]").getAttribute("data-hdel"),t2=code.charAt(0),d2=code.slice(1);
+      if(!hp2)return;
+      var before=t2==="w"?hp2.lw:hp2.lf,pid=hp2.id;
+      if(hDel(hp2,t2,d2)){
+        hSync(hp2);save();renderHist(hp2);
+        showToast((t2==="w"?"水やり":"肥料")+"の記録を削除しました",function(){var q=find(pid);if(q){hAdd(q,t2,d2);if(t2==="w")q.lw=before;else q.lf=before;hSync(q);save();if(curId===pid)renderHist(q)}});
+      }
+    }
+    else if(e.target.closest("[data-tab]")){setTab(e.target.closest("[data-tab]").getAttribute("data-tab"))}
+    else if(e.target.id==="lgcamb"){lgCamEl.click()}
+    else if(e.target.id==="lgpickb"){lgPickEl.click()}
+    else if(e.target.closest("[data-lg]")){openLog(curId,e.target.closest("[data-lg]").getAttribute("data-lg"))}
+    else if(e.target.closest("#drm")){var p=find(curId);if(p)ask(dispName(p)+"を削除しますか?(元に戻せません)","削除する",true,function(){plants=plants.filter(function(x){return x!==p});save();dropLogs(p.id);location.hash=""})}
+    else if(e.target.id==="dlook"){lookAi(find(curId),e.target)}
+  });
+  det.addEventListener("change",function(e){
+    var p=find(curId),t=e.target;
+    if(!p)return;
+    if(t.id==="dsrc"){
+      if(t.value==="__new__"){document.getElementById("dsrcw").hidden=false;document.getElementById("dsrcn").focus()}
+      else{if(t.value)p.src=t.value;else delete p.src;save()}
+    }else if(t.id==="dsrcn"){
+      var sn=t.value.trim().slice(0,30);
+      if(sn){p.src=sn;save();showDetail(curId)}
+    }else if(t.id==="dpl"){
+      if(t.value==="__new__"){document.getElementById("dplw").hidden=false;document.getElementById("dpln").focus()}
+      else{p.pl=t.value;save()}
+    }else if(t.id==="dpln"){
+      var nm=addPlace(t.value);
+      if(nm){p.pl=nm;save();showDetail(curId)}
+    }else if(t.id==="dps"){
+      p.ps=t.value;save();document.getElementById("dwg").textContent=waterGuide(p.ps);
+    }else if(t.id==="dn"){
+      refreshInfo();
+    }else if(t.id==="dwi"){
+      var wv=Math.round(+t.value);
+      if(t.value.trim()===""||!(wv>=1&&wv<=365)){t.value=p.wi;return}
+      p.wi=wv;t.value=wv;save();
+    }else if(t.id==="dfi"){
+      var fv=Math.round(+t.value),was=p.fi;
+      if(t.value.trim()===""||!(fv>=0&&fv<=730)){t.value=p.fi;return}
+      p.fi=fv;save();t.value=fv;
+    }
+  });
+  var pickId=null,fileEl=document.createElement("input");
+  fileEl.type="file";fileEl.accept="image/*";fileEl.style.display="none";
+  document.body.appendChild(fileEl);
+  fileEl.addEventListener("change",function(){
+    var f=fileEl.files&&fileEl.files[0],p=find(pickId);
+    if(!f||!p)return;
+    shrink(f,function(img){if(img){p.img=img;save();render();if(curId)showDetail(curId)}});
+  });
+  var TH=80,drag=null,swiped=false,listEl=document.getElementById("list");
+  function water(card,id){
+    var p=find(id);
+    if(!p||card.classList.contains("busy"))return;
+    card.classList.add("anim","busy","splash");
+    card.style.transform="";card.style.setProperty("--wet","1");
+    var prevLw=p.lw,wid=p.id,td=iso(today()),added=hAdd(p,"w",td);
+    p.lw=td;save();
+    showToast(dispName(p)+"に水をあげました",function(){var q=find(wid);if(q){if(added)hDel(q,"w",td);q.lw=prevLw;save();render()}});
+    setTimeout(render,1000);
+  }
+  listEl.addEventListener("click",function(e){if(swiped){e.stopPropagation();e.preventDefault()}},true);
+  listEl.addEventListener("pointerdown",function(e){
+    var card=e.target.closest(".card");
+    if(!card||card.classList.contains("busy")||(e.pointerType==="mouse"&&e.button!==0))return;
+    drag={card:card,id:card.dataset.id,x:e.clientX,y:e.clientY,on:false,dx:0,pid:e.pointerId};
+  });
+  listEl.addEventListener("pointermove",function(e){
+    if(!drag||e.pointerId!==drag.pid)return;
+    var dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+    if(!drag.on){
+      if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.5){drag.on=true;try{drag.card.setPointerCapture(e.pointerId)}catch(x){}}
+      else return;
+    }
+    drag.dx=dx;
+    drag.card.style.transform="translateX("+(dx*0.3)+"px)";
+    drag.card.style.setProperty("--wet",Math.min(1,Math.abs(dx)/TH).toFixed(2));
+  });
+  function endDrag(e){
+    if(!drag||e.pointerId!==drag.pid)return;
+    var d=drag;drag=null;
+    if(!d.on)return;
+    swiped=true;setTimeout(function(){swiped=false},80);
+    if(Math.abs(d.dx)>=TH&&e.type==="pointerup")water(d.card,d.id);
+    else{
+      d.card.classList.add("anim");
+      d.card.style.transform="";d.card.style.setProperty("--wet","0");
+      setTimeout(function(){d.card.classList.remove("anim")},700);
+    }
+  }
+  listEl.addEventListener("dragstart",function(e){e.preventDefault()});
+  listEl.addEventListener("pointerup",endDrag);
+  listEl.addEventListener("pointercancel",endDrag);
+  listEl.addEventListener("keydown",function(e){
+    var t=e.target;
+    if((e.key==="Enter"||e.key===" ")&&t.dataset&&t.dataset.sw){e.preventDefault();water(t.closest(".card"),t.dataset.sw)}
+  });
+  window.addEventListener("hashchange",route);
+  load();loadPlaces();fillPlaceSelect();render();route();
+  /* 画面より背の高い枠の中で開かれたとき、見えている範囲の下端に合わせます */
+  (function(){
+    var framed=false;try{framed=window.self!==window.top}catch(e){framed=true}
+    if(!framed||!("IntersectionObserver" in window))return;
+    var pr=document.getElementById("visprobe"),root=document.documentElement,last=-1,th=[];
+    for(var i=0;i<=100;i++)th.push(i/100);
+    function upd(e){
+      var r=e.intersectionRect,h=window.innerHeight,gap=0;
+      if(e.intersectionRatio>0&&r&&r.height>0)gap=Math.max(0,Math.round(h-r.bottom));
+      if(gap<12)gap=0;
+      /* 測れない端末では、枠が画面とほぼ同じ高さのとき、上のバーの分だけ下を空けます */
+      if(gap===0&&window.innerWidth<=600&&h>screen.height-150)gap=Math.max(0,Math.round(h-(screen.height-105)));
+      if(gap!==last){last=gap;root.style.setProperty("--vb",gap+"px")}
+    }
+    try{new IntersectionObserver(function(es){upd(es[es.length-1])},{threshold:th}).observe(pr)}catch(e){}
+  })();
+
+  /* 家族との共有(claude.ai のデータ保存を使って、植物と置き場所をそろえます) */
+  var sync={ref:null,on:false,ver:0,busy:false,timer:null,applying:false,first:true,imgs:{},imgv:{},pk:{},ic:null,by:Math.random().toString(36).slice(2)};
+  function syncSet(t){var e=document.getElementById("syncst");if(e)e.textContent=t}
+  function syncStamp(){var d=new Date();return d.getHours()+":"+String(d.getMinutes()).padStart(2,"0")}
+  function syncSoon(){
+    if(!sync||!sync.on||sync.applying)return;
+    clearTimeout(sync.timer);sync.timer=setTimeout(syncPush,1500);
+  }
+  async function syncPush(){
+    if(!sync.on)return;
+    if(sync.busy){syncSoon();return}
+    sync.busy=true;
+    try{
+      var v=Date.now();
+      await sync.ref.set({v:v,by:sync.by,
+        plants:JSON.stringify(plants.map(function(p){var o={};for(var k in p)if(k!=="img")o[k]=p[k];return o})),
+        places:JSON.stringify(places)});
+      sync.ver=v;syncSet("共有中です("+syncStamp()+" に送信しました)");
+      await syncPushImgs();
+    }catch(e){
+      if(e&&e.code==="invalid_argument"){sync.on=false;syncSet("このアカウントでは書き込みできないため、共有できません。共有の設定が「閲覧のみ」になっていないか確認してください。")}
+      else syncSet("共有に失敗しました。通信のよいところで、もう一度操作してください。")
+    }
+    sync.busy=false;
+  }
+  function imgKey(u){return u.length+":"+u.slice(-24)}
+  function thumbOf(src){
+    return new Promise(function(res){
+      loadImg(src,function(im){
+        if(!im){res("");return}
+        var w=im.naturalWidth||im.width,h=im.naturalHeight||im.height,m=360,k=Math.min(1,m/Math.max(w,h));
+        var c=document.createElement("canvas");c.width=Math.max(1,Math.round(w*k));c.height=Math.max(1,Math.round(h*k));
+        c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+        var u="";try{u=c.toDataURL("image/jpeg",.7)}catch(e){}
+        res(u.length<200000?u:"");
+      });
+    });
+  }
+  async function syncPushImgs(){
+    for(var i=0;i<plants.length;i++){
+      var p=plants[i];
+      if(!p.img)continue;
+      var key=imgKey(p.img);
+      if(sync.pk[p.id]===key)continue;
+      var t=await thumbOf(p.img);
+      if(!t){sync.pk[p.id]=key;continue}
+      var v=Date.now();
+      await sync.ic.doc(p.id).set({v:v,by:sync.by,img:t});
+      sync.imgv[p.id]=v;sync.pk[p.id]=key;
+    }
+  }
+  function syncAttach(){
+    var ch=false;
+    plants.forEach(function(p){
+      var r=sync.imgs[p.id];
+      if(r&&(!p.img||r.v>(sync.imgv[p.id]||0))&&p.img!==r.img){
+        p.img=r.img;sync.imgv[p.id]=r.v;sync.pk[p.id]=imgKey(r.img);ch=true;
+      }
+    });
+    if(ch){sync.applying=true;save();sync.applying=false;try{render();route()}catch(e){}}
+  }
+  function syncImgSnap(snap){
+    snap.docs.forEach(function(ds){
+      var d=ds.data();
+      if(!d||d.by===sync.by||typeof d.img!=="string"||!/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(d.img))return;
+      var o=sync.imgs[ds.id];
+      if(!o||d.v>o.v)sync.imgs[ds.id]={v:d.v||0,img:d.img};
+    });
+    syncAttach();
+  }
+  function syncParse(d){
+    try{
+      var pl=JSON.parse(d.plants),pc=JSON.parse(d.places);
+      if(!Array.isArray(pl)||!Array.isArray(pc))return null;
+      var out=[];pl.forEach(function(x){var c=cleanPlant(x);if(c)out.push(c)});
+      var pls=[];pc.forEach(function(x){if(typeof x==="string"&&x.trim()&&pls.indexOf(x)<0&&pls.length<50)pls.push(x.trim().slice(0,20))});
+      return {plants:out,places:pls};
+    }catch(e){return null}
+  }
+  function syncApply(r){
+    var imgs={};plants.forEach(function(p){if(p.img)imgs[p.id]=p.img});
+    sync.applying=true;
+    plants=r.plants;plants.forEach(function(p){if(!p.img&&imgs[p.id])p.img=imgs[p.id]});
+    places=r.places;
+    save();savePlaces();
+    sync.applying=false;
+    try{fillPlaceSelect();render();route()}catch(e){}
+    syncAttach();
+  }
+  function syncSnap(snap){
+    var d=snap.exists?snap.data():null;
+    var r=d?syncParse(d):null;
+    if(sync.first){
+      sync.first=false;
+      var joined=false;try{joined=localStorage.getItem("sync-joined-v1")==="1"}catch(e){}
+      if(!r){ if(plants.length||places.length)syncSoon(); else syncSet("共有中です(まだデータがありません)"); return }
+      var added=false;
+      if(!joined){
+        var ids={};r.plants.forEach(function(p){ids[p.id]=1});
+        plants.forEach(function(p){if(!ids[p.id]){r.plants.push(JSON.parse(JSON.stringify(p)));added=true}});
+        places.forEach(function(x){if(r.places.indexOf(x)<0){r.places.push(x);added=true}});
+        try{localStorage.setItem("sync-joined-v1","1")}catch(e){}
+      }
+      sync.ver=d.v||0;syncApply(r);
+      syncSet("共有中です("+syncStamp()+" に受信しました)");
+      if(added)syncSoon();
+      return;
+    }
+    if(!r||d.by===sync.by||!(d.v>sync.ver))return;
+    sync.ver=d.v;syncApply(r);
+    syncSet("共有中です("+syncStamp()+" に受信しました)");
+  }
+  (async function(){
+    var t=setTimeout(function(){if(!sync.on)syncSet("共有に接続できていません。claude.aiにログインして開いているか、共有の設定を確認してください。")},10000);
+    try{
+      if(!window.claude||typeof claude.use!=="function"){syncSet("この画面では共有できません。");return}
+      var db=await claude.use("db");
+      if(!db){syncSet("この画面では共有できません(ログインしていない、または共有の設定が必要です)。");return}
+      sync.ref=db.doc("shared/state");sync.ic=db.collection("pimg");sync.on=true;
+      sync.ic.onSnapshot(function(snap){try{syncImgSnap(snap)}catch(e){}},function(){});
+      sync.ref.onSnapshot(function(snap){clearTimeout(t);try{syncSnap(snap)}catch(e){}},function(){clearTimeout(t);sync.on=false;syncSet("共有に接続できませんでした。")});
+    }catch(e){syncSet("この画面では共有できません。")}
+  })();
+
+})();
+</script>
+<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
+</body>
+</html>

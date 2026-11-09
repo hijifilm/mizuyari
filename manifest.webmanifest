@@ -1,0 +1,17 @@
+{
+  "name": "水やり日和",
+  "short_name": "水やり日和",
+  "description": "スワイプするだけで水やりを簡単記録。乾いた株が一目でわかるシンプルデザインの観葉植物ケアアプリ。",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EEF3EE",
+  "theme_color": "#2F6B4F",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
