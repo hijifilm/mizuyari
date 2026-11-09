@@ -8,8 +8,10 @@ service cloud.firestore {
 
     // 自分が入っている家族グループの番号は、自分だけが読み書きできます
     match /users/{uid} {
-      allow read, write: if signedIn() && request.auth.uid == uid
-        && (request.method == 'delete' || request.resource.data.keys().hasOnly(['fid']));
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow delete: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['fid']);
     }
 
     // 招待コード → 家族グループ。コードを知っている人だけが1件ずつ引けます(一覧は不可)
