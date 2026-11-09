@@ -1,6 +1,6 @@
 /* 水やり日和: 画面とアイコンを端末に保存して、通信がなくても開けるようにします */
 var V = "suizuyari-v1";
-var FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./privacy.html"];
+var FILES = ["./firebase-config.js", "./fb-sync.js", "./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./privacy.html"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(V).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
 });

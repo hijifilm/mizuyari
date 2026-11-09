@@ -563,7 +563,9 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
 .shl{font-size:12px;color:var(--sub);margin:10px 0 0}
 #shurl{font-size:16px;height:42px;padding:0 10px;margin-top:4px;box-sizing:border-box}
 </style>
-<style>.dcard:has(#syncst){display:none}</style>
+<style id="fbhide">.dcard:has(#syncst){display:none}</style>
+<style>.fbc{font-size:22px;font-weight:700;letter-spacing:.2em;text-align:center;margin:6px 0;color:var(--leaf)}</style>
+<script src="firebase-config.js"></script>
 </head>
 <body>
 <main>
@@ -2109,14 +2111,14 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
     var r=d?syncParse(d):null;
     if(sync.first){
       sync.first=false;
-      var joined=false;try{joined=localStorage.getItem("sync-joined-v1")==="1"}catch(e){}
+      var joined=false;try{joined=localStorage.getItem("sync-joined-v1")===(sync.tag||"1")}catch(e){}
       if(!r){ if(plants.length||places.length)syncSoon(); else syncSet("共有中です(まだデータがありません)"); return }
       var added=false;
       if(!joined){
         var ids={};r.plants.forEach(function(p){ids[p.id]=1});
         plants.forEach(function(p){if(!ids[p.id]){r.plants.push(JSON.parse(JSON.stringify(p)));added=true}});
         places.forEach(function(x){if(r.places.indexOf(x)<0){r.places.push(x);added=true}});
-        try{localStorage.setItem("sync-joined-v1","1")}catch(e){}
+        try{localStorage.setItem("sync-joined-v1",sync.tag||"1")}catch(e){}
       }
       sync.ver=d.v||0;syncApply(r);
       syncSet("共有中です("+syncStamp()+" に受信しました)");
@@ -2127,20 +2129,33 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
     sync.ver=d.v;syncApply(r);
     syncSet("共有中です("+syncStamp()+" に受信しました)");
   }
+  var syncUnsubs=[],syncTimer0=null;
+  function stopSync(){
+    syncUnsubs.forEach(function(u){try{if(u)u()}catch(e){}});syncUnsubs=[];
+    clearTimeout(sync.timer);clearTimeout(syncTimer0);sync.on=false;
+  }
+  function startSync(db,tag,noClaudeText){
+    stopSync();
+    sync.first=true;sync.ver=0;sync.imgs={};sync.imgv={};sync.pk={};sync.tag=tag||"";
+    syncTimer0=setTimeout(function(){if(!sync.on)syncSet(noClaudeText||"共有に接続できていません。claude.aiにログインして開いているか、共有の設定を確認してください。")},10000);
+    sync.ref=db.doc("shared/state");sync.ic=db.collection("pimg");sync.on=true;
+    syncUnsubs.push(sync.ic.onSnapshot(function(snap){try{syncImgSnap(snap)}catch(e){}},function(){}));
+    syncUnsubs.push(sync.ref.onSnapshot(function(snap){clearTimeout(syncTimer0);try{syncSnap(snap)}catch(e){}},function(){clearTimeout(syncTimer0);sync.on=false;syncSet("共有に接続できませんでした。")}));
+  }
+  window.__suizuSync={start:startSync,stop:stopSync,setStatus:syncSet};
   (async function(){
-    var t=setTimeout(function(){if(!sync.on)syncSet("共有に接続できていません。claude.aiにログインして開いているか、共有の設定を確認してください。")},10000);
+    if(window.FB_CONFIG&&window.FB_CONFIG.apiKey)return;
     try{
       if(!window.claude||typeof claude.use!=="function"){syncSet("この画面では共有できません。");return}
       var db=await claude.use("db");
       if(!db){syncSet("この画面では共有できません(ログインしていない、または共有の設定が必要です)。");return}
-      sync.ref=db.doc("shared/state");sync.ic=db.collection("pimg");sync.on=true;
-      sync.ic.onSnapshot(function(snap){try{syncImgSnap(snap)}catch(e){}},function(){});
-      sync.ref.onSnapshot(function(snap){clearTimeout(t);try{syncSnap(snap)}catch(e){}},function(){clearTimeout(t);sync.on=false;syncSet("共有に接続できませんでした。")});
+      startSync(db,"");
     }catch(e){syncSet("この画面では共有できません。")}
   })();
 
 })();
 </script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
+<script src="fb-sync.js"></script>
 </body>
 </html>
