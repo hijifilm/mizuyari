@@ -363,6 +363,21 @@ a.lgxl{display:block;text-align:center;text-decoration:none;background:none;colo
 .dh .ph{width:64px;height:64px;border-radius:16px}
 .dh .ph.none{font-size:32px}
 .dht{flex:1;min-width:0}
+.dnk{font-size:19px;font-weight:700;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dkn{font-size:13px;color:var(--sub);line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dmeta{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;margin-top:3px;font-size:12px;color:var(--sub)}
+.dmi{display:inline-flex;align-items:center;gap:3px}
+.dmi .pin{width:12px;height:12px}
+.dmeta .day{margin:0;font-size:12px}
+.ihr{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.ihr .ih{margin:0}
+.ibtn{flex:none;border:1.5px solid var(--leaf);background:var(--card);color:var(--leaf);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.ibtn.on{background:var(--leaf);color:var(--onleaf)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0 0 12px;font-size:14px}
+.kv dt{color:var(--sub);font-size:12px;padding-top:2px;white-space:nowrap}
+.kv dd{margin:0;min-width:0;word-break:break-word}
+.kv .kvn{color:var(--sub)}
+.kv .kvm{white-space:pre-wrap}
 .dh #dnn{font-size:19px;font-weight:700;padding:6px 10px;margin:0}
 .dsub{display:flex;align-items:center;gap:8px;margin-top:4px}
 .dh .dnm{flex:1;min-width:0;margin:0;font-size:13px;font-weight:500;padding:4px 10px}
@@ -663,7 +678,7 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
   <div class="sum" id="sum"></div>
   <div class="sr" id="sr" hidden>
     <svg class="sri" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    <input id="q" type="search" placeholder="名前・場所・鉢のサイズ・メモで検索" aria-label="植物を検索" autocomplete="off" enterkeyhint="search">
+    <input id="q" type="search" placeholder="品種・場所・鉢のサイズ・メモ・記録で検索" aria-label="植物を検索" autocomplete="off" enterkeyhint="search">
   </div>
   <p class="qn" id="qn" role="status"></p>
   <div id="list"></div>
@@ -1010,7 +1025,7 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
   function matches(p,q){
     var terms=half(q).trim().split(/[\s\u3000]+/).filter(Boolean);
     if(!terms.length)return true;
-    var nm=norm(p.name+" "+(p.nn||"")),pl=norm(p.pl||""),mm=norm(p.memo||"");
+    var nm=norm(p.name+" "+(p.nn||"")),pl=norm(p.pl||""),mm=norm((p.memo||"")+" "+logNotes(p).join(" "));
     return terms.every(function(t){
       var m=/^(\d+)号?$/.exec(t);
       if(m&&String(p.ps||"")===m[1])return true;
@@ -1018,9 +1033,15 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
       return !!k&&(nm.indexOf(k)>=0||pl.indexOf(k)>=0||(!/^\d{1,2}$/.test(t)&&mm.indexOf(k)>=0));
     });
   }
+  function logNotes(p){var a=(typeof logs==="object"&&logs&&logs[p.id])||[],o=[];a.forEach(function(l){if(l&&typeof l.note==="string"&&l.note.trim())o.push(l.note)});return o}
   function memoSnipHtml(p){
-    var q=query.trim(),memo=p.memo||"";
-    if(!q||!memo)return "";
+    var q=query.trim();
+    if(!q)return "";
+    var srcs=[];if(p.memo)srcs.push(["📝",p.memo]);logNotes(p).forEach(function(n){srcs.push(["📷",n])});
+    for(var si=0;si<srcs.length;si++){var r=snipOf(q,srcs[si][1],srcs[si][0]);if(r)return r}
+    return "";
+  }
+  function snipOf(q,memo,icon){
     var terms=half(q).trim().split(/[\s　]+/).filter(function(t){return t&&!/^\d{1,2}$/.test(t)});
     var low=kana(memo).toLowerCase();
     for(var i=0;i<terms.length;i++){
@@ -1028,7 +1049,7 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
       if(idx>=0){
         var st=Math.max(0,idx-3),en=Math.min(memo.length,idx+t.length+20);
         var sn=(st>0?"…":"")+memo.slice(st,en).replace(/\s+/g," ")+(en<memo.length?"…":"");
-        return '<div class="loc"><span aria-hidden="true">📝</span><span class="sn">'+esc(sn)+'</span></div>';
+        return '<div class="loc"><span aria-hidden="true">'+icon+'</span><span class="sn">'+esc(sn)+'</span></div>';
       }
     }
     return "";
@@ -1773,19 +1794,34 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
     });
     Array.prototype.forEach.call(document.querySelectorAll("#detail [data-pan]"),function(d){d.hidden=d.getAttribute("data-pan")!==t});
   }
-  function showDetail(id){
-    var p=find(id),box=document.getElementById("detail"),dt=iso(today());
-    document.getElementById("home").hidden=true;box.hidden=false;
-    box.innerHTML='<div class="dtop"><a class="back" href="#">‹ 一覧にもどる</a><button type="button" class="trb" id="drm" aria-label="この植物を削除"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l.8 12a1 1 0 0 0 1 .9h7.4a1 1 0 0 0 1-.9l.8-12M10 11v5M14 11v5"/></svg></button></div>'
-      +'<div class="dh"><button class="phb" data-p="'+p.id+'" aria-label="写真を変える">'+photoHtml(p)+'</button>'
-      +'<div class="dht"><input id="dnn" value="'+esc(p.nn||"")+'" maxlength="20" placeholder="ニックネーム(任意)" aria-label="ニックネーム"><div class="dsub"><input id="dn" class="dnm" value="'+esc(p.name)+'" maxlength="30" aria-label="品種" placeholder="品種"><span class="day" id="dday">'+dayText(p)+'</span></div></div></div>'
-      +'<div class="dbody">'
-      +'<div class="dwrap" data-pan="info" role="tabpanel">'
-      +'<div class="dcard dpan" id="dinfo">'+infoHtml(p)+'</div>'
-      +'<div class="dcard dpan" id="dcare">'
-        +'<h2 class="ih">お世話の設定</h2>'
+  function headHtml(p){
+    var nm=dispName(p),sub=p.nn&&p.nn!==p.name?'<div class="dkn">'+esc(p.name)+'</div>':'';
+    var meta=[];
+    if(p.pl)meta.push(PIN+esc(p.pl));
+    if(p.ps)meta.push(p.ps+'号');
+    return '<div class="dnk">'+esc(nm)+'</div>'+sub+'<div class="dmeta">'+(meta.length?'<span class="dmi">'+meta.join('</span><span class="dmi">')+'</span>':'')+'<span class="day" id="dday">'+dayText(p)+'</span></div>';
+  }
+  function fmtMD(d){return d?(+d.slice(5,7))+"/"+(+d.slice(8,10)):"未設定"}
+  function careView(p){
+    var u=function(v){return v?esc(v):'<span class="kvn">未設定</span>'};
+    return '<div class="ihr"><h2 class="ih">登録している情報</h2><button type="button" class="ibtn" id="dedit">✏️ 情報を変更する</button></div><dl class="kv">'
+      +'<dt>お迎え日</dt><dd>'+(p.sd?esc(p.sd.replace(/-/g,"/")):'<span class="kvn">未設定</span>')+'</dd>'
+      +'<dt>お迎え元</dt><dd>'+u(p.src)+'</dd>'
+      +'<dt>置き場所</dt><dd>'+u(p.pl)+'</dd>'
+      +'<dt>鉢のサイズ</dt><dd>'+(p.ps?p.ps+'号(約'+(p.ps*3)+'cm)':'<span class="kvn">未設定</span>')+'</dd>'
+      +'<dt>水やり</dt><dd>'+p.wi+'日おき(最後 '+fmtMD(p.lw)+')</dd>'
+      +'<dt>肥料</dt><dd>'+(p.fi>0?p.fi+'日おき(最後 '+fmtMD(p.lf)+')':'なし')+'</dd>'
+      +'<dt>メモ</dt><dd class="kvm">'+(p.memo&&p.memo.trim()?esc(p.memo):'<span class="kvn">なし</span>')+'</dd></dl>'
+      +(p.ps?'<p class="wg">'+waterGuide(p.ps)+'</p>':'');
+  }
+  function careEdit(p,dt){
+    return ""
+        +'<div class="ihr"><h2 class="ih">情報を変更する</h2><button type="button" class="ibtn on" id="ddone">完了</button></div>'
+        +'<label>ニックネーム(任意)<input id="dnn" value="'+esc(p.nn||"")+'" maxlength="20" placeholder="例: モンちゃん"></label>'
+        +'<label>品種<input id="dn" class="dnm" value="'+esc(p.name)+'" maxlength="30" placeholder="品種"></label>'
         +'<div class="dg"><label>お迎え日<input id="dsd" type="date" value="'+(p.sd||"")+'"></label>'
         +'<label>鉢のサイズ<select id="dps">'+potOpts(p.ps||"")+'</select></label></div>'
+        +'<label>置き場所<select id="dpl">'+placeOpts(p.pl||"")+'</select></label><div id="dplw" hidden><label>新しい場所の名前<input id="dpln" maxlength="20" placeholder="例: リビングの窓辺"></label></div>'
         +'<label class="dsrcl">お迎え元<select id="dsrc">'+srcOpts(p.src||"")+'</select></label><div id="dsrcw" hidden><label>新しいお迎え元の名前<input id="dsrcn" maxlength="30" placeholder="例: ホームセンター、友人"></label></div>'
         +'<div class="cg"><div class="cgh">'+IW+'水やり</div>'
         +'<label>頻度<span class="ivf"><input id="dwi" type="number" inputmode="numeric" min="1" max="365" value="'+p.wi+'" aria-label="水やりの間隔(日)"><span>日おき</span></span></label>'
@@ -1793,15 +1829,26 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
         +'<div class="cgh">'+IF+'肥料<small>(0でなし)</small></div>'
         +'<label>頻度<span class="ivf"><input id="dfi" type="number" inputmode="numeric" min="0" max="730" value="'+p.fi+'" aria-label="肥料の間隔(日)。0で肥料なし"><span>日おき</span></span></label>'
         +'<label>最後の肥料<input id="dlf" type="date" value="'+p.lf+'" max="'+dt+'"></label></div>'
-        +'<label>置き場所<select id="dpl">'+placeOpts(p.pl||"")+'</select></label><div id="dplw" hidden><label>新しい場所の名前<input id="dpln" maxlength="20" placeholder="例: リビングの窓辺"></label></div>'
-
         +'<p class="wg" id="dwg">'+waterGuide(p.ps)+'</p>'
         +'<label>メモ<textarea id="dmemo" rows="2" placeholder="気づいたこと、元気がないときの様子など">'+esc(p.memo||"")+'</textarea></label>'
-        +'</div></div>'
+      +'<button type="button" class="btn bkb" id="ddone2">完了</button>';
+  }
+  var dedit=false;
+  function showDetail(id){
+    var p=find(id),box=document.getElementById("detail"),dt=iso(today());
+    document.getElementById("home").hidden=true;box.hidden=false;
+    box.innerHTML='<div class="dtop"><a class="back" href="#">‹ 一覧にもどる</a><button type="button" class="trb" id="drm" aria-label="この植物を削除"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l.8 12a1 1 0 0 0 1 .9h7.4a1 1 0 0 0 1-.9l.8-12M10 11v5M14 11v5"/></svg></button></div>'
+      +'<div class="dh"><button class="phb" data-p="'+p.id+'" aria-label="写真を変える">'+photoHtml(p)+'</button>'
+      +'<div class="dht">'+headHtml(p)+'</div></div>'
+      +'<div class="dbody">'
+      +'<div class="dwrap" data-pan="info" role="tabpanel">'
+      +'<div class="dcard dpan" id="dinfo"'+(dedit?' hidden':'')+'>'+infoHtml(p)+'</div>'
+      +'<div class="dcard dpan" id="dcare">'+(dedit?careEdit(p,dt):careView(p))
+      +'</div></div>'
       +'<div class="dcard dpan" data-pan="his" role="tabpanel" id="dhis">'+histHtml(p)+'</div>'
       +'<div class="dpan lgp" data-pan="log" role="tabpanel" id="dlogs">'+logsHtml(p)+'</div></div>'
       +'<div class="tabs" role="tablist" aria-label="表示の切り替え">'
-      +'<button type="button" role="tab" data-tab="his"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg><span>ケア履歴</span></button><button type="button" role="tab" data-tab="log"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span>記録</span></button><button type="button" role="tab" data-tab="info"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/></svg><span>概要</span></button></div>';
+      +'<button type="button" role="tab" data-tab="his"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg><span>ケア履歴</span></button><button type="button" role="tab" data-tab="log"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span>記録</span></button><button type="button" role="tab" data-tab="info"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/></svg><span>情報</span></button></div>';
     setTab(dtab);
     fillThumbs();
   }
@@ -1813,7 +1860,7 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
       syncNotify();bkInfo();Array.prototype.forEach.call(document.querySelectorAll("#setv details"),function(d){d.open=false});window.scrollTo(0,0);return;
     }
     sv.hidden=true;closeLog();
-    if(m&&find(m[1])){if(curId!==m[1]){dtab=pendingTab||"his";if(pendingTab)setTimeout(function(){var c=document.getElementById("dcare");if(c)c.scrollIntoView({block:"start"})},80);pendingTab=null}curId=m[1];showDetail(m[1]);window.scrollTo(0,0)}
+    if(m&&find(m[1])){if(curId!==m[1]){dedit=false;dtab=pendingTab||"his";if(pendingTab)setTimeout(function(){var c=document.getElementById("dcare");if(c)c.scrollIntoView({block:"start"})},80);pendingTab=null}curId=m[1];showDetail(m[1]);window.scrollTo(0,0)}
     else{curId=null;box.hidden=true;box.innerHTML="";document.getElementById("home").hidden=false;render()}
   }
   var det=document.getElementById("detail");
@@ -1860,6 +1907,8 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
     else if(e.target.id==="lgcamb"){lgCamEl.click()}
     else if(e.target.id==="lgpickb"){lgPickEl.click()}
     else if(e.target.closest("[data-lg]")){openLog(curId,e.target.closest("[data-lg]").getAttribute("data-lg"))}
+    else if(e.target.closest("#dedit")){dedit=true;showDetail(curId);var bd=document.querySelector("#detail .dbody");if(bd)bd.scrollTop=0}
+    else if(e.target.closest("#ddone")||e.target.closest("#ddone2")){dedit=false;showDetail(curId);var bd2=document.querySelector("#detail .dbody");if(bd2)bd2.scrollTop=0}
     else if(e.target.closest("#drm")){var p=find(curId);if(p)ask(dispName(p)+"を削除しますか?(元に戻せません)","削除する",true,function(){plants=plants.filter(function(x){return x!==p});save();dropLogs(p.id);location.hash=""})}
     else if(e.target.id==="dlook"){lookAi(find(curId),e.target)}
   });
