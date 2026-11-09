@@ -139,7 +139,7 @@
       var c = e && e.code || "";
       msg(c === "auth/popup-closed-by-user" || c === "auth/cancelled-popup-request" ? "ログインをやめました。"
         : c === "auth/unauthorized-domain" ? "このアドレスは、Firebaseで許可されていません。設定の「承認済みドメイン」を確認してください。"
-        : c === "permission-denied" ? "権限がありません。コードが違うか、グループが満員(10人)の可能性があります。"
+        : c === "permission-denied" ? "権限がありません。(" + (e.step || "?") + ")"
         : "うまくいきませんでした。通信を確認して、もう一度お試しください。");
     }
     busy = false;
@@ -153,16 +153,18 @@
     b.set(fs.doc(S, "users", user.uid), { fid: f.id });
     await b.commit();
     await refresh();
-    msg("家族グループを作りました。招待コードを家族に伝えてください。");
+    msg(fid ? "家族グループを作りました。招待コードを家族に伝えてください。" : "作成はできましたが、読み込めませんでした。アプリを開き直してください。");
   }
   async function joinFamily(code) {
     code = (code || "").trim().toUpperCase();
     if (!/^[A-Z0-9]{6,12}$/.test(code)) { msg("招待コードを入れてください。"); return; }
-    var c = await fs.getDoc(fs.doc(S, "codes", code));
+    var step = "";
+    async function T(n, p) { step = n; try { return await p; } catch (e) { e.step = n; throw e; } }
+    var c = await T("1:コード確認", fs.getDoc(fs.doc(S, "codes", code)));
     if (!c.exists()) { msg("そのコードは見つかりませんでした。"); return; }
     var f = c.data().fid;
-    await fs.updateDoc(fs.doc(S, "families", f), { members: fs.arrayUnion(user.uid) });
-    await fs.setDoc(fs.doc(S, "users", user.uid), { fid: f });
+    await T("2:グループに加わる", fs.updateDoc(fs.doc(S, "families", f), { members: fs.arrayUnion(user.uid) }));
+    await T("3:自分の情報を保存", fs.setDoc(fs.doc(S, "users", user.uid), { fid: f }));
     await refresh();
     msg("家族グループに参加しました。");
   }
