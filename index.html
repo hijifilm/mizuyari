@@ -1193,7 +1193,7 @@ input,select,textarea{border-color:var(--line)}
     var h='<div class="catg" role="group" aria-label="分類で絞りこむ"><span class="catl">分類</span>'+chip("data-cat","","すべて",byC.length,catSel==="");
     CATS.forEach(function(c){if(!nc[c]&&catSel!==c)return;h+=chip("data-cat",c,c,nc[c]||0,catSel===c)});
     h+='</div>';
-    if(places.length>1||plSel){
+    if(places.some(function(k){return k!==NOPL})||plSel){
       h+='<div class="catg" role="group" aria-label="置き場所で絞りこむ"><span class="catl">置き場所</span>'+chip("data-pl","","すべて",byP.length,plSel==="");
       places.forEach(function(k){h+=chip("data-pl",k,k===NOPL?"未設定":k,np[k]||0,plSel===k,k===NOPL?"":PIN)});
       h+='</div>';
