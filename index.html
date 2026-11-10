@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-title" content="水やり日和">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script>try{var _t=JSON.parse(localStorage.getItem("settings-v1")||"{}").theme;if(_t==="light"||_t==="dark")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#EEF3EE;--card:#FFFFFF;--ink:#1F2D26;--sub:#5E6E65;--line:#D5E0D7;--leaf:#2F6B4F;--water:#2F7DBF;--fert:#B87A12;--late:#C23B3B;--onleaf:#FFFFFF;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -562,6 +562,94 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bottom:calc(82px + env(safe-area-inset-bottom,0px))}
 .shl{font-size:12px;color:var(--sub);margin:10px 0 0}
 #shurl{font-size:16px;height:42px;padding:0 10px;margin-top:4px;box-sizing:border-box}
+
+/* ---- デザイン調整: フラットを基本に、細い輪郭とごく薄い影だけで奥行きを出す ---- */
+:root{--bg:#F3F6F2;--bg2:#F3F6F2;--card:#FFFFFF;--ink:#17231D;--sub:#65746B;--line:#E2E8E3;--leaf:#2A6A4D;--sh:0 1px 2px rgba(23,35,29,.05)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F1512;--bg2:#0F1512;--card:#17201B;--ink:#E9F0EB;--sub:#9AAEA1;--line:#25312A;--sh:none}}
+:root[data-theme="dark"]{--bg:#0F1512;--bg2:#0F1512;--card:#17201B;--ink:#E9F0EB;--sub:#9AAEA1;--line:#25312A;--sh:none}
+body{background:var(--bg);font-family:"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-feature-settings:"palt";-webkit-font-smoothing:antialiased}
+h1{font-size:27px;font-weight:700;letter-spacing:.02em;line-height:1.25}
+.dt{letter-spacing:.04em;font-weight:500}
+.name,.dnk,.sm1,.calt,.sh,.swt,.bk summary{letter-spacing:.01em}
+.sh{font-weight:700}
+/* ヘッダーのボタン */
+.addb{background:var(--leaf);color:var(--onleaf);border:0;box-shadow:none;padding:0 16px}
+.addb.on{background:var(--card);color:var(--leaf);box-shadow:inset 0 0 0 1.5px var(--leaf)}
+.setb{border:1px solid var(--line);color:var(--ink);box-shadow:var(--sh)}
+/* 今日のまとめ+カレンダー: 1枚の白いカードに */
+.sum.ok,.sum.warn,.sum.late{background:var(--card);border:1px solid var(--line);box-shadow:var(--sh);border-radius:20px}
+.sum.ok .smi{background:color-mix(in srgb,var(--leaf) 13%,var(--card))}
+.sum.warn .smi{background:color-mix(in srgb,var(--warn) 24%,var(--card))}
+.sum.late .smi{background:color-mix(in srgb,var(--late) 15%,var(--card))}
+.sum.warn .sm1{color:var(--warnT)}
+.calb{background:none;padding:2px 0 4px;border-radius:0}
+.cd{border-radius:10px}
+.cd.td{border-color:var(--leaf)}
+.cdt{background:var(--bg);border-radius:12px}
+/* 植物のカード */
+.card{border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh);background-image:linear-gradient(rgba(70,150,215,calc(var(--m,0)*.09)),rgba(70,150,215,calc(var(--m,0)*.09)))}
+.card::before{background:color-mix(in srgb,var(--water) 15%,transparent)}
+.card.late{border-color:var(--late)}
+.card.warn{border-color:var(--warn)}
+.ph{border-radius:14px}
+.ph.none{background:var(--bg)}
+.bd{border-width:1px;box-shadow:var(--sh)}
+/* 白いパネル */
+.dcard,.add,form{border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh)}
+.sr input{background:var(--card);border:1px solid var(--line)}
+input,select,textarea{border-color:var(--line)}
+.dpan input,.dpan select,.dpan textarea{background-color:var(--bg)}
+.dpan .it,.dpan .wg{background:var(--bg)}
+.tabs button[aria-selected="true"]{color:var(--leaf)}
+/* 下のタブバー: すりガラス+上端の細い線 */
+.tabs{background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);box-shadow:none;border-top:1px solid var(--line)}
+.tabs button{position:relative}
+.tabs button[aria-selected="true"]::before{content:"";position:absolute;top:-6px;left:50%;width:24px;height:3px;margin-left:-12px;border-radius:0 0 3px 3px;background:var(--leaf)}
+/* ダイアログ・通知だけは、浮いて見えるように影を残す */
+.mdb{box-shadow:0 24px 48px -20px rgba(10,20,15,.5)}
+.fib.rest{--gc:var(--sub)}.fib.rest .ic{opacity:.45}.fib.rest .bd{color:var(--sub)}
+.fp.rest .fi span{display:block;color:var(--sub);font-size:12.5px;line-height:1.6;margin-top:2px}
+
+/* ---- 水やり完了のエフェクト ---- */
+.sum{position:relative}
+.fx{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:3}
+.fxw{position:absolute;top:0;bottom:0;left:-60%;width:60%;background:linear-gradient(100deg,transparent,rgba(143,211,244,.34) 45%,rgba(184,230,196,.38) 55%,transparent);animation:fxsweep 1.5s ease-out .1s forwards}
+.fxr{position:absolute;left:41px;top:41px;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:2px solid #8FD3F4;opacity:0;animation:fxring 1.3s ease-out .05s forwards}
+.fxr.r2{animation-delay:.35s;border-color:#B8E6C4}
+.fxs{position:absolute;display:block;opacity:0;transform:scale(0) rotate(0);animation:fxtw 1.5s ease-in-out forwards;filter:drop-shadow(0 0 3px rgba(255,255,255,.9))}
+.fxs svg{width:100%;height:100%;display:block}
+.fxd{position:absolute;bottom:-8px;width:7px;height:10px;background:#8FD3F4;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;opacity:0;animation:fxrise 1.9s ease-out forwards}
+.smi.pop{animation:fxpop .7s cubic-bezier(.3,1.6,.5,1)}
+@keyframes fxsweep{to{left:110%}}
+@keyframes fxring{0%{opacity:.9;transform:scale(.6)}100%{opacity:0;transform:scale(3.4)}}
+@keyframes fxtw{0%{opacity:0;transform:scale(0) rotate(0)}35%{opacity:1;transform:scale(1.1) rotate(45deg)}70%{opacity:.9;transform:scale(.7) rotate(90deg)}100%{opacity:0;transform:scale(0) rotate(135deg)}}
+@keyframes fxrise{0%{opacity:0;transform:translateY(0)}20%{opacity:.85}100%{opacity:0;transform:translateY(-120px)}}
+@keyframes fxpop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){.fx{display:none}.smi.pop{animation:none}}
+
+/* ---- カレンダーの日の詳細: 1行に固定 ---- */
+.sum .cdt{flex-wrap:nowrap;gap:10px;height:42px;min-height:0;padding:0 12px;overflow:hidden}
+.sum .cdh{flex:none;margin:0;font-size:14px;white-space:nowrap}
+.sum .crs{position:relative;flex:1;min-width:0;height:100%;overflow:hidden}
+.sum .crs .cr{position:absolute;left:0;top:0;height:100%;display:inline-flex;align-items:center;flex-wrap:nowrap;white-space:nowrap;gap:4px;font-size:14px;line-height:1.2;opacity:0;pointer-events:none;transition:opacity .35s}
+.sum .crs .cr.on{opacity:1;pointer-events:auto}
+.sum .crs .cr{right:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.sum .crs .cr::-webkit-scrollbar{display:none}
+.sum .crs .cr .ci{margin-top:0;flex:none}
+.sum .cdn{flex:none;font-size:11.5px;color:var(--sub);font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion: reduce){.sum .crs .cr{transition:none}}
+
+/* ---- 検索: 分類で絞りこむ ---- */
+.cats{display:flex;flex-direction:column;gap:6px;margin:0 0 10px}
+.cats[hidden]{display:none}
+.cat{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.cat b{font-size:12px;font-weight:700;color:var(--sub);font-variant-numeric:tabular-nums}
+.cat.on{background:var(--leaf);border-color:var(--leaf);color:var(--onleaf)}
+.cat.on b{color:inherit;opacity:.85}
+.catg{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%}
+.catl{flex:none;width:100%;font-size:12px;color:var(--sub);margin:4px 0 -2px}
+.cat .pin,.cat svg{width:14px;height:14px;flex:none;margin:0}
+.cat:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
 </style>
 <style id="fbhide">.dcard:has(#syncst){display:none}</style>
 <style>.fbc{font-size:22px;font-weight:700;letter-spacing:.2em;text-align:center;margin:6px 0;color:var(--leaf)}</style>
@@ -592,6 +680,26 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
         <button type="button" class="tgl" id="ntsw" role="switch" aria-checked="false" aria-labelledby="ntl"><span></span></button>
       </div>
       <p class="txt nt">いまは、通知はまだ届きません(準備中)。この設定は保存されていて、通知が使えるようになったときに使われます。</p>
+    </details>
+    <details class="dcard bk">
+      <summary><span>肥料の管理</span><span class="sst" id="fest"></span></summary>
+      <div class="swr">
+        <div class="swl">
+          <div class="swt" id="fel">肥料のお世話も記録する</div>
+          <p class="txt" id="fesub"></p>
+        </div>
+        <button type="button" class="tgl" id="fesw" role="switch" aria-checked="false" aria-labelledby="fel"><span></span></button>
+      </div>
+    </details>
+    <details class="dcard bk">
+      <summary><span>季節に合わせる</span><span class="sst" id="sest"></span></summary>
+      <div class="swr">
+        <div class="swl">
+          <div class="swt" id="sel">季節で水やり・肥料の間隔を変える</div>
+          <p class="txt" id="sesub"></p>
+        </div>
+        <button type="button" class="tgl" id="sesw" role="switch" aria-checked="true" aria-labelledby="sel"><span></span></button>
+      </div>
     </details>
     <details class="dcard bk">
       <summary><span>写真</span><span class="sst" id="phst"></span></summary>
@@ -682,6 +790,7 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
     <svg class="sri" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     <input id="q" type="search" placeholder="品種・場所・鉢のサイズ・メモ・記録で検索" aria-label="植物を検索" autocomplete="off" enterkeyhint="search">
   </div>
+  <div class="cats" id="cats" hidden></div>
   <p class="qn" id="qn" role="status"></p>
   <div id="list"></div>
   <div class="tabs hometabs" role="tablist" aria-label="ホームの切り替え">
@@ -772,6 +881,15 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
   function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
   function parse(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2])}
   function left(last,every){return every-Math.round((today()-parse(last))/864e5)}
+  var _dbc={};
+  function dbOf(p){var k=p.name||"";if(!(k in _dbc)){try{_dbc[k]=(typeof lookupDb==="function"&&lookupDb(k))||null}catch(e){_dbc[k]=null}}return _dbc[k]}
+  function mon(){return today().getMonth()+1}
+  function seasonF(p){var d=dbOf(p),wf=(d&&d.wf)?d.wf:1.5,m=mon();if(m===12||m<=2)return wf;if(m===3||m===11)return 1+(wf-1)/2;return 1}
+  function W(p){if(!settings.seasonal)return p.wi;return Math.max(1,Math.round(p.wi*seasonF(p)))}
+  function fPaused(p){if(!settings.fert||!settings.seasonal||!(p.fi>0))return false;var d=dbOf(p),m=mon();return(m>=11||m<=2)&&!(d&&d.fw)}
+  function F(p){return(settings.fert&&p.fi>0&&!fPaused(p))?p.fi:0}
+  function fLast(p){if(!settings.seasonal)return p.lf;var m=mon();if(m>=3&&m<=10){var st=new Date(today().getFullYear(),2,1);if(parse(p.lf)<st)return iso(st)}return p.lf}
+  function fLeft(p){var f=F(p);return f>0?left(fLast(p),f):null}
   function label(n){return n<0?(-n)+"日 超過":n===0?"今日":"あと"+n+"日"}
   function esc(s){return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
   var IW='<svg class="ic w" viewBox="0 0 24 24" role="img" aria-label="水やり"><path d="M12 3S5.5 10.2 5.5 14.6a6.5 6.5 0 0 0 13 0C18.5 10.2 12 3 12 3z" fill="currentColor"/><path class="hl" d="M9 15a3 3 0 0 0 3 3" fill="none" stroke-width="1.7" stroke-linecap="round"/></svg>';
@@ -808,7 +926,10 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
     al="肥料 "+(late?(-f)+"日超過":warn?"今日が目安":"目安まであと"+f+"日");
     return '<button class="fib'+(late?' late':warn?' warn':'')+'" data-ft="'+p.id+'" aria-label="'+al+'(タップで記録を開く)" aria-expanded="false">'+IF+'<b class="bd">'+t+'</b></button>';
   }
-  function urgency(p){var a=left(p.lw,p.wi),b=p.fi>0?left(p.lf,p.fi):999;return Math.min(a,b)}
+  function fertRest(p){
+    return '<button class="fib rest" data-ft="'+p.id+'" aria-label="肥料は冬のあいだお休み中(タップで記録を開く)" aria-expanded="false">'+IF+'<b class="bd">休</b></button>';
+  }
+  function urgency(p){var a=left(p.lw,W(p)),fl=fLeft(p),b=fl===null?999:fl;return Math.min(a,b)}
   function shrink(file,cb){
     var r=new FileReader();
     r.onload=function(){var im=new Image();im.onload=function(){
@@ -821,6 +942,25 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
   var SMDROP='<svg viewBox="0 0 24 24"><path d="M12 3 6.5 11.4A6.5 6.5 0 1 0 17.5 11.4z" fill="currentColor"/></svg>';
   var SMLEAF='<svg viewBox="0 0 24 24"><path d="M5 19C5 10.5 10 5 19.5 4.5 19.5 14 14.5 19 5 19z" fill="currentColor"/><path d="M5 19 13 11" stroke="var(--card)" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>';
   /* ---- 1か月カレンダー(今日は水やりなしのとき表示) ---- */
+  var prevWd=null;
+  /* ---- 水やりが全部おわったときの、きらきら+うるおいのエフェクト ---- */
+  function celebrate(sm){
+    prevWd=0;
+    if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+    var fx=document.createElement("div");fx.className="fx";fx.setAttribute("aria-hidden","true");
+    var h='<i class="fxw"></i><i class="fxr"></i><i class="fxr r2"></i>',i,cols=["#F5C84B","#FFFFFF","#8FD3F4","#B8E6C4"];
+    var star='<svg viewBox="0 0 24 24"><path d="M12 0C12.9 7.2 16.8 11.1 24 12 16.8 12.9 12.9 16.8 12 24 11.1 16.8 7.2 12.9 0 12 7.2 11.1 11.1 7.2 12 0z" fill="currentColor"/></svg>';
+    for(i=0;i<18;i++){
+      var x=(i*37+Math.random()*28)%96+2,y=Math.random()*88+4,z=8+Math.random()*14,dl=Math.random()*0.9;
+      h+='<b class="fxs" style="left:'+x.toFixed(1)+'%;top:'+y.toFixed(1)+'%;width:'+z.toFixed(0)+'px;height:'+z.toFixed(0)+'px;color:'+cols[i%4]+';animation-delay:'+dl.toFixed(2)+'s">'+star+'</b>';
+    }
+    for(i=0;i<6;i++){
+      h+='<u class="fxd" style="left:'+(10+i*15+Math.random()*6).toFixed(1)+'%;animation-delay:'+(Math.random()*0.7).toFixed(2)+'s"></u>';
+    }
+    fx.innerHTML=h;sm.appendChild(fx);
+    var ic=sm.querySelector(".smi");if(ic)ic.classList.add("pop");
+    setTimeout(function(){if(fx.parentNode)fx.parentNode.removeChild(fx)},2600);
+  }
   var calOff=0,calSel=null;
   var CDROP='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3S5.5 10.2 5.5 14.6a6.5 6.5 0 0 0 13 0C18.5 10.2 12 3 12 3z"/></svg>';
   var CFERT='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 21 12 12 21 3 12z"/></svg>';
@@ -831,7 +971,7 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
       o[type+(done?"d":"")].push(dispName(p));
     }
     plants.forEach(function(p){
-      [["w",p.lw,p.wi],["f",p.lf,p.fi]].forEach(function(a){
+      [["w",p.lw,W(p)],["f",fLast(p),F(p)]].forEach(function(a){
         if(!(a[2]>0))return;
         var b=parse(a[1]),k;
         (p.hist||[]).forEach(function(h){if(h.t===a[0]&&parse(h.d)<=endD)add(h.d,a[0],true,p)});
@@ -871,13 +1011,30 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
       h+='<button type="button" class="cd'+(key===iso(t)?' td':'')+(key===sel?' sl':'')+'" data-cd="'+key+'" aria-label="'+lab+'"'+(key===sel?' aria-pressed="true"':' aria-pressed="false"')+'><span class="cn">'+d+'</span><span class="cis">'+ic+'</span></button>';
     }
     h+='</div>';
-    var se=ev[sel],sd=parse(sel),rows="";
-    function row(cls,icon,label,names){return names&&names.length?'<span class="cr"><span class="ci '+cls+'">'+icon+'</span>'+label+' '+esc(names.join("、"))+'</span>':""}
+    var se=ev[sel],sd=parse(sel),rows=[];
+    function row(cls,icon,label,names){if(names&&names.length)rows.push('<span class="cr"><span class="ci '+cls+'">'+icon+'</span>'+label+(label==="あげた"?"：":" ")+esc(names.join("、"))+'</span>')}
     if(se){
-      rows+=row("cw",CDROP,"水やり",se.w)+row("cw o",CDROP,"あげた",se.wd)+row("cf",CFERT,"肥料",se.f)+row("cf o",CFERT,"あげた",se.fd);
+      row("cw",CDROP,"水やり",se.w);row("cw o",CDROP,"あげた",se.wd);row("cf",CFERT,"肥料",se.f);row("cf o",CFERT,"あげた",se.fd);
     }
-    h+='<div class="cdt"><b class="cdh">'+(sd.getMonth()+1)+'/'+sd.getDate()+'('+"日月火水木金土".charAt(sd.getDay())+')</b>'+(rows||'<span class="cr sub">予定なし</span>')+'</div></div>';
+    h+='<div class="cdt"><b class="cdh">'+(sd.getMonth()+1)+'/'+sd.getDate()+'('+"日月火水木金土".charAt(sd.getDay())+')</b><div class="crs">'+(rows.length?rows.join(""):'<span class="cr sub">予定なし</span>')+'</div>'+(rows.length>1?'<span class="cdn" aria-hidden="true">1/'+rows.length+'</span>':'')+'</div></div>';
     box.innerHTML=h;
+    calRotate(box);
+  }
+  /* 日の詳細は1行に固定。複数あるときは数秒ごとに切りかえ、長いときは横にスクロールする */
+  var calTimer=null;
+  function calRotate(box){
+    if(calTimer){clearInterval(calTimer);calTimer=null}
+    var rs=box.querySelectorAll(".crs .cr");if(!rs.length)return;
+    var wrap=box.querySelector(".crs"),n=rs.length,cur=0,num=box.querySelector(".cdn");
+    function show(i){
+      for(var k=0;k<n;k++)rs[k].classList.toggle("on",k===i);
+      rs[i].scrollLeft=0;if(num)num.textContent=(i+1)+"/"+n;
+    }
+    show(0);
+    if(n>1)calTimer=setInterval(function(){
+      if(!document.body.contains(box)){clearInterval(calTimer);calTimer=null;return}
+      cur=(cur+1)%n;show(cur);
+    },3600);
   }
   document.getElementById("sum").addEventListener("click",function(e){
     var c=e.target.closest("[data-cal]"),d=e.target.closest("[data-cd]");
@@ -889,31 +1046,36 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
     var nowD=new Date();
     document.getElementById("dt").textContent=(nowD.getMonth()+1)+"月"+nowD.getDate()+"日 "+"日月火水木金土".charAt(nowD.getDay())+"曜日";
     var list=document.getElementById("list");
-    var sorted=plants.slice().sort(function(a,b){return left(a.lw,a.wi)-left(b.lw,b.wi)||urgency(a)-urgency(b)});
+    var sorted=plants.slice().sort(function(a,b){return left(a.lw,W(a))-left(b.lw,W(b))||urgency(a)-urgency(b)});
     var due=sorted.filter(function(p){return urgency(p)<=0}).length;
-    var wd=sorted.filter(function(p){return left(p.lw,p.wi)<=0}).length,wl=sorted.filter(function(p){return left(p.lw,p.wi)<0}).length,fd=sorted.filter(function(p){return p.fi>0&&left(p.lf,p.fi)<=0}).length,sm=document.getElementById("sum");
-    if(!plants.length){sm.className="sum";sm.innerHTML=""}
+    var wd=sorted.filter(function(p){return left(p.lw,W(p))<=0}).length,wl=sorted.filter(function(p){return left(p.lw,W(p))<0}).length,fd=sorted.filter(function(p){var x=fLeft(p);return x!==null&&x<=0}).length,sm=document.getElementById("sum");
+    if(!plants.length){sm.className="sum";sm.innerHTML="";prevWd=null}
     else{
-      var nx=Math.min.apply(null,plants.map(function(p){return left(p.lw,p.wi)}));
+      var nx=Math.min.apply(null,plants.map(function(p){return left(p.lw,W(p))}));
       sm.className="sum "+(wl?"late":wd?"warn":"ok");
       sm.innerHTML='<div class="smi" aria-hidden="true">'+(wd?SMDROP:SMLEAF)+'</div><div class="smt"><div class="sm1">'+(wd?'今日は水やり <b>'+wd+'株</b>'+(wl?'(遅れ '+wl+'株)':''):'今日は水やりなし')+'</div>'
         +(wd?'':'<div class="sm2">次は '+nx+'日後</div>')
         +(fd?'<div class="sm2">肥料 '+fd+'株</div>':'')
         +'</div>'+'<div class="calw" id="calw"></div>';
       drawCal();
+      var cel=prevWd>0&&wd===0;prevWd=wd;
+      if(cel)celebrate(sm);
     }
     document.getElementById("sr").hidden=!plants.length||htab!=="search";
     document.getElementById("qn").hidden=htab!=="search";
     if(!plants.length){list.innerHTML='<p class="empty">まだ植物がありません。右上の「＋🪴」から追加してください。バックアップがあるときは、右上の設定ボタンの中の「バックアップと復元」から戻せます。</p>';document.getElementById("qn").textContent="";return}
-    var qt=htab==="search"?query.trim():"",shown=qt?sorted.filter(function(p){return matches(p,query)}):sorted;
-    document.getElementById("qn").textContent=qt&&shown.length?shown.length+"件見つかりました":"";
-    if(!shown.length){list.innerHTML='<p class="empty">「'+esc(qt)+'」に合う植物が見つかりません。</p>';return}
+    var isS=htab==="search",qt=isS?query.trim():"",byQ=qt?sorted.filter(function(p){return matches(p,query)}):sorted;
+    drawCats(byQ,isS);
+    var cs=isS?catSel:"",ps=isS?plSel:"",shown=byQ.filter(function(p){return(!cs||catOf(p)===cs)&&(!ps||(plOf(p)||NOPL)===ps)});
+    document.getElementById("qn").textContent=(qt||cs||ps)&&shown.length?shown.length+"件見つかりました":"";
+    if(!shown.length){var fl=[ps?(ps===NOPL?"置き場所が未設定":ps+"にある"):"",cs?cs+"の":""].join("");list.innerHTML='<p class="empty">'+(qt?'「'+esc(qt)+'」に合う、':'')+(fl?esc(fl):'')+'植物が見つかりません。</p>';return}
     var old={};
     list.querySelectorAll(".card").forEach(function(c){old[c.dataset.id]=c.getBoundingClientRect().top});
     list.innerHTML=shown.map(function(p){
-      var w=left(p.lw,p.wi),f=p.fi>0?left(p.lf,p.fi):null,el=p.fi>0?Math.round((today()-parse(p.lf))/864e5):0,fl=f===null?"":f>0?"目安まであと"+f+"日":f===0?"今日が目安":"目安を"+(-f)+"日超過";
-      var h='<div class="card'+(w<0?' late':w===0?' warn':'')+'" data-id="'+p.id+'" style="--m:'+(w<=0?0:Math.min(1,w/p.wi)).toFixed(2)+'"><div class="top"><div class="who">'+'<button class="phb" data-p="'+p.id+'" aria-label="写真を変える">'+(p.img?'<img class="ph" alt="" src="'+p.img+'">':'<div class="ph none">🪴</div>')+'</button>'+'<div class="nm"><h3 class="name"><a class="nl" href="#plant-'+p.id+'">'+esc(dispName(p))+(p.nn&&p.nn!==p.name?'<span class="kn">('+esc(p.name)+')</span>':'')+' ›</a></h3>'+(p.pl?'<div class="loc">'+PIN+esc(p.pl)+'</div>':'')+memoSnipHtml(p)+'</div></div><div class="gs"><div class="wk" tabindex="0" role="button" data-sw="'+p.id+'" aria-label="水やりをする(左右にスワイプ、またはEnterキー)">'+gauge(w,p.wi,p.id)+'</div>'+(f!==null?fertBtn(p,f):'<span class="fib" aria-hidden="true"></span>')+'</div></div>';
+      var w=left(p.lw,W(p)),f=fLeft(p),el=p.fi>0?Math.round((today()-parse(p.lf))/864e5):0,fl=f===null?"":f>0?"目安まであと"+f+"日":f===0?"今日が目安":"目安を"+(-f)+"日超過";
+      var h='<div class="card'+(w<0?' late':w===0?' warn':'')+'" data-id="'+p.id+'" style="--m:'+(w<=0?0:Math.min(1,w/W(p))).toFixed(2)+'"><div class="top"><div class="who">'+'<button class="phb" data-p="'+p.id+'" aria-label="写真を変える">'+(p.img?'<img class="ph" alt="" src="'+p.img+'">':'<div class="ph none">🪴</div>')+'</button>'+'<div class="nm"><h3 class="name"><a class="nl" href="#plant-'+p.id+'">'+esc(dispName(p))+(p.nn&&p.nn!==p.name?'<span class="kn">('+esc(p.name)+')</span>':'')+' ›</a></h3>'+(p.pl?'<div class="loc">'+PIN+esc(p.pl)+'</div>':'')+memoSnipHtml(p)+'</div></div><div class="gs"><div class="wk" tabindex="0" role="button" data-sw="'+p.id+'" aria-label="水やりをする(左右にスワイプ、またはEnterキー)">'+gauge(w,W(p),p.id)+'</div>'+(f!==null?fertBtn(p,f):(settings.fert?(p.fi>0&&fPaused(p)?fertRest(p):'<span class="fib" aria-hidden="true"></span>'):''))+'</div></div>';
       if(f!==null)h+='<div class="fp"><div class="fi"><div>最後から<b>'+el+'日</b>経過</div><span class="'+(f<0?'late':'')+'">'+fl+'</span></div><button class="btn f" data-f="'+p.id+'" aria-label="肥料をあげた">あげた</button></div>';
+      else if(settings.fert&&p.fi>0&&fPaused(p))h+='<div class="fp rest"><div class="fi"><div><b>肥料はお休み中です</b></div><span>冬は植物の成長がゆっくりで、肥料を吸いきれずに根を傷めることがあります。3月になったら、また知らせます。</span></div></div>';
       return h+'</div>';
     }).join("");
     if(skipFlip)skipFlip=false;else flip(old);
@@ -946,10 +1108,16 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
     save();render();
   });
   var idWi=7,idFi=30,pendingTab=null;
+  document.getElementById("n").addEventListener("input",function(){
+    var m=document.getElementById("idmsg"),dd=null;try{dd=lookupDb(this.value.trim())}catch(e){}
+    if(dd&&dd.w>=1)m.textContent="品種の目安: 水やり"+dd.w+"日おき"+(settings.fert?"・肥料"+(dd.f>0?dd.f+"日おき":"なし"):"")+"(登録のあとで変えられます)";
+    else if(/^品種の目安/.test(m.textContent))m.textContent="";
+  });
   document.getElementById("add").addEventListener("click",function(){
     var n=document.getElementById("n");
     if(!n.value.trim()){n.focus();return}
-    var wi=idWi>=1?idWi:7,fi=idFi>=0?idFi:30;
+    var wi=idWi>=1?idWi:7,fi=idFi>=0?idFi:30,dd0=null;try{dd0=lookupDb(n.value.trim())}catch(e){}
+    if(dd0&&dd0.w>=1){wi=dd0.w;fi=dd0.f>=0?dd0.f:fi}
     var d=iso(today()),ph=document.getElementById("ph"),file=ph.files&&ph.files[0],nid=String(Date.now());
     function done(img){
       plants.push({id:nid,name:n.value.trim(),nn:document.getElementById("nn").value.trim().slice(0,20),wi:Math.round(wi),fi:Math.round(fi),lw:d,lf:d,img:img||"",pl:"",hist:(Math.round(fi)>0?[{d:d,t:"w"},{d:d,t:"f"}]:[{d:d,t:"w"}])});
@@ -1007,11 +1175,40 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
   document.getElementById("ph").addEventListener("change",function(){
     if(sampleFn&&this.files&&this.files[0]&&!document.getElementById("n").value.trim())document.getElementById("idbtn").click();
   });
-  var query="",skipFlip=false;
+  var query="",skipFlip=false,catSel="",plSel="",NOPL="__none__";
+  var CATS=["観葉植物","多肉・サボテン","シダ","ハーブ・果樹","花","ラン","その他"];
+  function catOf(p){var d=dbOf(p);return d&&d.c?d.c:"その他"}
+  function plOf(p){return (p.pl||"").trim()}
+  function drawCats(list,on){
+    var box=document.getElementById("cats");
+    box.hidden=!on;if(!on)return;
+    var byP=catSel?list.filter(function(p){return catOf(p)===catSel}):list,
+        byC=plSel?list.filter(function(p){return (plOf(p)||NOPL)===plSel}):list,nc={},np={},places=[];
+    byC.forEach(function(p){var c=catOf(p);nc[c]=(nc[c]||0)+1});
+    byP.forEach(function(p){var k=plOf(p)||NOPL;if(!np[k]){np[k]=0;places.push(k)}np[k]++});
+    list.forEach(function(p){var k=plOf(p)||NOPL;if(places.indexOf(k)<0&&plSel===k)places.push(k)});
+    places.sort(function(a,b){return a===NOPL?1:b===NOPL?-1:a<b?-1:a>b?1:0});
+    if(plSel&&places.indexOf(plSel)<0)places.push(plSel);
+    function chip(attr,val,label,n,sel,icon){return '<button type="button" class="cat'+(sel?' on':'')+'" '+attr+'="'+esc(val)+'" aria-pressed="'+(sel?"true":"false")+'">'+(icon||"")+esc(label)+'<b>'+n+'</b></button>'}
+    var h='<div class="catg" role="group" aria-label="分類で絞りこむ"><span class="catl">分類</span>'+chip("data-cat","","すべて",byC.length,catSel==="");
+    CATS.forEach(function(c){if(!nc[c]&&catSel!==c)return;h+=chip("data-cat",c,c,nc[c]||0,catSel===c)});
+    h+='</div>';
+    if(places.length>1||plSel){
+      h+='<div class="catg" role="group" aria-label="置き場所で絞りこむ"><span class="catl">置き場所</span>'+chip("data-pl","","すべて",byP.length,plSel==="");
+      places.forEach(function(k){h+=chip("data-pl",k,k===NOPL?"未設定":k,np[k]||0,plSel===k,k===NOPL?"":PIN)});
+      h+='</div>';
+    }
+    box.innerHTML=h;
+  }
+  document.getElementById("cats").addEventListener("click",function(e){
+    var b=e.target.closest("[data-cat],[data-pl]");if(!b)return;
+    if(b.hasAttribute("data-cat"))catSel=b.getAttribute("data-cat");else plSel=b.getAttribute("data-pl");
+    skipFlip=true;render();
+  });
   function setHomeTab(t){
     if(t===htab)return;
     htab=t;
-    if(t!=="search"){query="";document.getElementById("q").value=""}
+    if(t!=="search"){query="";catSel="";plSel="";document.getElementById("q").value=""}
     document.getElementById("home").setAttribute("data-t",t);
     Array.prototype.forEach.call(document.querySelectorAll("#home [data-ht]"),function(b){
       var on=b.getAttribute("data-ht")===t;b.setAttribute("aria-selected",on?"true":"false");
@@ -1058,8 +1255,8 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
   }
   document.getElementById("q").addEventListener("input",function(){query=this.value;skipFlip=true;render()});
   /* ---- 設定(通知のオン/オフ) ---- */
-  var settings={notify:false,autosave:false,stamp:true,theme:"auto"};
-  try{var _s=JSON.parse(localStorage.getItem("settings-v1")||"{}");settings.notify=!!_s&&_s.notify===true;settings.autosave=!!_s&&_s.autosave===true;settings.stamp=!(_s&&_s.stamp===false);settings.theme=(_s&&(_s.theme==="light"||_s.theme==="dark"))?_s.theme:"auto"}catch(e){}
+  var settings={notify:false,autosave:false,stamp:true,theme:"auto",seasonal:true,fert:false};
+  try{var _s=JSON.parse(localStorage.getItem("settings-v1")||"{}");settings.notify=!!_s&&_s.notify===true;settings.autosave=!!_s&&_s.autosave===true;settings.stamp=!(_s&&_s.stamp===false);settings.seasonal=!(_s&&_s.seasonal===false);settings.fert=!!_s&&_s.fert===true;settings.theme=(_s&&(_s.theme==="light"||_s.theme==="dark"))?_s.theme:"auto"}catch(e){}
   function saveSettings(){try{localStorage.setItem("settings-v1",JSON.stringify(settings));return true}catch(e){return false}}
   var THN={auto:"自動",light:"ライト",dark:"ダーク"};
   function syncTheme(){
@@ -1078,6 +1275,14 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
     document.getElementById("ntsw").setAttribute("aria-checked",settings.notify?"true":"false");
     document.getElementById("ntsub").textContent=settings.notify?"オン: 水やりの日などに知らせます。":"オフ: 通知しません。";
     document.getElementById("ntst").textContent=settings.notify?"オン":"オフ";
+    var fe=document.getElementById("fesw");
+    if(fe){fe.setAttribute("aria-checked",settings.fert?"true":"false");
+      document.getElementById("fest").textContent=settings.fert?"オン":"オフ";
+      document.getElementById("fesub").textContent=settings.fert?"オン: 肥料の間隔・記録・お知らせを使います。":"オフ: 水やりだけを管理します。肥料のデータは消えず、オンにするとまた使えます。"}
+    var se=document.getElementById("sesw");
+    if(se){se.setAttribute("aria-checked",settings.seasonal?"true":"false");
+      document.getElementById("sest").textContent=settings.seasonal?"オン":"オフ";
+      document.getElementById("sesub").textContent=settings.seasonal?"オン: 冬(12〜2月)は水やりの間隔をのばし、肥料は11〜2月をお休みします。3月と11月は、その中間です。植物ごとの目安は、品種のデータによります。":"オフ: 登録した間隔のまま、1年中、同じ間隔で知らせます。"}
     document.getElementById("phst").textContent="自動保存 "+(settings.autosave?"オン":"オフ")+"・日付 "+(settings.stamp?"オン":"オフ");
     var as=document.getElementById("assw"),st=document.getElementById("stsw");
     as.setAttribute("aria-checked",settings.autosave?"true":"false");
@@ -1086,6 +1291,8 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
     document.getElementById("stsub").textContent=settings.stamp?"オン: 保存・投稿する画像に、名前・日付・育てた日数を入れます。":"オフ: 写真だけを、そのまま保存・投稿します。";
   }
   document.getElementById("ntsw").addEventListener("click",function(){settings.notify=!settings.notify;saveSettings();syncNotify()});
+  document.getElementById("fesw").addEventListener("click",function(){settings.fert=!settings.fert;saveSettings();syncNotify();render()});
+  document.getElementById("sesw").addEventListener("click",function(){settings.seasonal=!settings.seasonal;saveSettings();syncNotify();render()});
   document.getElementById("assw").addEventListener("click",function(){settings.autosave=!settings.autosave;saveSettings();syncNotify()});
   document.getElementById("stsw").addEventListener("click",function(){settings.stamp=!settings.stamp;saveSettings();syncNotify()});
   document.getElementById("settoggle").addEventListener("click",function(){location.hash="app-options"});
@@ -1250,7 +1457,7 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
         if(g.pl)addPlaceQuiet(g.pl);
       });
       if(Array.isArray(d.places))d.places.forEach(function(x){if(typeof x==="string")addPlaceQuiet(x)});
-      if(d.settings&&typeof d.settings==="object"&&typeof d.settings.notify==="boolean"){settings.notify=d.settings.notify;if(typeof d.settings.autosave==="boolean")settings.autosave=d.settings.autosave;if(typeof d.settings.stamp==="boolean")settings.stamp=d.settings.stamp;saveSettings();syncNotify()}
+      if(d.settings&&typeof d.settings==="object"&&typeof d.settings.notify==="boolean"){settings.notify=d.settings.notify;if(typeof d.settings.autosave==="boolean")settings.autosave=d.settings.autosave;if(typeof d.settings.stamp==="boolean")settings.stamp=d.settings.stamp;if(typeof d.settings.seasonal==="boolean")settings.seasonal=d.settings.seasonal;settings.fert=d.settings.fert===true;saveSettings();syncNotify()}
       if(!save()||!savePlaces()){
         plants=JSON.parse(before);places=JSON.parse(beforeP);
         bkMsg("保存する容量が足りず、復元できませんでした。");
@@ -1644,104 +1851,104 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
   }
   document.getElementById("addtoggle").addEventListener("click",function(){setAdd(document.getElementById("addsec").hidden)});
   var PLANTS=[
-    {k:["モンステラ","monstera","デリシオーサ","ホウライショウ","蓬莱蕉","アダンソニー","マドカズラ","swiss cheese plant"],ov:"熱帯アメリカ原産のサトイモ科。大きく切れ込んだ葉が特徴です。明るい日陰を好み、直射日光だと葉焼けします。寒さに弱く、冬は10℃以上で管理します。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["ポトス","pothos","ゴールデンカズラ","エンジョイ","マーブルクイーン","サテンポトス","エピプレムナム","epipremnum","スキンダプサス","scindapsus","devil's ivy"],pp:1,ov:"東南アジア原産のつる性の植物で、丈夫で初心者向きです。暗めの場所でも育ち、水栽培もできます。寒さに弱く、冬は10℃以上が目安です。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["サンスベリア","サンセベリア","sansevieria","虎の尾","トラノオ","ローレンチー","スタッキー","ボンセレンシス","snake plant"],pp:1,ov:"アフリカ原産で、肉厚の剣のような葉が特徴です。乾燥にとても強く、暗い場所にも耐えます。水やりは控えめにして、冬はさらに減らします。",pet:1,petN:"サポニンを含み、食べると嘔吐や下痢をすることがあります。",hum:0,humN:"触れる分には問題ありませんが、食べないようにしましょう。"},
-    {k:["ゴムの木","ゴムノキ","フィカスエラスティカ","インドゴムノキ","ティネケ","バーガンディ","ロブスタ","ゴムの樹","インドゴム","rubber tree"],pp:1,ov:"インド・東南アジア原産のクワ科。つやのある厚い葉が特徴で、明るい場所で元気に育ちます。寒さにやや弱く、冬は水を控えめにします。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・よだれ・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックス(天然ゴム)アレルギーの人は特に注意してください。"},
-    {k:["ベンジャミン","フィカスベンジャミナ","ベンジャミナ","スターライト","バロック","ナタリー","weeping fig"],pp:1,ov:"東南アジア原産のクワ科。細かい葉が茂り、枝ぶりを楽しめます。置き場所を変えると葉を落としやすいので、あまり動かさないのがコツです。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"},
-    {k:["ガジュマル","多幸の木","絞め殺しの木","ficus microcarpa"],pp:1,ov:"沖縄などに自生するクワ科。太い気根と丸い葉が特徴で、「幸せを呼ぶ木」とも呼ばれます。日当たりを好み、寒さに弱いです。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"},
-    {k:["ウンベラータ"],pp:1,ov:"アフリカ原産のクワ科。大きなハート形の葉が特徴です。明るい場所を好み、寒さと乾燥に弱いです。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"},
-    {k:["パキラ","pachira","発財樹","パキラグラブラ","お金の木"],ov:"中南米原産。手のひら状の葉と太い幹が特徴で、丈夫で育てやすいです。日当たりのよい場所を好み、乾燥にも強いです。",pet:0,petN:"犬や猫への毒性はないとされています。ただし食べ過ぎるとおなかを壊すことがあります。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ドラセナ","幸福の木","コンシンネ","マッサンゲアナ","ドラゴンツリー","マルギナタ","ワネッキー","ワーネッキー","ハッピープラント","dracaena"],pp:1,ov:"熱帯アフリカ・アジア原産。すらりとした幹と細長い葉が特徴で、「幸福の木」の名で親しまれています。明るい日陰が向き、冬は10℃以上で管理します。",pet:1,petN:"サポニンを含み、食べると嘔吐・よだれ・食欲低下が出ることがあります(特に猫)。",hum:0,humN:"触れる分には問題ありません。食べないようにしましょう。"},
-    {k:["ユッカ","青年の木"],pp:1,ov:"中米原産。太い幹の先に剣のような葉がつきます。日当たりと風通しを好み、乾燥に強いです。",pet:1,petN:"サポニンを含み、食べると嘔吐や下痢をすることがあります。",hum:0,humN:"葉先が鋭いので、けがに注意してください。"},
-    {k:["アロエ","aloe"],pp:1,ov:"アフリカ原産の多肉植物。日当たりと風通しを好み、乾燥にとても強いです。冬は水を控えめにします。",pet:2,petN:"アロインなどを含み、食べると嘔吐・下痢・元気消失が出ることがあります。",hum:1,humN:"汁で肌がかぶれることがあります。観賞用のものを食べるのは避けましょう。"},
-    {k:["スパティフィラム","ピースリリー","spathiphyllum","スパティフィルム","peace lily"],pp:1,ov:"熱帯アメリカ原産。白い苞(花のように見える部分)が特徴で、日陰でも育ちます。水切れに弱く、葉がぐったりしたら水やりのサインです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["ディフェンバキア","ディフェンバッキア","ディーフェンバキア"],pp:1,ov:"熱帯アメリカ原産。白や黄緑の斑入りの大きな葉が特徴です。明るい日陰を好み、寒さに弱いです。",pet:2,petN:"汁が口に入ると、口の痛み・腫れ・よだれ・嘔吐が出ます。ペットのいる場所には置かないでください。",hum:2,humN:"口に入ると強い痛みと腫れが出ます。汁で肌も荒れます。子どもの手が届く場所には置かないでください。"},
-    {k:["アイビー","ヘデラ","ivy","セイヨウキヅタ","キヅタ","ヘデラヘリックス"],pp:1,ov:"ヨーロッパ・アジア原産のつる性植物。壁やハンギングで垂らして楽しめます。明るい場所を好み、夏の暑さと乾燥がやや苦手です。",pet:2,petN:"サポニンを含み、食べると嘔吐・よだれ・下痢が出ることがあります。",hum:2,humN:"樹液で皮膚炎(かぶれ)が出ることがあります。食べないようにしましょう。"},
-    {k:["シェフレラ","カポック","schefflera","ヤドリフカノキ","アンブレラツリー","ブラッサイア","umbrella tree"],pp:1,ov:"東南アジア・台湾原産。手のひら状の葉が特徴で、丈夫で育てやすいです。明るい場所を好み、日陰にも耐えます。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。"},
-    {k:["フィロデンドロン","philodendron","セローム","ホープセローム","ヒメカズラ","フィロデンドロ"],pp:1,ov:"熱帯アメリカ原産のサトイモ科。大きな葉やつる性など、種類が多いです。明るい日陰を好み、寒さに弱いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["アンスリウム","anthurium","アンスリューム","ベニウチワ","紅団扇"],ov:"熱帯アメリカ原産。つやのあるハート形の苞(花のように見える部分)が特徴です。明るい日陰と高い湿度を好み、寒さに弱いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["シンゴニウム","syngonium","シンゴニューム","ネフティティス","ネフトチス","アローヘッド","アロヘッド","ホワイトバタフライ","arrowhead"],ov:"熱帯アメリカ原産のつる性植物。矢じり形の葉が特徴で、日陰にも強いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["ユーフォルビア","euphorbia","ユーフォルビヤ","ハナキリン","花麒麟","クラウンオブソーンズ","ホワイトゴースト"],ov:"種類が多く、多肉質のものから低木状のものまであります。日当たりと風通しを好み、乾燥に強いものが多いです。",pet:2,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれます。目に入ると危険なので、すぐに水で洗ってください。"},
-    {k:["ポインセチア","poinsettia","ポインセチヤ","ショウジョウボク","猩々木","クリスマスフラワー"],pp:1,ov:"メキシコ原産。冬に赤く色づく葉(苞)が特徴で、クリスマスの鉢植えとして人気です。寒さに弱く、10℃以上で管理します。",pet:1,petN:"樹液に刺激があり、食べると軽い嘔吐や口の炎症が出ることがあります。",hum:1,humN:"樹液で肌がかぶれることがあります。"},
-    {k:["ソテツ","蘇鉄","サゴパーム","サイカス","cycas"],pp:1,ov:"日本南部〜東アジア原産。太い幹と羽状の葉が特徴で、日当たりを好みます。",pet:3,petN:"種子や葉にサイカシンを含み、少量でも嘔吐や肝臓の障害など、重い症状が出ることがあります。",hum:2,humN:"種子を食べると中毒を起こすことがあります。子どもの誤食に注意してください。"},
-    {k:["アジアンタム","adiantum","クジャクシダ","孔雀羊歯","maidenhair"],ov:"熱帯〜温帯に分布するシダ。繊細な葉が特徴で、乾燥が苦手です。明るい日陰で、土を乾かしすぎないようにします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ペペロミア","peperomia","ペペロミヤ","ベビーラバー","アメリカンラバー","american rubber plant"],ov:"熱帯・亜熱帯原産。小ぶりで厚みのある葉の種類が多いです。明るい日陰を好み、水のやりすぎに注意します。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["カラテア","calathea","ゴッペルティア","ロゼオペクタ","オルビフォリア","インシグニス","ファスキアータ"],ov:"熱帯アメリカ原産。模様の美しい葉が特徴で、夜に葉を閉じます。直射日光、乾燥、寒さが苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["アレカヤシ","テーブルヤシ","チャメドレア","アレカ","ディプシス","dypsis","パーラーパーム","parlor palm","バンブーパーム"],ov:"ヤシ科の観葉植物。羽状の葉が涼しげです。明るい日陰を好み、乾燥した風や寒さが苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["エケベリア","echeveria","エケベリヤ"],ov:"メキシコ原産の多肉植物。バラの花のように葉が広がります。日当たりと風通しを好み、水やりは控えめにします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ハオルチア","ハオルシア","haworthia","十二の巻","十二之巻","ジュウニノマキ","万象","玉扇","オブツーサ"],ov:"南アフリカ原産の多肉植物。透明感のある葉の「窓」が特徴です。強い直射日光を避け、明るい日陰で育てます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ローズマリー","rosemary","マンネンロウ"],ov:"地中海沿岸原産のハーブ。日当たりと風通しを好み、乾燥気味に育てます。過湿と蒸れが苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["バジル","basil","バジリコ","メボウキ"],ov:"熱帯アジア原産のハーブ。日当たりと水を好みます。花を咲かせると葉が硬くなるので、先端をこまめに摘みます。寒さに弱い植物です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["オレガノ","oregano","ハナハッカ"],ov:"地中海沿岸原産のハーブ。日当たりと風通しを好み、乾燥気味に育てます。切り戻すと、わき芽がよく出ます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["パセリ","parsley","オランダゼリ"],ov:"地中海沿岸原産のハーブ。明るい場所で、土を乾かしすぎないように育てます。暑さにやや弱く、夏は半日陰が向きます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["バナナ","musa","ミュサ"],ov:"熱帯アジア原産。大きな葉を広げ、日当たりと水を好みます。寒さに弱く、冬は10℃以上で管理します。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ケンチャヤシ","ハウエア","howea","ケンチャ","ハウェア"],ov:"ロードハウ島原産のヤシ。耐陰性があり、室内向きです。直射日光は葉焼けのもとになります。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["カンノンチク","観音竹","シュロチク","rhapis","ラピス"],ov:"中国南部原産のヤシ。耐陰性・耐寒性があり、育てやすい種類です。直射日光で葉焼けするので、明るい日陰に置きます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ビカクシダ","コウモリラン","platycerium","プラティセリウム","ビフルカツム","スタッグホーン","staghorn"],ov:"着生するシダ。板や水ごけに付けて育てます。明るい日陰を好み、水は株元の貯水葉の乾き具合を見てあげます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ボストンファーン","ネフロレピス","タマシダ","nephrolepis"],ov:"熱帯・亜熱帯原産のシダ。明るい日陰と高い湿度を好みます。乾燥するとすぐに葉が傷みます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ホヤ","サクララン","hoya"],ov:"アジア原産のつる性植物。多肉質の葉をもち、乾燥に強いです。水のあげすぎと、寒さに注意します。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["シャコバサボテン","クリスマスカクタス","デンマークカクタス","schlumbergera","シャコバ","カニバサボテン","イースターカクタス"],ov:"ブラジル原産の森林性サボテン。短日(夜が長い時期)に花芽が付きます。直射日光と、水の与えすぎを避けます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["セダム","虹の玉","玉つづり","玉綴り","ビアホップ","朧月","オボロヅキ","マンネングサ","万年草"],ov:"乾燥に強い多肉植物。日当たりと風通しを好みます。水は、土がしっかり乾いてから与えます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["胡蝶蘭","コチョウラン","ファレノプシス","phalaenopsis","ファレノ"],ov:"東南アジア原産のラン。明るい日陰を好み、直射日光で葉焼けします。水は、根の色が白っぽくなったらあげます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["デンドロビウム","dendrobium","デンドロ","セッコク","デンファレ"],ov:"アジアからオセアニアに広く分布するラン。日当たりを好み、冬は水を控えめにして、花芽をつけます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["セントポーリア","アフリカンバイオレット","saintpaulia","ウサンバラスミレ","african violet"],ov:"東アフリカ原産。明るい日陰を好み、葉に水がかからないよう、鉢底から水をあげます。寒さと直射日光が苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ミニバラ","薔薇","バラ"],ov:"日当たりと風通しを好み、水を欲しがる花木です。花が終わったら、花がらを摘むと、次の花が咲きやすくなります。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"とげで、けがをしないよう注意してください。"},
-    {k:["ハゴロモジャスミン","ジャスミン・ポリアンサム","jasminum"],ov:"中国原産のつる性植物。日当たりを好みます。春に甘い香りの花が咲きます。寒さにはやや強いです。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ツバキ","カメリア","camellia"],ov:"日本原産の常緑樹。半日陰でも育ち、冬から春に花が咲きます。夏の強い日差しと、乾燥を避けます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["フクシア","fuchsia"],ov:"中南米原産。垂れ下がる花が特徴です。暑さが苦手で、夏は涼しい半日陰が向きます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ガーベラ","gerbera"],ov:"南アフリカ原産。日当たりを好み、花が長く楽しめます。花がらはこまめに取り除きます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ヒポエステス","ポルカドットプラント","hypoestes"],ov:"マダガスカル原産。赤や白の斑点が入った葉が特徴です。明るい日陰を好み、乾燥させすぎないようにします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ハラン","葉蘭","アスピディストラ","aspidistra"],ov:"日本・中国原産。暗い場所や乾燥に強く、丈夫な観葉植物です。直射日光で葉焼けします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["フィットニア","fittonia"],ov:"南米原産。葉脈が目立つ、ほふく性の植物です。高い湿度と明るい日陰を好み、乾燥すると葉がしおれます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["エスキナンサス","リップスティック","aeschynanthus"],ov:"東南アジア原産のつる性植物。明るい日陰を好みます。水のあげすぎと、寒さを避けます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["マランタ","ベニスジヒメバショウ","maranta","ケルコビアナ","レウコネウラ"],ov:"ブラジル原産。夜になると葉を閉じる姿から、「祈りの植物」とも呼ばれます。明るい日陰と高い湿度を好みます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ピレア","pilea","ペペロミオイデス","チャイニーズマネープラント","パンケーキプラント","アルミニウムプラント"],ov:"熱帯原産。小さな葉をたくさんつけます。明るい日陰を好み、日光が足りないと間延びします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["アフェランドラ","aphelandra"],ov:"ブラジル原産。白い葉脈と黄色い花が特徴です。高い湿度と明るい日陰を好み、寒さに弱いです。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ブロメリア","ネオレゲリア","グズマニア","アナナス","クリプタンサス","neoregelia","guzmania","エクメア","ビルベルギア"],ov:"中南米原産のパイナップル科。葉の中央に水をためる種類が多く、明るい日陰を好みます。ためた水は、時々入れ替えます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["トックリラン","ポニーテール","ノリナ","beaucarnea"],ov:"メキシコ原産。幹の根元がふくらみ、水をためます。乾燥に強く、水のあげすぎが根腐れのもとです。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["オリヅルラン","クロロフィツム","chlorophytum","オリズルラン","折鶴蘭","折り鶴蘭","スパイダープラント","spider plant"],ov:"南アフリカ原産。細長い葉と、伸びる子株が特徴です。丈夫で、日陰にも強い種類です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ウチワサボテン","オプンチア","バニーカクタス","opuntia"],ov:"北米・中南米原産のサボテン。日当たりと風通しを好み、乾燥に強いです。トゲと細かい毛(グロキッド)が、皮膚に刺さりやすいので注意してください。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:1,humN:"トゲや細かい毛が刺さって、痛みが残ることがあります。"},
-    {k:["インパチェンス","アフリカホウセンカ","impatiens","サンパチェンス"],ov:"アフリカ原産。半日陰でよく花が咲きます。水切れに弱く、夏は朝夕に水が必要です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["ヒューケラ","ツボサンゴ","heuchera","ヒューチェラ"],ov:"北米原産。色とりどりの葉を楽しめます。半日陰を好み、夏の暑さと乾燥が苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["クチナシ","ガーデニア","gardenia"],ov:"東アジア原産。甘い香りの白い花が咲きます。日当たりを好み、水切れに弱いです。",pet:1,petN:"食べると嘔吐・下痢・元気消失が出ることがあります。",hum:1,humN:"果実を食べると、おなかを壊すことがあります。"},
-    {k:["アジサイ","紫陽花","ハイドランジア","hydrangea","ガクアジサイ"],mh:1,pp:1,ov:"日本原産。半日陰と水を好み、水切れで葉がしおれます。花が終わったら切り戻します。",pet:1,petN:"食べると、嘔吐・下痢・元気消失が出ることがあります。",hum:2,humN:"葉やつぼみを食べると、嘔吐・めまいなどの中毒が出ることがあります。料理の飾りに使われた葉で、食中毒が起きた例があります。"},
-    {k:["アマリリス","ヒッペアストラム","amaryllis","hippeastrum"],pp:1,ov:"南米原産の球根植物。日当たりのよい場所で、大きな花を咲かせます。花後は、葉を育てて球根に栄養をためます。",pet:2,petN:"球根を中心に有毒成分を含み、食べると嘔吐・よだれ・下痢・元気消失が出ることがあります。",hum:2,humN:"球根を食べると、嘔吐や下痢が出ることがあります。"},
-    {k:["アザレア","ツツジ","サツキ","azalea","rhododendron","シャクナゲ","石楠花"],mh:1,pp:1,ov:"日本・アジア原産。日当たりと風通しを好み、酸性の土が向きます。花が終わったら花がらを摘みます。",pet:3,petN:"グラヤノトキシンを含み、少量でも嘔吐・よだれ・元気消失など、重い症状が出ることがあります。",hum:2,humN:"葉や花を食べると、中毒を起こすことがあります。蜜にも注意してください。"},
-    {k:["ローリエ","ゲッケイジュ","月桂樹"],ov:"地中海沿岸原産。香りのよい葉は、料理にも使われます。日当たりを好み、風通しのよい場所で育てます。",pet:1,petN:"食べると、嘔吐・下痢が出ることがあります。",hum:0,humN:"料理に使う量は問題ありません。"},
-    {k:["ベゴニア","begonia","秋海棠","シュウカイドウ"],ov:"熱帯・亜熱帯原産。花や葉を楽しめます。半日陰を好み、水のあげすぎと、葉に水がかかることを避けます。",pet:2,petN:"シュウ酸塩を含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。特に根や球根に多く含まれます。",hum:1,humN:"食べると、口の痛みや、おなかの不調が出ることがあります。"},
-    {k:["カラジウム","caladium","カラジューム"],ov:"南米原産。色鮮やかな葉が特徴です。暑さと湿度を好み、冬は葉が落ちて休眠します。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["アスパラガス","スプレンゲリ","アスパラガスファーン","asparagus","ミリオクラダス","メイリー","プルモーサス"],ov:"南アフリカ原産。細かい葉をつけ、日当たりのよい場所を好みます。実と茎のトゲに注意してください。",pet:1,petN:"サポニンを含み、食べると嘔吐・下痢が出ることがあります。皮膚に触れると、皮膚炎が出ることもあります。",hum:1,humN:"実を食べると、おなかを壊すことがあります。トゲで、けがをしないよう注意してください。"},
-    {k:["ストレリチア","極楽鳥花","オーガスタ","strelitzia","ゴクラクチョウカ","ストレチア","ニコライ","バードオブパラダイス"],ov:"南アフリカ原産。大きな葉を広げ、日当たりのよい場所を好みます。ASPCAでは、ストレリチア・レギネ(極楽鳥花)が掲載されています。",pet:1,petN:"食べると、軽い嘔吐・下痢が出ることがあります。",hum:1,humN:"種を食べると、おなかを壊すことがあります。"},
-    {k:["テッポウユリ","ヤマユリ","スカシユリ","オリエンタルリリー","アジアティックリリー","カサブランカ","百合","lilium"],pp:1,x:["ユリ","ゆり","リリー"],ov:"日当たりと水はけのよい場所を好む球根植物。花が終わったら、花がらを取ります。",pet:3,petN:"猫は、花・葉・花粉・花瓶の水を少量口にしただけで、急性腎障害を起こすことがあります。猫のいる家には置かないでください。",hum:1,humN:"食べると、おなかを壊すことがあります。"},
-    {k:["ゼラニウム","ペラルゴニウム","pelargonium","ゼラニューム","天竺葵","テンジクアオイ"],ov:"南アフリカ原産。日当たりと風通しを好み、乾燥気味に育てます。梅雨と夏の蒸れが苦手です。",pet:1,petN:"食べると、嘔吐・食欲低下・皮膚炎が出ることがあります。",hum:1,humN:"汁で肌がかぶれることがあります。"},
-    {k:["キク","クリサンセマム","chrysanthemum"],ov:"日当たりと風通しを好みます。花が終わったら切り戻します。",pet:1,petN:"食べると、嘔吐・よだれ・皮膚炎が出ることがあります。",hum:1,humN:"汁で肌がかぶれることがあります。"},
-    {k:["カラーリリー","オランダカイウ","ザンテデスキア","zantedeschia"],ov:"南アフリカ原産。サトイモ科で、白や黄色の花(仏炎苞)が咲きます。水を好み、日当たりのよい場所で育てます。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["キョウチクトウ","夾竹桃","オレアンダー","nerium"],pp:1,ov:"日当たりを好み、育てやすい花木です。全体に強い毒があります。",pet:3,petN:"全体にオレアンドリンなどの強心配糖体を含み、少量でも嘔吐・不整脈など、重い症状が出ることがあります。",hum:3,humN:"全体が有毒です。燃やした煙や、枝を使った串なども、中毒のもとになります。"},
-    {k:["シクラメン","cyclamen"],pp:1,ov:"地中海沿岸原産。涼しい場所を好み、暖房の効いた部屋は苦手です。水は、鉢の底からあげます。",pet:2,petN:"サポニンを含み、特に球根を食べると、嘔吐・下痢・よだれ・元気消失が出ることがあります。",hum:1,humN:"食べると、おなかを壊すことがあります。"},
-    {k:["金のなる木","カネノナルキ","クラッスラ","花月","crassula","ジェイドプラント","jade plant"],pp:1,ov:"南アフリカ原産の多肉植物。日当たりを好み、乾燥に強いです。冬は水を控えめにします。",pet:1,petN:"食べると、嘔吐・元気消失が出ることがあります。",hum:1,humN:"食べると、吐き気が出ることがあります。"},
-    {k:["カランコエ","ベンケイソウ","長寿花","kalanchoe","月兎耳","ツキトジ","子宝草","コダカラソウ","ブロスフェルディアナ"],pp:1,ov:"マダガスカル原産の多肉植物。日当たりを好み、乾燥に強いです。短日で花芽が付きます。",pet:2,petN:"強心配糖体を含み、食べると嘔吐・下痢・心拍の乱れが出ることがあります。",hum:1,humN:"食べると、おなかを壊すことがあります。"},
-    {k:["レモン","ライム","オレンジ","グレープフルーツ","ミカン","みかん","ユズ","柑橘","シトラス","citrus","キンカン","金柑","カボス","スダチ","ハッサク","ポンカン","デコポン","ブンタン","シークワーサー"],ov:"日当たりと水はけのよい場所を好む果樹。冬は寒さを避けます。",pet:1,petN:"精油などを含み、食べると嘔吐・下痢・よだれが出ることがあります。皮膚炎が出ることもあります。",hum:0,humN:"果実は食べられますが、皮の油で肌が荒れることがあります。"},
-    {k:["ユーカリ","eucalyptus","ポポラス","グニー","シルバードロップ","シルバーダラー","ユーカリプタス"],pp:1,ov:"オーストラリア原産。日当たりを好み、水はけのよい土が向きます。大きくなりやすいので、定期的に切り戻します。",pet:1,petN:"精油などを含み、食べると、よだれ・嘔吐・元気消失が出ることがあります。",hum:1,humN:"食べると、おなかを壊すことがあります。"},
-    {k:["ラベンダー","lavender","ラバンジン","ラバンデュラ"],ov:"地中海沿岸原産のハーブ。日当たりと風通しを好み、乾燥気味に育てます。梅雨と夏の蒸れが苦手です。",pet:1,petN:"リナロールなどを含み、食べると嘔吐・食欲低下が出ることがあります。",hum:0,humN:"一般的な利用では、問題ありません。"},
-    {k:["ミント","ペパーミント","スペアミント","mentha","ハッカ","薄荷"],ov:"ヨーロッパ原産のハーブ。半日陰でも育ち、水を好みます。繁殖力が強いので、鉢で育てます。",pet:1,petN:"精油などを含み、食べると、嘔吐・下痢が出ることがあります。",hum:0,humN:"一般的な利用では、問題ありません。"},
-    {k:["オキザリス","カタバミ","oxalis"],ov:"南アフリカなど原産。日が当たると花が開きます。暑さが苦手で、夏は休眠することがあります。",pet:1,petN:"シュウ酸塩を含み、食べると、よだれ・嘔吐・下痢が出ることがあります。",hum:1,humN:"食べすぎると、おなかを壊すことがあります。"},
-    {k:["トラデスカンティア","ムラサキツユクサ","ツユクサ","シロフスジツユクサ","インチプラント","wandering jew","tradescantia"],ov:"中南米原産のほふく性植物。丈夫で、よく増えます。日当たりがよいと、葉の模様が美しくなります。",pet:1,petN:"食べると、軽い胃腸の不調や、皮膚炎が出ることがあります。",hum:1,humN:"汁で肌がかぶれることがあります。"},
-    {k:["アロカシア","クワズイモ","alocasia"],mh:1,ov:"アジアの熱帯原産のサトイモ科。大きな葉をもち、高い湿度と明るい日陰を好みます。寒さに弱いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["コルディリネ","ティープラント","ティーツリー","cordyline"],ov:"オーストラリアやニュージーランド原産。赤や緑の細長い葉をもち、日当たりを好みます。寒さにはやや強いです。",pet:1,petN:"サポニンを含み、食べると、嘔吐・下痢・よだれが出ることがあります。",hum:0,humN:"触れる分には問題ありません。"},
-    {k:["サトイモ","タロイモ","コロカシア","colocasia"],ov:"熱帯アジア原産。大きな葉をもち、水と日当たりを好みます。寒さに弱いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["アグラオネマ","チャイニーズエバーグリーン","aglaonema"],ov:"東南アジア原産。耐陰性があり、育てやすい観葉植物です。寒さに弱く、冬は10℃以上で管理します。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
-    {k:["エバーフレッシュ","ピテセロビウム","pithecellobium"],ov:"中南米原産のマメ科。夜になると、葉を閉じる姿が特徴です。日当たりを好み、水切れすると葉を落とします。冬は暖かい場所で管理します。",pet:-1,petN:"毒性があるという報告は見つかっていません。国内の園芸・ペット情報では「毒性なし」とされていますが、ASPCAなどの公的な一覧に載っておらず、確認できていません。",hum:-1,humN:"確認できていません。食べないようにしましょう。"},
-    {k:["アオサンゴ","鉛筆サボテン","ミルクブッシュ"],ov:"アフリカ原産の多肉植物。鉛筆のような細い枝が特徴です。日当たりを好み、乾燥に強いです。",pet:2,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれます。目に入ると危険なので、すぐに水で洗ってください。"},
-    {k:["スズラン","鈴蘭","convallaria"],pp:1,ov:"日本・ヨーロッパ原産。涼しい半日陰を好みます。全体に毒があります。",pet:3,petN:"強心配糖体を含み、食べると嘔吐・不整脈など、重い症状が出ることがあります。",hum:3,humN:"全体が有毒です。花瓶の水を飲んでも、中毒を起こすことがあります。"},
-    {k:["グロリオサ","gloriosa"],mh:1,ov:"熱帯アフリカ・アジア原産のつる性の球根植物。日当たりを好みます。特に球根の毒性が強いです。",pet:3,petN:"コルヒチンを含み、食べると嘔吐・血便・臓器障害など、重い症状が出ることがあります。",hum:3,humN:"特に球根が強い毒をもちます。食べると命にかかわることがあります。"},
-    {k:["イヌサフラン","コルチカム","colchicum"],mh:1,ov:"ヨーロッパ原産の球根植物。秋に花が咲きます。全体に強い毒があります。",pet:3,petN:"コルヒチンを含み、食べると嘔吐・血便・臓器障害など、重い症状が出ることがあります。",hum:3,humN:"全体が有毒です。食べると命にかかわることがあります。"},
-    {k:["アリッサム","スイートアリッサム","alyssum"],ov:"地中海沿岸原産。日当たりと水はけのよい場所を好みます。暑さと蒸れが苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["カトレア","cattleya"],ov:"中南米原産のラン。明るい場所を好み、直射日光は避けます。水は、鉢が乾いたらあげます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
-    {k:["グリーンネックレス","弦月","ルビーネックレス","七宝樹","string of pearls","セネシオ","senecio"],ov:"南アフリカ原産の多肉植物。丸い球のような葉が連なって垂れ下がります。日当たりと風通しを好み、水は乾いてから少なめにあげます。",pet:2,petN:"ピロリジジンアルカロイドを含むセネシオ属で、食べると嘔吐・下痢・肝臓の障害が出ることがあります。",hum:1,humN:"食べると、おなかを壊すことがあります。汁で肌がかぶれることもあります。"},
-    {k:["クロトン","ヘンヨウボク","変葉木","croton","codiaeum"],pp:1,ov:"マレーシアなど原産。色鮮やかな葉が特徴です。日当たりを好み、寒さと乾燥に弱いです。",pet:2,petN:"樹液に刺激があり、食べると、よだれ・嘔吐・下痢が出ることがあります。",hum:1,humN:"樹液で肌がかぶれることがあります。食べると、おなかを壊します。"},
-    {k:["カロライナジャスミン","ゲルセミウム","gelsemium"],mh:1,ov:"北米原産のつる性植物。「ジャスミン」と名前がつきますが、本物のジャスミンとは別の植物で、全体に強い毒があります。",pet:-1,petN:"ASPCAなどの一覧では確認できていません。全体に強い毒をもつ植物なので、ペットが口にしないよう、十分に注意してください。",hum:3,humN:"全体が有毒です。食べると、めまい・呼吸の障害など、重い中毒を起こすことがあります。蜜にも注意してください。"},
-    {k:["フィカス","アルテシマ","リラータ","カシワバゴム","ベンガレンシス","ベンガルボダイジュ","プミラ","ficus","フィドルリーフ","fiddle leaf","creeping fig"],pp:1,ov:"クワ科の観葉植物。日当たりのよい室内を好み、置き場所を変えると葉を落としやすいです。冬は寒さを避けます。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"}
+    {c:"観葉植物",k:["モンステラ","monstera","デリシオーサ","ホウライショウ","蓬莱蕉","アダンソニー","マドカズラ","swiss cheese plant"],w:5,wf:2,f:30,ov:"熱帯アメリカ原産のサトイモ科。大きく切れ込んだ葉が特徴です。明るい日陰を好み、直射日光だと葉焼けします。寒さに弱く、冬は10℃以上で管理します。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"観葉植物",k:["ポトス","pothos","ゴールデンカズラ","エンジョイ","マーブルクイーン","サテンポトス","エピプレムナム","epipremnum","スキンダプサス","scindapsus","devil's ivy"],w:5,wf:2,f:30,pp:1,ov:"東南アジア原産のつる性の植物で、丈夫で初心者向きです。暗めの場所でも育ち、水栽培もできます。寒さに弱く、冬は10℃以上が目安です。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"観葉植物",k:["サンスベリア","サンセベリア","sansevieria","虎の尾","トラノオ","ローレンチー","スタッキー","ボンセレンシス","snake plant"],w:10,wf:3,f:60,pp:1,ov:"アフリカ原産で、肉厚の剣のような葉が特徴です。乾燥にとても強く、暗い場所にも耐えます。水やりは控えめにして、冬はさらに減らします。",pet:1,petN:"サポニンを含み、食べると嘔吐や下痢をすることがあります。",hum:0,humN:"触れる分には問題ありませんが、食べないようにしましょう。"},
+    {c:"観葉植物",k:["ゴムの木","ゴムノキ","フィカスエラスティカ","インドゴムノキ","ティネケ","バーガンディ","ロブスタ","ゴムの樹","インドゴム","rubber tree"],w:7,wf:2,f:30,pp:1,ov:"インド・東南アジア原産のクワ科。つやのある厚い葉が特徴で、明るい場所で元気に育ちます。寒さにやや弱く、冬は水を控えめにします。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・よだれ・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックス(天然ゴム)アレルギーの人は特に注意してください。"},
+    {c:"観葉植物",k:["ベンジャミン","フィカスベンジャミナ","ベンジャミナ","スターライト","バロック","ナタリー","weeping fig"],w:5,wf:2,f:30,pp:1,ov:"東南アジア原産のクワ科。細かい葉が茂り、枝ぶりを楽しめます。置き場所を変えると葉を落としやすいので、あまり動かさないのがコツです。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"},
+    {c:"観葉植物",k:["ガジュマル","多幸の木","絞め殺しの木","ficus microcarpa"],w:5,wf:2,f:30,pp:1,ov:"沖縄などに自生するクワ科。太い気根と丸い葉が特徴で、「幸せを呼ぶ木」とも呼ばれます。日当たりを好み、寒さに弱いです。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"},
+    {c:"観葉植物",k:["ウンベラータ"],w:5,wf:2,f:30,pp:1,ov:"アフリカ原産のクワ科。大きなハート形の葉が特徴です。明るい場所を好み、寒さと乾燥に弱いです。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"},
+    {c:"観葉植物",k:["パキラ","pachira","発財樹","パキラグラブラ","お金の木"],w:7,wf:2,f:30,ov:"中南米原産。手のひら状の葉と太い幹が特徴で、丈夫で育てやすいです。日当たりのよい場所を好み、乾燥にも強いです。",pet:0,petN:"犬や猫への毒性はないとされています。ただし食べ過ぎるとおなかを壊すことがあります。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["ドラセナ","幸福の木","コンシンネ","マッサンゲアナ","ドラゴンツリー","マルギナタ","ワネッキー","ワーネッキー","ハッピープラント","dracaena"],w:7,wf:2,f:30,pp:1,ov:"熱帯アフリカ・アジア原産。すらりとした幹と細長い葉が特徴で、「幸福の木」の名で親しまれています。明るい日陰が向き、冬は10℃以上で管理します。",pet:1,petN:"サポニンを含み、食べると嘔吐・よだれ・食欲低下が出ることがあります(特に猫)。",hum:0,humN:"触れる分には問題ありません。食べないようにしましょう。"},
+    {c:"観葉植物",k:["ユッカ","青年の木"],w:7,wf:2,f:30,pp:1,ov:"中米原産。太い幹の先に剣のような葉がつきます。日当たりと風通しを好み、乾燥に強いです。",pet:1,petN:"サポニンを含み、食べると嘔吐や下痢をすることがあります。",hum:0,humN:"葉先が鋭いので、けがに注意してください。"},
+    {c:"多肉・サボテン",k:["アロエ","aloe"],w:10,wf:3,f:60,pp:1,ov:"アフリカ原産の多肉植物。日当たりと風通しを好み、乾燥にとても強いです。冬は水を控えめにします。",pet:2,petN:"アロインなどを含み、食べると嘔吐・下痢・元気消失が出ることがあります。",hum:1,humN:"汁で肌がかぶれることがあります。観賞用のものを食べるのは避けましょう。"},
+    {c:"観葉植物",k:["スパティフィラム","ピースリリー","spathiphyllum","スパティフィルム","peace lily"],w:3,wf:1.5,f:30,pp:1,ov:"熱帯アメリカ原産。白い苞(花のように見える部分)が特徴で、日陰でも育ちます。水切れに弱く、葉がぐったりしたら水やりのサインです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"観葉植物",k:["ディフェンバキア","ディフェンバッキア","ディーフェンバキア"],w:5,wf:2,f:30,pp:1,ov:"熱帯アメリカ原産。白や黄緑の斑入りの大きな葉が特徴です。明るい日陰を好み、寒さに弱いです。",pet:2,petN:"汁が口に入ると、口の痛み・腫れ・よだれ・嘔吐が出ます。ペットのいる場所には置かないでください。",hum:2,humN:"口に入ると強い痛みと腫れが出ます。汁で肌も荒れます。子どもの手が届く場所には置かないでください。"},
+    {c:"観葉植物",k:["アイビー","ヘデラ","ivy","セイヨウキヅタ","キヅタ","ヘデラヘリックス"],w:5,wf:2,f:30,pp:1,ov:"ヨーロッパ・アジア原産のつる性植物。壁やハンギングで垂らして楽しめます。明るい場所を好み、夏の暑さと乾燥がやや苦手です。",pet:2,petN:"サポニンを含み、食べると嘔吐・よだれ・下痢が出ることがあります。",hum:2,humN:"樹液で皮膚炎(かぶれ)が出ることがあります。食べないようにしましょう。"},
+    {c:"観葉植物",k:["シェフレラ","カポック","schefflera","ヤドリフカノキ","アンブレラツリー","ブラッサイア","umbrella tree"],w:5,wf:2,f:30,pp:1,ov:"東南アジア・台湾原産。手のひら状の葉が特徴で、丈夫で育てやすいです。明るい場所を好み、日陰にも耐えます。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。"},
+    {c:"観葉植物",k:["フィロデンドロン","philodendron","セローム","ホープセローム","ヒメカズラ","フィロデンドロ"],w:5,wf:2,f:30,pp:1,ov:"熱帯アメリカ原産のサトイモ科。大きな葉やつる性など、種類が多いです。明るい日陰を好み、寒さに弱いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"観葉植物",k:["アンスリウム","anthurium","アンスリューム","ベニウチワ","紅団扇"],w:4,wf:1.5,f:30,ov:"熱帯アメリカ原産。つやのあるハート形の苞(花のように見える部分)が特徴です。明るい日陰と高い湿度を好み、寒さに弱いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"観葉植物",k:["シンゴニウム","syngonium","シンゴニューム","ネフティティス","ネフトチス","アローヘッド","アロヘッド","ホワイトバタフライ","arrowhead"],w:4,wf:1.5,f:30,ov:"熱帯アメリカ原産のつる性植物。矢じり形の葉が特徴で、日陰にも強いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"多肉・サボテン",k:["ユーフォルビア","euphorbia","ユーフォルビヤ","ハナキリン","花麒麟","クラウンオブソーンズ","ホワイトゴースト"],w:10,wf:3,f:60,ov:"種類が多く、多肉質のものから低木状のものまであります。日当たりと風通しを好み、乾燥に強いものが多いです。",pet:2,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれます。目に入ると危険なので、すぐに水で洗ってください。"},
+    {c:"花",k:["ポインセチア","poinsettia","ポインセチヤ","ショウジョウボク","猩々木","クリスマスフラワー"],w:5,wf:1.5,f:30,pp:1,ov:"メキシコ原産。冬に赤く色づく葉(苞)が特徴で、クリスマスの鉢植えとして人気です。寒さに弱く、10℃以上で管理します。",pet:1,petN:"樹液に刺激があり、食べると軽い嘔吐や口の炎症が出ることがあります。",hum:1,humN:"樹液で肌がかぶれることがあります。"},
+    {c:"観葉植物",k:["ソテツ","蘇鉄","サゴパーム","サイカス","cycas"],w:7,wf:3,f:60,pp:1,ov:"日本南部〜東アジア原産。太い幹と羽状の葉が特徴で、日当たりを好みます。",pet:3,petN:"種子や葉にサイカシンを含み、少量でも嘔吐や肝臓の障害など、重い症状が出ることがあります。",hum:2,humN:"種子を食べると中毒を起こすことがあります。子どもの誤食に注意してください。"},
+    {c:"シダ",k:["アジアンタム","adiantum","クジャクシダ","孔雀羊歯","maidenhair"],w:3,wf:1.5,f:30,ov:"熱帯〜温帯に分布するシダ。繊細な葉が特徴で、乾燥が苦手です。明るい日陰で、土を乾かしすぎないようにします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["ペペロミア","peperomia","ペペロミヤ","ベビーラバー","アメリカンラバー","american rubber plant"],w:7,wf:2,f:30,ov:"熱帯・亜熱帯原産。小ぶりで厚みのある葉の種類が多いです。明るい日陰を好み、水のやりすぎに注意します。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["カラテア","calathea","ゴッペルティア","ロゼオペクタ","オルビフォリア","インシグニス","ファスキアータ"],w:4,wf:1.5,f:30,ov:"熱帯アメリカ原産。模様の美しい葉が特徴で、夜に葉を閉じます。直射日光、乾燥、寒さが苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["アレカヤシ","テーブルヤシ","チャメドレア","アレカ","ディプシス","dypsis","パーラーパーム","parlor palm","バンブーパーム"],w:5,wf:2,f:30,ov:"ヤシ科の観葉植物。羽状の葉が涼しげです。明るい日陰を好み、乾燥した風や寒さが苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"多肉・サボテン",k:["エケベリア","echeveria","エケベリヤ"],w:10,wf:3,f:60,ov:"メキシコ原産の多肉植物。バラの花のように葉が広がります。日当たりと風通しを好み、水やりは控えめにします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"多肉・サボテン",k:["ハオルチア","ハオルシア","haworthia","十二の巻","十二之巻","ジュウニノマキ","万象","玉扇","オブツーサ"],w:10,wf:3,f:60,ov:"南アフリカ原産の多肉植物。透明感のある葉の「窓」が特徴です。強い直射日光を避け、明るい日陰で育てます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"ハーブ・果樹",k:["ローズマリー","rosemary","マンネンロウ"],w:4,wf:2,f:30,ov:"地中海沿岸原産のハーブ。日当たりと風通しを好み、乾燥気味に育てます。過湿と蒸れが苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"ハーブ・果樹",k:["バジル","basil","バジリコ","メボウキ"],w:2,wf:2,f:14,ov:"熱帯アジア原産のハーブ。日当たりと水を好みます。花を咲かせると葉が硬くなるので、先端をこまめに摘みます。寒さに弱い植物です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"ハーブ・果樹",k:["オレガノ","oregano","ハナハッカ"],w:4,wf:2,f:30,ov:"地中海沿岸原産のハーブ。日当たりと風通しを好み、乾燥気味に育てます。切り戻すと、わき芽がよく出ます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"ハーブ・果樹",k:["パセリ","parsley","オランダゼリ"],w:3,wf:2,f:30,ov:"地中海沿岸原産のハーブ。明るい場所で、土を乾かしすぎないように育てます。暑さにやや弱く、夏は半日陰が向きます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"ハーブ・果樹",k:["バナナ","musa","ミュサ"],w:3,wf:2,f:14,ov:"熱帯アジア原産。大きな葉を広げ、日当たりと水を好みます。寒さに弱く、冬は10℃以上で管理します。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["ケンチャヤシ","ハウエア","howea","ケンチャ","ハウェア"],w:5,wf:2,f:30,ov:"ロードハウ島原産のヤシ。耐陰性があり、室内向きです。直射日光は葉焼けのもとになります。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["カンノンチク","観音竹","シュロチク","rhapis","ラピス"],w:5,wf:2,f:30,ov:"中国南部原産のヤシ。耐陰性・耐寒性があり、育てやすい種類です。直射日光で葉焼けするので、明るい日陰に置きます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"シダ",k:["ビカクシダ","コウモリラン","platycerium","プラティセリウム","ビフルカツム","スタッグホーン","staghorn"],w:5,wf:2,f:30,ov:"着生するシダ。板や水ごけに付けて育てます。明るい日陰を好み、水は株元の貯水葉の乾き具合を見てあげます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"シダ",k:["ボストンファーン","ネフロレピス","タマシダ","nephrolepis"],w:3,wf:1.5,f:30,ov:"熱帯・亜熱帯原産のシダ。明るい日陰と高い湿度を好みます。乾燥するとすぐに葉が傷みます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["ホヤ","サクララン","hoya"],w:10,wf:2,f:30,ov:"アジア原産のつる性植物。多肉質の葉をもち、乾燥に強いです。水のあげすぎと、寒さに注意します。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"多肉・サボテン",k:["シャコバサボテン","クリスマスカクタス","デンマークカクタス","schlumbergera","シャコバ","カニバサボテン","イースターカクタス"],w:7,wf:2,f:30,ov:"ブラジル原産の森林性サボテン。短日(夜が長い時期)に花芽が付きます。直射日光と、水の与えすぎを避けます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"多肉・サボテン",k:["セダム","虹の玉","玉つづり","玉綴り","ビアホップ","朧月","オボロヅキ","マンネングサ","万年草"],w:10,wf:3,f:60,ov:"乾燥に強い多肉植物。日当たりと風通しを好みます。水は、土がしっかり乾いてから与えます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"ラン",k:["胡蝶蘭","コチョウラン","ファレノプシス","phalaenopsis","ファレノ"],w:7,wf:2,f:30,ov:"東南アジア原産のラン。明るい日陰を好み、直射日光で葉焼けします。水は、根の色が白っぽくなったらあげます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"ラン",k:["デンドロビウム","dendrobium","デンドロ","セッコク","デンファレ"],w:5,wf:3,f:30,ov:"アジアからオセアニアに広く分布するラン。日当たりを好み、冬は水を控えめにして、花芽をつけます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"花",k:["セントポーリア","アフリカンバイオレット","saintpaulia","ウサンバラスミレ","african violet"],w:5,wf:1.5,f:14,ov:"東アフリカ原産。明るい日陰を好み、葉に水がかからないよう、鉢底から水をあげます。寒さと直射日光が苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"花",k:["ミニバラ","薔薇","バラ"],w:2,wf:2,f:30,ov:"日当たりと風通しを好み、水を欲しがる花木です。花が終わったら、花がらを摘むと、次の花が咲きやすくなります。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"とげで、けがをしないよう注意してください。"},
+    {c:"花",k:["ハゴロモジャスミン","ジャスミン・ポリアンサム","jasminum"],w:3,wf:2,f:30,ov:"中国原産のつる性植物。日当たりを好みます。春に甘い香りの花が咲きます。寒さにはやや強いです。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"花",k:["ツバキ","カメリア","camellia"],w:3,wf:1.5,f:60,ov:"日本原産の常緑樹。半日陰でも育ち、冬から春に花が咲きます。夏の強い日差しと、乾燥を避けます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"花",k:["フクシア","fuchsia"],w:3,wf:2,f:14,ov:"中南米原産。垂れ下がる花が特徴です。暑さが苦手で、夏は涼しい半日陰が向きます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"花",k:["ガーベラ","gerbera"],w:3,wf:2,f:14,ov:"南アフリカ原産。日当たりを好み、花が長く楽しめます。花がらはこまめに取り除きます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["ヒポエステス","ポルカドットプラント","hypoestes"],w:3,wf:2,f:30,ov:"マダガスカル原産。赤や白の斑点が入った葉が特徴です。明るい日陰を好み、乾燥させすぎないようにします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["ハラン","葉蘭","アスピディストラ","aspidistra"],w:5,wf:2,f:60,ov:"日本・中国原産。暗い場所や乾燥に強く、丈夫な観葉植物です。直射日光で葉焼けします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["フィットニア","fittonia"],w:2,wf:1.5,f:30,ov:"南米原産。葉脈が目立つ、ほふく性の植物です。高い湿度と明るい日陰を好み、乾燥すると葉がしおれます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["エスキナンサス","リップスティック","aeschynanthus"],w:5,wf:2,f:30,ov:"東南アジア原産のつる性植物。明るい日陰を好みます。水のあげすぎと、寒さを避けます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["マランタ","ベニスジヒメバショウ","maranta","ケルコビアナ","レウコネウラ"],w:3,wf:1.5,f:30,ov:"ブラジル原産。夜になると葉を閉じる姿から、「祈りの植物」とも呼ばれます。明るい日陰と高い湿度を好みます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["ピレア","pilea","ペペロミオイデス","チャイニーズマネープラント","パンケーキプラント","アルミニウムプラント"],w:4,wf:2,f:30,ov:"熱帯原産。小さな葉をたくさんつけます。明るい日陰を好み、日光が足りないと間延びします。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["アフェランドラ","aphelandra"],w:3,wf:1.5,f:30,ov:"ブラジル原産。白い葉脈と黄色い花が特徴です。高い湿度と明るい日陰を好み、寒さに弱いです。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["ブロメリア","ネオレゲリア","グズマニア","アナナス","クリプタンサス","neoregelia","guzmania","エクメア","ビルベルギア"],w:7,wf:2,f:30,ov:"中南米原産のパイナップル科。葉の中央に水をためる種類が多く、明るい日陰を好みます。ためた水は、時々入れ替えます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["トックリラン","ポニーテール","ノリナ","beaucarnea"],w:10,wf:3,f:60,ov:"メキシコ原産。幹の根元がふくらみ、水をためます。乾燥に強く、水のあげすぎが根腐れのもとです。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"観葉植物",k:["オリヅルラン","クロロフィツム","chlorophytum","オリズルラン","折鶴蘭","折り鶴蘭","スパイダープラント","spider plant"],w:5,wf:2,f:30,ov:"南アフリカ原産。細長い葉と、伸びる子株が特徴です。丈夫で、日陰にも強い種類です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"多肉・サボテン",k:["ウチワサボテン","オプンチア","バニーカクタス","opuntia"],w:14,wf:3,f:60,ov:"北米・中南米原産のサボテン。日当たりと風通しを好み、乾燥に強いです。トゲと細かい毛(グロキッド)が、皮膚に刺さりやすいので注意してください。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:1,humN:"トゲや細かい毛が刺さって、痛みが残ることがあります。"},
+    {c:"花",k:["インパチェンス","アフリカホウセンカ","impatiens","サンパチェンス"],w:2,wf:2,f:14,ov:"アフリカ原産。半日陰でよく花が咲きます。水切れに弱く、夏は朝夕に水が必要です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"花",k:["ヒューケラ","ツボサンゴ","heuchera","ヒューチェラ"],w:3,wf:2,f:60,ov:"北米原産。色とりどりの葉を楽しめます。半日陰を好み、夏の暑さと乾燥が苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"花",k:["クチナシ","ガーデニア","gardenia"],w:3,wf:2,f:60,ov:"東アジア原産。甘い香りの白い花が咲きます。日当たりを好み、水切れに弱いです。",pet:1,petN:"食べると嘔吐・下痢・元気消失が出ることがあります。",hum:1,humN:"果実を食べると、おなかを壊すことがあります。"},
+    {c:"花",k:["アジサイ","紫陽花","ハイドランジア","hydrangea","ガクアジサイ"],w:2,wf:2,f:60,mh:1,pp:1,ov:"日本原産。半日陰と水を好み、水切れで葉がしおれます。花が終わったら切り戻します。",pet:1,petN:"食べると、嘔吐・下痢・元気消失が出ることがあります。",hum:2,humN:"葉やつぼみを食べると、嘔吐・めまいなどの中毒が出ることがあります。料理の飾りに使われた葉で、食中毒が起きた例があります。"},
+    {c:"花",k:["アマリリス","ヒッペアストラム","amaryllis","hippeastrum"],w:5,wf:3,f:30,pp:1,ov:"南米原産の球根植物。日当たりのよい場所で、大きな花を咲かせます。花後は、葉を育てて球根に栄養をためます。",pet:2,petN:"球根を中心に有毒成分を含み、食べると嘔吐・よだれ・下痢・元気消失が出ることがあります。",hum:2,humN:"球根を食べると、嘔吐や下痢が出ることがあります。"},
+    {c:"花",k:["アザレア","ツツジ","サツキ","azalea","rhododendron","シャクナゲ","石楠花"],w:3,wf:2,f:60,mh:1,pp:1,ov:"日本・アジア原産。日当たりと風通しを好み、酸性の土が向きます。花が終わったら花がらを摘みます。",pet:3,petN:"グラヤノトキシンを含み、少量でも嘔吐・よだれ・元気消失など、重い症状が出ることがあります。",hum:2,humN:"葉や花を食べると、中毒を起こすことがあります。蜜にも注意してください。"},
+    {c:"ハーブ・果樹",k:["ローリエ","ゲッケイジュ","月桂樹"],w:5,wf:2,f:30,ov:"地中海沿岸原産。香りのよい葉は、料理にも使われます。日当たりを好み、風通しのよい場所で育てます。",pet:1,petN:"食べると、嘔吐・下痢が出ることがあります。",hum:0,humN:"料理に使う量は問題ありません。"},
+    {c:"花",k:["ベゴニア","begonia","秋海棠","シュウカイドウ"],w:5,wf:2,f:30,ov:"熱帯・亜熱帯原産。花や葉を楽しめます。半日陰を好み、水のあげすぎと、葉に水がかかることを避けます。",pet:2,petN:"シュウ酸塩を含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。特に根や球根に多く含まれます。",hum:1,humN:"食べると、口の痛みや、おなかの不調が出ることがあります。"},
+    {c:"観葉植物",k:["カラジウム","caladium","カラジューム"],w:3,wf:3,f:30,ov:"南米原産。色鮮やかな葉が特徴です。暑さと湿度を好み、冬は葉が落ちて休眠します。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"観葉植物",k:["アスパラガス","スプレンゲリ","アスパラガスファーン","asparagus","ミリオクラダス","メイリー","プルモーサス"],w:4,wf:2,f:30,ov:"南アフリカ原産。細かい葉をつけ、日当たりのよい場所を好みます。実と茎のトゲに注意してください。",pet:1,petN:"サポニンを含み、食べると嘔吐・下痢が出ることがあります。皮膚に触れると、皮膚炎が出ることもあります。",hum:1,humN:"実を食べると、おなかを壊すことがあります。トゲで、けがをしないよう注意してください。"},
+    {c:"観葉植物",k:["ストレリチア","極楽鳥花","オーガスタ","strelitzia","ゴクラクチョウカ","ストレチア","ニコライ","バードオブパラダイス"],w:5,wf:2,f:30,ov:"南アフリカ原産。大きな葉を広げ、日当たりのよい場所を好みます。ASPCAでは、ストレリチア・レギネ(極楽鳥花)が掲載されています。",pet:1,petN:"食べると、軽い嘔吐・下痢が出ることがあります。",hum:1,humN:"種を食べると、おなかを壊すことがあります。"},
+    {c:"花",k:["テッポウユリ","ヤマユリ","スカシユリ","オリエンタルリリー","アジアティックリリー","カサブランカ","百合","lilium"],w:4,wf:2,f:30,pp:1,x:["ユリ","ゆり","リリー"],ov:"日当たりと水はけのよい場所を好む球根植物。花が終わったら、花がらを取ります。",pet:3,petN:"猫は、花・葉・花粉・花瓶の水を少量口にしただけで、急性腎障害を起こすことがあります。猫のいる家には置かないでください。",hum:1,humN:"食べると、おなかを壊すことがあります。"},
+    {c:"花",k:["ゼラニウム","ペラルゴニウム","pelargonium","ゼラニューム","天竺葵","テンジクアオイ"],w:5,wf:2,f:30,ov:"南アフリカ原産。日当たりと風通しを好み、乾燥気味に育てます。梅雨と夏の蒸れが苦手です。",pet:1,petN:"食べると、嘔吐・食欲低下・皮膚炎が出ることがあります。",hum:1,humN:"汁で肌がかぶれることがあります。"},
+    {c:"花",k:["キク","クリサンセマム","chrysanthemum"],w:3,wf:2,f:30,ov:"日当たりと風通しを好みます。花が終わったら切り戻します。",pet:1,petN:"食べると、嘔吐・よだれ・皮膚炎が出ることがあります。",hum:1,humN:"汁で肌がかぶれることがあります。"},
+    {c:"花",k:["カラーリリー","オランダカイウ","ザンテデスキア","zantedeschia"],w:3,wf:2,f:30,ov:"南アフリカ原産。サトイモ科で、白や黄色の花(仏炎苞)が咲きます。水を好み、日当たりのよい場所で育てます。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"花",k:["キョウチクトウ","夾竹桃","オレアンダー","nerium"],w:4,wf:2,f:30,pp:1,ov:"日当たりを好み、育てやすい花木です。全体に強い毒があります。",pet:3,petN:"全体にオレアンドリンなどの強心配糖体を含み、少量でも嘔吐・不整脈など、重い症状が出ることがあります。",hum:3,humN:"全体が有毒です。燃やした煙や、枝を使った串なども、中毒のもとになります。"},
+    {c:"花",k:["シクラメン","cyclamen"],w:4,wf:1,f:14,fw:1,pp:1,ov:"地中海沿岸原産。涼しい場所を好み、暖房の効いた部屋は苦手です。水は、鉢の底からあげます。",pet:2,petN:"サポニンを含み、特に球根を食べると、嘔吐・下痢・よだれ・元気消失が出ることがあります。",hum:1,humN:"食べると、おなかを壊すことがあります。"},
+    {c:"多肉・サボテン",k:["金のなる木","カネノナルキ","クラッスラ","花月","crassula","ジェイドプラント","jade plant"],w:10,wf:3,f:60,pp:1,ov:"南アフリカ原産の多肉植物。日当たりを好み、乾燥に強いです。冬は水を控えめにします。",pet:1,petN:"食べると、嘔吐・元気消失が出ることがあります。",hum:1,humN:"食べると、吐き気が出ることがあります。"},
+    {c:"多肉・サボテン",k:["カランコエ","ベンケイソウ","長寿花","kalanchoe","月兎耳","ツキトジ","子宝草","コダカラソウ","ブロスフェルディアナ"],w:10,wf:3,f:60,pp:1,ov:"マダガスカル原産の多肉植物。日当たりを好み、乾燥に強いです。短日で花芽が付きます。",pet:2,petN:"強心配糖体を含み、食べると嘔吐・下痢・心拍の乱れが出ることがあります。",hum:1,humN:"食べると、おなかを壊すことがあります。"},
+    {c:"ハーブ・果樹",k:["レモン","ライム","オレンジ","グレープフルーツ","ミカン","みかん","ユズ","柑橘","シトラス","citrus","キンカン","金柑","カボス","スダチ","ハッサク","ポンカン","デコポン","ブンタン","シークワーサー"],w:3,wf:2,f:60,ov:"日当たりと水はけのよい場所を好む果樹。冬は寒さを避けます。",pet:1,petN:"精油などを含み、食べると嘔吐・下痢・よだれが出ることがあります。皮膚炎が出ることもあります。",hum:0,humN:"果実は食べられますが、皮の油で肌が荒れることがあります。"},
+    {c:"観葉植物",k:["ユーカリ","eucalyptus","ポポラス","グニー","シルバードロップ","シルバーダラー","ユーカリプタス"],w:4,wf:2,f:30,pp:1,ov:"オーストラリア原産。日当たりを好み、水はけのよい土が向きます。大きくなりやすいので、定期的に切り戻します。",pet:1,petN:"精油などを含み、食べると、よだれ・嘔吐・元気消失が出ることがあります。",hum:1,humN:"食べると、おなかを壊すことがあります。"},
+    {c:"ハーブ・果樹",k:["ラベンダー","lavender","ラバンジン","ラバンデュラ"],w:5,wf:2,f:30,ov:"地中海沿岸原産のハーブ。日当たりと風通しを好み、乾燥気味に育てます。梅雨と夏の蒸れが苦手です。",pet:1,petN:"リナロールなどを含み、食べると嘔吐・食欲低下が出ることがあります。",hum:0,humN:"一般的な利用では、問題ありません。"},
+    {c:"ハーブ・果樹",k:["ミント","ペパーミント","スペアミント","mentha","ハッカ","薄荷"],w:2,wf:2,f:30,ov:"ヨーロッパ原産のハーブ。半日陰でも育ち、水を好みます。繁殖力が強いので、鉢で育てます。",pet:1,petN:"精油などを含み、食べると、嘔吐・下痢が出ることがあります。",hum:0,humN:"一般的な利用では、問題ありません。"},
+    {c:"花",k:["オキザリス","カタバミ","oxalis"],w:4,wf:2,f:30,ov:"南アフリカなど原産。日が当たると花が開きます。暑さが苦手で、夏は休眠することがあります。",pet:1,petN:"シュウ酸塩を含み、食べると、よだれ・嘔吐・下痢が出ることがあります。",hum:1,humN:"食べすぎると、おなかを壊すことがあります。"},
+    {c:"観葉植物",k:["トラデスカンティア","ムラサキツユクサ","ツユクサ","シロフスジツユクサ","インチプラント","wandering jew","tradescantia"],w:3,wf:2,f:30,ov:"中南米原産のほふく性植物。丈夫で、よく増えます。日当たりがよいと、葉の模様が美しくなります。",pet:1,petN:"食べると、軽い胃腸の不調や、皮膚炎が出ることがあります。",hum:1,humN:"汁で肌がかぶれることがあります。"},
+    {c:"観葉植物",k:["アロカシア","クワズイモ","alocasia"],w:3,wf:2,f:30,mh:1,ov:"アジアの熱帯原産のサトイモ科。大きな葉をもち、高い湿度と明るい日陰を好みます。寒さに弱いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"観葉植物",k:["コルディリネ","ティープラント","ティーツリー","cordyline"],w:5,wf:2,f:30,ov:"オーストラリアやニュージーランド原産。赤や緑の細長い葉をもち、日当たりを好みます。寒さにはやや強いです。",pet:1,petN:"サポニンを含み、食べると、嘔吐・下痢・よだれが出ることがあります。",hum:0,humN:"触れる分には問題ありません。"},
+    {c:"観葉植物",k:["サトイモ","タロイモ","コロカシア","colocasia"],w:2,wf:2,f:30,ov:"熱帯アジア原産。大きな葉をもち、水と日当たりを好みます。寒さに弱いです。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"観葉植物",k:["アグラオネマ","チャイニーズエバーグリーン","aglaonema"],w:5,wf:2,f:30,ov:"東南アジア原産。耐陰性があり、育てやすい観葉植物です。寒さに弱く、冬は10℃以上で管理します。",pet:2,petN:"シュウ酸カルシウムを含み、かじると口の痛み・よだれ・嘔吐が出ることがあります。",hum:1,humN:"汁が肌につくと、かゆみや炎症が出ることがあります。口に入ると痛みます。"},
+    {c:"観葉植物",k:["エバーフレッシュ","ピテセロビウム","pithecellobium"],w:4,wf:2,f:30,ov:"中南米原産のマメ科。夜になると、葉を閉じる姿が特徴です。日当たりを好み、水切れすると葉を落とします。冬は暖かい場所で管理します。",pet:-1,petN:"毒性があるという報告は見つかっていません。国内の園芸・ペット情報では「毒性なし」とされていますが、ASPCAなどの公的な一覧に載っておらず、確認できていません。",hum:-1,humN:"確認できていません。食べないようにしましょう。"},
+    {c:"多肉・サボテン",k:["アオサンゴ","鉛筆サボテン","ミルクブッシュ"],w:10,wf:3,f:60,ov:"アフリカ原産の多肉植物。鉛筆のような細い枝が特徴です。日当たりを好み、乾燥に強いです。",pet:2,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれます。目に入ると危険なので、すぐに水で洗ってください。"},
+    {c:"花",k:["スズラン","鈴蘭","convallaria"],w:4,wf:2,f:60,pp:1,ov:"日本・ヨーロッパ原産。涼しい半日陰を好みます。全体に毒があります。",pet:3,petN:"強心配糖体を含み、食べると嘔吐・不整脈など、重い症状が出ることがあります。",hum:3,humN:"全体が有毒です。花瓶の水を飲んでも、中毒を起こすことがあります。"},
+    {c:"花",k:["グロリオサ","gloriosa"],w:3,wf:3,f:30,mh:1,ov:"熱帯アフリカ・アジア原産のつる性の球根植物。日当たりを好みます。特に球根の毒性が強いです。",pet:3,petN:"コルヒチンを含み、食べると嘔吐・血便・臓器障害など、重い症状が出ることがあります。",hum:3,humN:"特に球根が強い毒をもちます。食べると命にかかわることがあります。"},
+    {c:"花",k:["イヌサフラン","コルチカム","colchicum"],w:7,wf:2,f:0,mh:1,ov:"ヨーロッパ原産の球根植物。秋に花が咲きます。全体に強い毒があります。",pet:3,petN:"コルヒチンを含み、食べると嘔吐・血便・臓器障害など、重い症状が出ることがあります。",hum:3,humN:"全体が有毒です。食べると命にかかわることがあります。"},
+    {c:"花",k:["アリッサム","スイートアリッサム","alyssum"],w:3,wf:2,f:30,ov:"地中海沿岸原産。日当たりと水はけのよい場所を好みます。暑さと蒸れが苦手です。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"ラン",k:["カトレア","cattleya"],w:7,wf:3,f:30,ov:"中南米原産のラン。明るい場所を好み、直射日光は避けます。水は、鉢が乾いたらあげます。",pet:0,petN:"犬や猫への毒性はないとされています。",hum:0,humN:"特に問題ないとされています。"},
+    {c:"多肉・サボテン",k:["グリーンネックレス","弦月","ルビーネックレス","七宝樹","string of pearls","セネシオ","senecio"],w:10,wf:3,f:60,ov:"南アフリカ原産の多肉植物。丸い球のような葉が連なって垂れ下がります。日当たりと風通しを好み、水は乾いてから少なめにあげます。",pet:2,petN:"ピロリジジンアルカロイドを含むセネシオ属で、食べると嘔吐・下痢・肝臓の障害が出ることがあります。",hum:1,humN:"食べると、おなかを壊すことがあります。汁で肌がかぶれることもあります。"},
+    {c:"観葉植物",k:["クロトン","ヘンヨウボク","変葉木","croton","codiaeum"],w:4,wf:2,f:30,pp:1,ov:"マレーシアなど原産。色鮮やかな葉が特徴です。日当たりを好み、寒さと乾燥に弱いです。",pet:2,petN:"樹液に刺激があり、食べると、よだれ・嘔吐・下痢が出ることがあります。",hum:1,humN:"樹液で肌がかぶれることがあります。食べると、おなかを壊します。"},
+    {c:"花",k:["カロライナジャスミン","ゲルセミウム","gelsemium"],w:5,wf:2,f:30,mh:1,ov:"北米原産のつる性植物。「ジャスミン」と名前がつきますが、本物のジャスミンとは別の植物で、全体に強い毒があります。",pet:-1,petN:"ASPCAなどの一覧では確認できていません。全体に強い毒をもつ植物なので、ペットが口にしないよう、十分に注意してください。",hum:3,humN:"全体が有毒です。食べると、めまい・呼吸の障害など、重い中毒を起こすことがあります。蜜にも注意してください。"},
+    {c:"観葉植物",k:["フィカス","アルテシマ","リラータ","カシワバゴム","ベンガレンシス","ベンガルボダイジュ","プミラ","ficus","フィドルリーフ","fiddle leaf","creeping fig"],w:5,wf:2,f:30,pp:1,ov:"クワ科の観葉植物。日当たりのよい室内を好み、置き場所を変えると葉を落としやすいです。冬は寒さを避けます。",pet:1,petN:"白い樹液に刺激があり、触れたり食べたりすると、皮膚炎・嘔吐が出ることがあります。",hum:2,humN:"樹液で肌がかぶれることがあります。ラテックスアレルギーの人は特に注意してください。"}
   ];
   function kana(x){return String(x||"").replace(/[ぁ-ゖ]/g,function(c){return String.fromCharCode(c.charCodeAt(0)+96)})}
   function norm(x){return kana(x).toLowerCase().replace(/[\s　・･\-ー_]/g,"")}
@@ -1845,12 +2052,13 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
       var v=(parse(a[a.length-1])-parse(a[0]))/864e5/(a.length-1);
       return "・平均 "+(Math.round(v*10)/10)+"日おき";
     }
-    var out='<div class="hsum"><span class="hs">'+IW+'水やり '+cnt.w+'回'+avg("w")+'</span><span class="hs">'+IF+'肥料 '+cnt.f+'回'+avg("f")+'</span></div>'
-      +'<div class="hadd"><input id="hd" type="date" value="'+iso(today())+'" max="'+iso(today())+'" aria-label="記録する日"><button type="button" class="hab" id="haw">'+IW+'水やり</button><button type="button" class="hab" id="haf">'+IF+'肥料</button></div>'
+    var out='<div class="hsum"><span class="hs">'+IW+'水やり '+cnt.w+'回'+avg("w")+'</span>'+(settings.fert?'<span class="hs">'+IF+'肥料 '+cnt.f+'回'+avg("f")+'</span>':'')+'</div>'
+      +'<div class="hadd"><input id="hd" type="date" value="'+iso(today())+'" max="'+iso(today())+'" aria-label="記録する日"><button type="button" class="hab" id="haw">'+IW+'水やり</button>'+(settings.fert?'<button type="button" class="hab" id="haf">'+IF+'肥料</button>':'')+'</div>'
       +'<p class="hint hh" id="hmsg" role="status"></p>';
-    if(!h.length)return out+'<p class="lgempty">まだ履歴がありません。</p>';
+    if(!h.filter(function(x){return settings.fert||x.t!=='f'}).length)return out+'<p class="lgempty">まだ履歴がありません。</p>';
     var mo="",list='';
     h.forEach(function(x){
+      if(x.t==='f'&&!settings.fert)return;
       var m=x.d.slice(0,7),dt=parse(x.d);
       if(m!==mo){mo=m;list+='<div class="hmo">'+dt.getFullYear()+'年'+(dt.getMonth()+1)+'月</div>'}
       list+='<div class="hrow"><span class="hdt">'+(dt.getMonth()+1)+'/'+dt.getDate()+'('+WD.charAt(dt.getDay())+')</span><span class="hty">'+(x.t==="w"?IW+'水やり':IF+'肥料')+'</span><button type="button" class="hx" data-hdel="'+x.t+x.d+'" aria-label="'+(dt.getMonth()+1)+'月'+dt.getDate()+'日の'+(x.t==="w"?"水やり":"肥料")+'を削除">×</button></div>';
@@ -1882,13 +2090,13 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
   function fmtMD(d){return d?(+d.slice(5,7))+"/"+(+d.slice(8,10)):"未設定"}
   function careView(p){
     var u=function(v){return v?esc(v):'<span class="kvn">未設定</span>'};
-    return '<div class="ihr"><h2 class="ih">登録している情報</h2><button type="button" class="ibtn" id="dedit">✏️ 情報を変更する</button></div><dl class="kv">'
+    return '<div class="ihr"><h2 class="ih">株データ</h2><button type="button" class="ibtn" id="dedit">✏️ 変更する</button></div><dl class="kv">'
       +'<dt>お迎え日</dt><dd>'+(p.sd?esc(p.sd.replace(/-/g,"/")):'<span class="kvn">未設定</span>')+'</dd>'
       +'<dt>お迎え元</dt><dd>'+u(p.src)+'</dd>'
       +'<dt>置き場所</dt><dd>'+u(p.pl)+'</dd>'
       +'<dt>鉢のサイズ</dt><dd>'+(p.ps?p.ps+'号(約'+(p.ps*3)+'cm)':'<span class="kvn">未設定</span>')+'</dd>'
-      +'<dt>水やり</dt><dd>'+p.wi+'日おき(最後 '+fmtMD(p.lw)+')</dd>'
-      +'<dt>肥料</dt><dd>'+(p.fi>0?p.fi+'日おき(最後 '+fmtMD(p.lf)+')':'なし')+'</dd>'
+      +'<dt>水やり</dt><dd>'+p.wi+'日おき(最後 '+fmtMD(p.lw)+')'+(W(p)!==p.wi?'<br><span class="kvn">いまの季節は、'+W(p)+'日おきで知らせます</span>':'')+'</dd>'
+      +(settings.fert?'<dt>肥料</dt><dd>'+(p.fi>0?p.fi+'日おき(最後 '+fmtMD(p.lf)+')'+(fPaused(p)?'<br><span class="kvn">いまは、お休み中です(3月から再開)</span>':''):'なし')+'</dd>':'')
       +'<dt>メモ</dt><dd class="kvm">'+(p.memo&&p.memo.trim()?esc(p.memo):'<span class="kvn">なし</span>')+'</dd></dl>'
       +(p.ps?'<p class="wg">'+waterGuide(p.ps)+'</p>':'');
   }
@@ -1901,12 +2109,12 @@ body:has(#home:not([hidden])) .toast,body:has(#detail:not([hidden])) .toast{bott
         +'<label>鉢のサイズ<select id="dps">'+potOpts(p.ps||"")+'</select></label></div>'
         +'<label>置き場所<select id="dpl">'+placeOpts(p.pl||"")+'</select></label><div id="dplw" hidden><label>新しい場所の名前<input id="dpln" maxlength="20" placeholder="例: リビングの窓辺"></label></div>'
         +'<label class="dsrcl">お迎え元<select id="dsrc">'+srcOpts(p.src||"")+'</select></label><div id="dsrcw" hidden><label>新しいお迎え元の名前<input id="dsrcn" maxlength="30" placeholder="例: ホームセンター、友人"></label></div>'
-        +'<div class="cg"><div class="cgh">'+IW+'水やり</div>'
+        +'<div class="cg"><div class="cgh">'+IW+'水やり<small>(春〜秋の間隔)</small></div>'
         +'<label>頻度<span class="ivf"><input id="dwi" type="number" inputmode="numeric" min="1" max="365" value="'+p.wi+'" aria-label="水やりの間隔(日)"><span>日おき</span></span></label>'
         +'<label>最後の水やり<input id="dlw" type="date" value="'+p.lw+'" max="'+dt+'"></label>'
-        +'<div class="cgh">'+IF+'肥料<small>(0でなし)</small></div>'
+        +(settings.fert?'<div class="cgh">'+IF+'肥料<small>(0でなし)</small></div>'
         +'<label>頻度<span class="ivf"><input id="dfi" type="number" inputmode="numeric" min="0" max="730" value="'+p.fi+'" aria-label="肥料の間隔(日)。0で肥料なし"><span>日おき</span></span></label>'
-        +'<label>最後の肥料<input id="dlf" type="date" value="'+p.lf+'" max="'+dt+'"></label></div>'
+        +'<label>最後の肥料<input id="dlf" type="date" value="'+p.lf+'" max="'+dt+'"></label>':'')+'</div>'
         +'<p class="wg" id="dwg">'+waterGuide(p.ps)+'</p>'
         +'<label>メモ<textarea id="dmemo" rows="2" placeholder="気づいたこと、元気がないときの様子など">'+esc(p.memo||"")+'</textarea></label>'
       +'<button type="button" class="btn bkb" id="ddone2">完了</button>';
